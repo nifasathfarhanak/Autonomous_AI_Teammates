@@ -5,7 +5,8 @@ Strictly conforms to presentation specification figures.
 """
 
 import json
-from datetime import datetime, timedelta, timezone
+import os
+from datetime import date, datetime, timedelta, timezone
 from typing import Dict, Any, List, Optional
 from ..database import get_connection
 from ..schemas import (
@@ -41,6 +42,234 @@ REPEAT_PURCHASE_WEEKLY_RATES = {
     "week_3": 37.0,
     "week_4": 24.0
 }
+
+def get_sales_visualization_data(
+    merchant_id: str = "MERCH-001",
+    days: int = 7,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+) -> Dict[str, Any]:
+    """Builds comparable sales and product analytics from completed database orders."""
+    if days not in (7, 30, 90):
+        raise ValueError("days must be one of 7, 30, or 90.")
+
+    requested_start = date.fromisoformat(start_date) if start_date else None
+    requested_end = date.fromisoformat(end_date) if end_date else None
+    if requested_start and requested_end and requested_start > requested_end:
+        raise ValueError("start_date must be on or before end_date.")
+    if requested_start and requested_end and (requested_end - requested_start).days + 1 > 366:
+        raise ValueError("Date ranges cannot exceed 366 days.")
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT MAX(substr(o.order_date, 1, 10))
+        FROM orders o
+        JOIN customers c ON c.customer_id = o.customer_id
+        WHERE c.merchant_id = ? AND UPPER(o.status) = 'COMPLETED'
+    """, (merchant_id,))
+    latest_order_date = cur.fetchone()[0]
+
+    if requested_end:
+        selected_end = requested_end
+    elif latest_order_date:
+        selected_end = date.fromisoformat(latest_order_date)
+    else:
+        selected_end = date.today()
+
+    if requested_start:
+        selected_start = requested_start
+        if selected_start > selected_end:
+            conn.close()
+            raise ValueError("start_date must be on or before end_date.")
+        selected_days = (selected_end - selected_start).days + 1
+        if selected_days > 366:
+            conn.close()
+            raise ValueError("Date ranges cannot exceed 366 days.")
+    else:
+        selected_days = days
+        selected_start = selected_end - timedelta(days=selected_days - 1)
+
+    previous_end = selected_start - timedelta(days=1)
+    previous_start = previous_end - timedelta(days=selected_days - 1)
+
+    def load_orders(period_start: date, period_end: date) -> List[Dict[str, Any]]:
+        cur.execute("""
+            SELECT
+                o.order_id,
+                substr(o.order_date, 1, 10) AS order_date,
+                o.order_value,
+                CASE WHEN EXISTS (
+                    SELECT 1
+                    FROM orders prior
+                    WHERE prior.customer_id = o.customer_id
+                      AND UPPER(prior.status) = 'COMPLETED'
+                      AND substr(prior.order_date, 1, 10) < substr(o.order_date, 1, 10)
+                ) THEN 'REPEAT' ELSE 'NEW' END AS customer_type
+            FROM orders o
+            JOIN customers c ON c.customer_id = o.customer_id
+            WHERE c.merchant_id = ?
+              AND UPPER(o.status) = 'COMPLETED'
+              AND substr(o.order_date, 1, 10) BETWEEN ? AND ?
+            ORDER BY substr(o.order_date, 1, 10), o.order_id
+        """, (merchant_id, period_start.isoformat(), period_end.isoformat()))
+        return [dict(row) for row in cur.fetchall()]
+
+    current_orders = load_orders(selected_start, selected_end)
+    previous_orders = load_orders(previous_start, previous_end)
+    combined_orders = current_orders + previous_orders
+    order_ids = [row["order_id"] for row in combined_orders]
+    items_by_order: Dict[str, List[Dict[str, Any]]] = {row["order_id"]: [] for row in combined_orders}
+    item_rows: List[Dict[str, Any]] = []
+
+    if order_ids:
+        placeholders = ",".join("?" for _ in order_ids)
+        cur.execute(f"""
+            SELECT
+                oi.order_id, oi.product_id, oi.product_name, oi.quantity,
+                oi.unit_price, oi.total_price,
+                COALESCE(p.sku, '') AS sku,
+                COALESCE(p.category, 'Uncategorized') AS category
+            FROM order_items oi
+            LEFT JOIN products p ON p.product_id = oi.product_id
+            WHERE oi.order_id IN ({placeholders})
+            ORDER BY oi.product_name
+        """, order_ids)
+        for row in cur.fetchall():
+            item = dict(row)
+            items_by_order[item["order_id"]].append(item)
+            item_rows.append(item)
+
+    conn.close()
+
+    for order in combined_orders:
+        order["order_value"] = float(order["order_value"])
+        order["items"] = items_by_order[order["order_id"]]
+
+    def order_summary(orders: List[Dict[str, Any]]) -> Dict[str, Any]:
+        total = sum(row["order_value"] for row in orders)
+        repeat_count = sum(row["customer_type"] == "REPEAT" for row in orders)
+        return {
+            "sales_inr": round(total, 2),
+            "order_count": len(orders),
+            "repeat_order_count": repeat_count,
+            "repeat_order_share_pct": round(repeat_count * 100.0 / len(orders), 1) if orders else 0.0,
+            "average_order_value_inr": round(total / len(orders), 2) if orders else 0.0,
+            "orders_with_item_details": sum(bool(row["items"]) for row in orders)
+        }
+
+    current_summary = order_summary(current_orders)
+    previous_summary = order_summary(previous_orders)
+    delta_pct = (
+        round((current_summary["sales_inr"] - previous_summary["sales_inr"]) * 100 / previous_summary["sales_inr"], 1)
+        if previous_summary["sales_inr"] else None
+    )
+    line_item_orders = {row["order_id"] for row in item_rows}
+    current_order_ids = {row["order_id"] for row in current_orders}
+    current_items = [
+        item for item in item_rows
+        if item["order_id"] in current_order_ids
+    ]
+
+    product_totals: Dict[str, Dict[str, Any]] = {}
+    order_by_id = {row["order_id"]: row for row in combined_orders}
+    for item in item_rows:
+        product = product_totals.setdefault(item["product_id"], {
+            "product_id": item["product_id"],
+            "sku": item["sku"],
+            "name": item["product_name"],
+            "category": item["category"],
+            "unit_price": float(item["unit_price"]),
+            "units_sold": 0,
+            "previous_units_sold": 0,
+            "sales_inr": 0.0,
+            "previous_sales_inr": 0.0,
+            "current_orders": set(),
+            "previous_orders": set(),
+            "current_repeat_orders": set()
+        })
+        order_id = item["order_id"]
+        if item["order_id"] in current_order_ids:
+            product["units_sold"] += int(item["quantity"])
+            product["sales_inr"] += float(item["total_price"])
+            product["current_orders"].add(order_id)
+            if order_by_id[order_id]["customer_type"] == "REPEAT":
+                product["current_repeat_orders"].add(order_id)
+        else:
+            product["previous_units_sold"] += int(item["quantity"])
+            product["previous_sales_inr"] += float(item["total_price"])
+            product["previous_orders"].add(order_id)
+
+    for product in product_totals.values():
+        product_orders = product["current_orders"]
+        product["repeat_order_share_pct"] = round(
+            len(product["current_repeat_orders"]) * 100.0 / len(product_orders), 1
+        ) if product_orders else 0.0
+        product["growth_pct"] = (
+            round((product["sales_inr"] - product["previous_sales_inr"]) * 100 / product["previous_sales_inr"], 1)
+            if product["previous_sales_inr"] else None
+        )
+        product["sales_inr"] = round(product["sales_inr"], 2)
+        product["previous_sales_inr"] = round(product["previous_sales_inr"], 2)
+        del product["current_orders"]
+        del product["previous_orders"]
+        del product["current_repeat_orders"]
+
+    products = sorted(product_totals.values(), key=lambda row: row["sales_inr"], reverse=True)
+    categories: Dict[str, Dict[str, Any]] = {}
+    for product in products:
+        category = categories.setdefault(product["category"], {
+            "category": product["category"],
+            "sales_inr": 0.0,
+            "units_sold": 0,
+            "products": 0
+        })
+        category["sales_inr"] += product["sales_inr"]
+        category["units_sold"] += product["units_sold"]
+        category["products"] += 1
+
+    for category in categories.values():
+        category["sales_inr"] = round(category["sales_inr"], 2)
+
+    daily: Dict[str, Dict[str, Any]] = {}
+    for order in combined_orders:
+        day = daily.setdefault(order["order_date"], {
+            "date": order["order_date"],
+            "sales_inr": 0.0,
+            "order_count": 0,
+            "repeat_order_count": 0
+        })
+        day["sales_inr"] += order["order_value"]
+        day["order_count"] += 1
+        day["repeat_order_count"] += order["customer_type"] == "REPEAT"
+
+    return {
+        "merchant_id": merchant_id,
+        "is_demo": os.environ.get("ENVIRONMENT", "demo").lower() == "demo",
+        "data_source": "SQLite completed orders and recorded order items",
+        "latest_order_date": latest_order_date,
+        "period": {
+            "start_date": selected_start.isoformat(),
+            "end_date": selected_end.isoformat(),
+            "days": selected_days,
+            "previous_start_date": previous_start.isoformat(),
+            "previous_end_date": previous_end.isoformat()
+        },
+        "summary": {
+            "current": current_summary,
+            "previous": previous_summary,
+            "sales_change_pct": delta_pct,
+            "unit_count_recorded": sum(int(item["quantity"]) for item in current_items),
+            "item_detail_coverage_pct": round(
+                len(current_order_ids & line_item_orders) * 100.0 / len(current_orders), 1
+            ) if current_orders else 0.0
+        },
+        "orders": combined_orders,
+        "daily": sorted(daily.values(), key=lambda row: row["date"]),
+        "products": products,
+        "categories": sorted(categories.values(), key=lambda row: row["sales_inr"], reverse=True),
+        "gross_profit_available": False
+    }
 
 def seed_sales_transactions(conn=None):
     """Seeds realistic fictional demo orders and items into SQLite.

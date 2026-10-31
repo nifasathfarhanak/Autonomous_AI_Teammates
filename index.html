@@ -816,166 +816,235 @@
 
 
       <!-- ==================================================================
-           APPLICATION VIEW 3: /app/sales (SALES INSIGHTS & POS TELEMETRY)
+           APPLICATION VIEW 3: /app/sales (DATABASE-BACKED SALES VISUALIZATION)
            ================================================================== -->
       <section class="route-view" id="view-sales" aria-labelledby="headingSales">
-        <div class="view-header-row">
+        <div class="view-header-row sales-page-header">
           <div>
-            <div class="view-eyebrow">POS Data &amp; Volume Analytics</div>
+            <div class="view-eyebrow">YOUR STORE · SALES</div>
             <h2 class="view-title" id="headingSales">Sales Intelligence</h2>
-            <p class="view-description">Daily sales breakdown, repeat order retention drop metrics, and Soundbox 4G transaction data.</p>
+            <p class="view-description">See what is selling, how sales are changing, and which products bring in the most business.</p>
           </div>
-          <div class="view-actions-row">
-            <span class="traceable-badge">Source: <strong>dealpilot.db:orders</strong></span>
-            <button class="btn btn-secondary btn-sm" onclick="fetchSalesInsights()">Refresh Sales</button>
-          </div>
-        </div>
-
-        <!-- Sales KPI Summary Cards -->
-        <div class="kpi-grid-4" style="margin-bottom: 24px;">
-          <div class="kpi-card">
-            <div class="kpi-label-row"><span class="kpi-title">Last Week Total</span></div>
-            <div class="kpi-metric">₹4,12,000</div>
-            <div class="kpi-subtext">Mon–Sun cumulative gross volume</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label-row"><span class="kpi-title">This Week Total</span><span class="kpi-badge-negative">-27.2%</span></div>
-            <div class="kpi-metric" style="color: var(--red);">₹3,00,000</div>
-            <div class="kpi-subtext">₹1,12,000 deficit vs prior week</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label-row"><span class="kpi-title">Repeat Diners Drop</span><span class="kpi-badge-negative">-18.4%</span></div>
-            <div class="kpi-metric" style="color: var(--amber);">50.1%</div>
-            <div class="kpi-subtext">Historical baseline: 68.5% repeat rate</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label-row"><span class="kpi-title">Unreturned Regulars</span></div>
-            <div class="kpi-metric">46 Diners</div>
-            <div class="kpi-subtext">Account for ₹20,900 revenue drop</div>
+          <div class="sales-header-meta">
+            <span class="sales-live-dot" aria-hidden="true"></span>
+            <span id="salesLastUpdated">Loading sales records…</span>
           </div>
         </div>
 
-        <!-- Deterministic Sales Drop Detection Alert Card -->
-        <div class="card" id="salesDropAlertCard" style="margin-bottom: 24px; border-left: 4px solid var(--red);">
-          <div class="card-header">
+        <div class="sales-data-note" id="salesDataNote" role="status" aria-live="polite">
+          Loading completed sales records…
+        </div>
+
+        <section class="sales-toolbar card" aria-label="Sales report controls">
+          <div class="sales-toolbar-top">
             <div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="display:inline-block;width:18px;height:18px;background:var(--amber);border-radius:4px;"></span>
-                <div class="card-title" id="dropDetectionTitle">Deterministic Sales Anomaly Detected</div>
+              <h3 class="sales-control-title">Sales period</h3>
+              <p id="salesPeriodDescription" class="sales-control-help">Comparing this period with the same number of days before it.</p>
+            </div>
+            <div class="sales-period-buttons" role="group" aria-label="Choose a sales period">
+              <button type="button" class="sales-period-button active" data-sales-days="7" aria-pressed="true" onclick="setSalesPeriod(7)">7 days</button>
+              <button type="button" class="sales-period-button" data-sales-days="30" aria-pressed="false" onclick="setSalesPeriod(30)">30 days</button>
+              <button type="button" class="sales-period-button" data-sales-days="90" aria-pressed="false" onclick="setSalesPeriod(90)">90 days</button>
+            </div>
+          </div>
+          <div class="sales-filter-row">
+            <label class="sales-filter-field">From
+              <input id="salesStartDate" type="date" class="form-input" aria-label="Sales start date">
+            </label>
+            <label class="sales-filter-field">To
+              <input id="salesEndDate" type="date" class="form-input" aria-label="Sales end date">
+            </label>
+            <button class="btn btn-secondary btn-sm" type="button" onclick="applySalesCustomRange()">Apply dates</button>
+            <span class="sales-filter-divider" aria-hidden="true"></span>
+            <label class="sales-filter-field sales-filter-select">Day
+              <select id="salesDayFilter" class="form-input" onchange="renderSalesDashboard()">
+                <option value="ALL">All days</option>
+                <option value="1">Monday</option><option value="2">Tuesday</option>
+                <option value="3">Wednesday</option><option value="4">Thursday</option>
+                <option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option>
+              </select>
+            </label>
+            <label class="sales-filter-field sales-filter-select">Customer
+              <select id="salesCustomerFilter" class="form-input" onchange="renderSalesDashboard()">
+                <option value="ALL">All orders</option>
+                <option value="NEW">First-time orders</option>
+                <option value="REPEAT">Returning orders</option>
+              </select>
+            </label>
+            <button class="btn btn-secondary btn-sm sales-refresh-button" type="button" onclick="fetchSalesInsights()">Refresh</button>
+          </div>
+          <div class="sales-active-filter-row">
+            <span id="salesActiveFilters">Showing all completed orders</span>
+            <button id="salesClearFilters" type="button" class="sales-clear-button" onclick="clearSalesFilters()" hidden>Clear filters</button>
+          </div>
+        </section>
+
+        <div class="sales-kpi-grid" aria-label="Sales summary" aria-live="polite">
+          <article class="sales-kpi-card sales-kpi-primary">
+            <span class="sales-kpi-label">Sales this period</span>
+            <strong id="salesKpiCurrent" class="sales-kpi-value">—</strong>
+            <span id="salesKpiCurrentHint" class="sales-kpi-hint">Completed orders</span>
+          </article>
+          <article class="sales-kpi-card">
+            <span class="sales-kpi-label">Change vs previous</span>
+            <strong id="salesKpiChange" class="sales-kpi-value">—</strong>
+            <span id="salesKpiChangeHint" class="sales-kpi-hint">Same length of time</span>
+          </article>
+          <article class="sales-kpi-card">
+            <span class="sales-kpi-label">Orders</span>
+            <strong id="salesKpiOrders" class="sales-kpi-value">—</strong>
+            <span id="salesKpiOrdersHint" class="sales-kpi-hint">Completed orders</span>
+          </article>
+          <article class="sales-kpi-card">
+            <span class="sales-kpi-label">Average order</span>
+            <strong id="salesKpiAov" class="sales-kpi-value">—</strong>
+            <span class="sales-kpi-hint">Sales divided by orders</span>
+          </article>
+          <article class="sales-kpi-card">
+            <span class="sales-kpi-label">Returning customer orders</span>
+            <strong id="salesKpiRepeat" class="sales-kpi-value">—</strong>
+            <span id="salesKpiRepeatHint" class="sales-kpi-hint">Based on earlier completed orders</span>
+          </article>
+          <article class="sales-kpi-card">
+            <span class="sales-kpi-label">Recorded items sold</span>
+            <strong id="salesKpiUnits" class="sales-kpi-value">—</strong>
+            <span id="salesKpiUnitsHint" class="sales-kpi-hint">From recorded product line items</span>
+          </article>
+        </div>
+
+        <div class="sales-chart-grid sales-chart-grid-main">
+          <article class="sales-panel sales-panel-wide">
+            <div class="sales-panel-heading">
+              <div>
+                <h3>How are my sales changing?</h3>
+                <p id="salesTrendSubtitle">Current period compared with the same number of earlier days.</p>
               </div>
-              <div class="card-subtitle" id="dropDetectionPeriod">Comparison: Week 4 (This Week) vs Week 3 (Last Week)</div>
+              <div class="sales-legend" aria-label="Chart legend">
+                <span><i class="sales-legend-dot current"></i>This period</span>
+                <span><i class="sales-legend-dot previous"></i>Previous period</span>
+              </div>
             </div>
-            <span class="badge" style="background: #FEE2E2; color: #991B1B; font-weight: 800;" id="dropSeverityBadge">SEVERITY: HIGH</span>
-          </div>
-
-          <div style="font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 14px;" id="dropDetectionExplanation">
-            Sales have declined by 27.2% (₹112,000 drop) compared with last week, and repeat-customer order share fell from 37% to 24%. The volume decline concentrated in the Thursday through Sunday window, driven by missing regular lunch patrons.
-          </div>
-
-          <div style="background: var(--bg-subtle); border-radius: 8px; padding: 14px; font-size: 13px;">
-            <div style="font-weight: 700; color: var(--paytm-navy); margin-bottom: 8px;">Supporting Data Evidence Grounded in Database Records:</div>
-            <ul id="dropEvidenceList" style="margin-left: 18px; line-height: 1.6; color: var(--text-body);">
-              <li>Overall gross sales fell from ₹412,000 to ₹300,000 (-27.2% deficit).</li>
-              <li>Repeat customer orders dropped sharply from 37% to 24% (-13.0 percentage points).</li>
-              <li>Thursday volume dropped by -31.0% (from ₹58k to ₹40k).</li>
-              <li>Friday volume dropped by -37.7% (from ₹61k to ₹38k).</li>
-              <li>46 regular diners did not transact during lunch, causing ₹20,900 gross revenue leakage.</li>
-            </ul>
-          </div>
+            <div id="salesTrendChart" class="sales-chart-canvas" role="img" aria-label="Daily sales comparison chart"></div>
+            <p id="salesTrendInsight" class="sales-chart-insight"></p>
+          </article>
+          <article class="sales-panel">
+            <div class="sales-panel-heading">
+              <div>
+                <h3>Which days perform differently?</h3>
+                <p>Compare the same weekdays across both periods.</p>
+              </div>
+            </div>
+            <div id="salesWeekdayChart" class="sales-weekday-chart" role="group" aria-label="Sales by weekday comparison"></div>
+            <p id="salesWeekdayInsight" class="sales-chart-insight"></p>
+          </article>
         </div>
 
-        <!-- 4-Week Repeat Purchase Analysis (Week 1: 41%, Week 2: 39%, Week 3: 37%, Week 4: 24%) -->
-        <div class="card" style="margin-bottom: 24px;">
-          <div class="card-header">
-            <div>
-              <div class="card-title">4-Week Repeat-Purchase Trend Analysis</div>
-              <div class="card-subtitle">Repeat customer order percentage across 4 consecutive billing cycles</div>
+        <div class="sales-chart-grid">
+          <article class="sales-panel">
+            <div class="sales-panel-heading">
+              <div>
+                <h3>Are regular customers coming back?</h3>
+                <p>Share of completed orders from customers with an earlier completed order.</p>
+              </div>
             </div>
-            <span class="traceable-badge">Source: <strong>Soundbox SB-4G-DEL-9842</strong></span>
-          </div>
-
-          <div class="repeat-trend-grid">
-            <div class="repeat-week-card">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Week 1</div>
-              <div class="repeat-week-pct">41%</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Stable Baseline</div>
+            <div id="salesRepeatChart" class="sales-repeat-chart" role="img" aria-label="Weekly share of returning customer orders"></div>
+            <p id="salesRepeatInsight" class="sales-chart-insight"></p>
+          </article>
+          <article class="sales-panel">
+            <div class="sales-panel-heading">
+              <div>
+                <h3>Which products sell best?</h3>
+                <p>Sales from recorded product line items in this period.</p>
+              </div>
+              <label class="sales-filter-field sales-filter-select">Category
+                <select id="salesCategoryFilter" class="form-input" onchange="renderSalesDashboard()">
+                  <option value="ALL">All categories</option>
+                </select>
+              </label>
             </div>
-            <div class="repeat-week-card">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Week 2</div>
-              <div class="repeat-week-pct">39%</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Normal Variance (-2%)</div>
+            <div id="salesProductChart" class="sales-product-chart" role="img" aria-label="Highest selling products by recorded sales"></div>
+          </article>
+          <article class="sales-panel">
+            <div class="sales-panel-heading">
+              <div>
+                <h3>Where do recorded product sales come from?</h3>
+                <p>Choose a category to focus the report on its orders and products.</p>
+              </div>
             </div>
-            <div class="repeat-week-card">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Week 3 (Last Week)</div>
-              <div class="repeat-week-pct">37%</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Slight Softening (-2%)</div>
-            </div>
-            <div class="repeat-week-card active-drop">
-              <div style="font-size: 12px; font-weight: 700; color: var(--red);">Week 4 (Current)</div>
-              <div class="repeat-week-pct">24%</div>
-              <div style="font-size: 12px; color: var(--red); font-weight: 700;">Sharp Drop (-13% pts)</div>
-            </div>
-          </div>
+            <div id="salesCategoryChart" class="sales-category-chart" role="group" aria-label="Filter by product sales category"></div>
+          </article>
         </div>
 
-        <!-- Day-of-Week Comparison Table -->
-        <div class="card" style="margin-bottom: 24px;">
-          <div class="card-header">
+        <section id="salesHeatmapPanel" class="sales-panel sales-heatmap-panel" hidden>
+          <div class="sales-panel-heading">
             <div>
-              <div class="card-title">Day-by-Day Volume Comparison (Mon–Sun)</div>
-              <div class="card-subtitle">Data sourced from Soundbox POS (DEL-9842) · Real-time data sync</div>
+              <h3>Sales activity through the period</h3>
+              <p>Each square is one day. Darker squares mean higher recorded sales.</p>
             </div>
-            <span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">Soundbox POS Log</span>
+            <span class="sales-heatmap-legend">Less <i class="level-1"></i><i class="level-2"></i><i class="level-3"></i><i class="level-4"></i> More</span>
           </div>
+          <div id="salesHeatmap" class="sales-heatmap" aria-label="Calendar heatmap of sales by day"></div>
+        </section>
 
-          <div class="table-responsive">
-            <table class="data-table">
+        <section class="sales-panel sales-matrix-panel">
+          <div class="sales-panel-heading">
+            <div>
+              <h3>Product sales at a glance</h3>
+              <p>More items sold move a product to the right; higher recorded sales move it up.</p>
+            </div>
+          </div>
+          <div id="salesProductMatrix" class="sales-product-matrix" role="img" aria-label="Product sales and item volume chart"></div>
+        </section>
+
+        <section class="sales-insight-panel" aria-labelledby="salesInsightHeading">
+          <div class="sales-insight-mark" aria-hidden="true">A</div>
+          <div class="sales-insight-copy">
+            <span class="sales-insight-eyebrow">ACTIONMATE · WHAT TO NOTICE</span>
+            <h3 id="salesInsightHeading">What should I look at next?</h3>
+            <p id="salesInsightText">Loading a clear summary from your completed sales records…</p>
+            <div id="salesInsightEvidence" class="sales-insight-evidence"></div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="navigateToRoute('assistant')">Ask ActionMate</button>
+        </section>
+
+        <section class="sales-panel sales-products-panel">
+          <div class="sales-panel-heading sales-table-heading">
+            <div>
+              <h3>Product sales details</h3>
+              <p id="salesProductCoverage">Recorded product sales only; cost data is not available for gross profit.</p>
+            </div>
+            <div class="sales-table-controls">
+              <input id="salesProductSearch" class="form-input" type="search" placeholder="Find a product…" aria-label="Search products" oninput="renderSalesProductTable()">
+              <label class="sales-column-toggle"><input type="checkbox" id="salesShowRepeatColumn" checked onchange="toggleSalesRepeatColumn()"> Show returning orders</label>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="exportSalesProductsCsv()">Download CSV</button>
+            </div>
+          </div>
+          <div class="sales-table-scroll">
+            <table class="data-table sales-product-table">
               <thead>
                 <tr>
-                  <th>Day of Week</th>
-                  <th>Last Week Volume</th>
-                  <th>This Week Volume</th>
-                  <th>Absolute Change</th>
-                  <th>Percentage Drop</th>
-                  <th>Anomaly Severity</th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('sku')">SKU</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('name')">Product</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('category')">Category</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('unit_price')">Unit price</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('units_sold')">Items sold</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('sales_inr')">Recorded sales</button></th>
+                  <th><button type="button" class="sales-sort-button" onclick="sortSalesProducts('growth_pct')">Change</button></th>
+                  <th class="sales-repeat-column"><button type="button" class="sales-sort-button" onclick="sortSalesProducts('repeat_order_share_pct')">Returning orders</button></th>
                 </tr>
               </thead>
-              <tbody id="salesComparisonTableBody">
-                <!-- Dynamically rendered -->
-              </tbody>
+              <tbody id="salesProductTableBody"></tbody>
             </table>
           </div>
-        </div>
-
-        <!-- Product Performance Table -->
-        <div class="card">
-          <div class="card-header">
+          <div class="sales-table-footer">
+            <span id="salesProductCount">—</span>
             <div>
-              <div class="card-title">Product Catalog Performance &amp; Repeat Rates</div>
-              <div class="card-subtitle">30-day units sold, gross volume, and customer repeat order rate by SKU</div>
+              <button id="salesProductsPrev" class="btn btn-secondary btn-sm" type="button" onclick="changeSalesProductPage(-1)">Previous</button>
+              <span id="salesProductsPageLabel" aria-live="polite">Page 1</span>
+              <button id="salesProductsNext" class="btn btn-secondary btn-sm" type="button" onclick="changeSalesProductPage(1)">Next</button>
             </div>
-            <span class="traceable-badge">Source: <strong>dealpilot.db:order_items</strong></span>
           </div>
-
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>SKU</th>
-                  <th>Product Name</th>
-                  <th>Category</th>
-                  <th>Unit Price</th>
-                  <th>30d Units Sold</th>
-                  <th>Gross Revenue</th>
-                  <th>Repeat Rate</th>
-                </tr>
-              </thead>
-              <tbody id="productPerformanceTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+        </section>
       </section>
 
 
@@ -2927,7 +2996,20 @@
       overviewShowPrevious: true,
       overviewCatalog: [],
       overviewSelectedCategory: null,
-      inventoryItems: []
+      inventoryItems: [],
+      salesAnalytics: null
+    };
+
+    const salesPageState = {
+      days: 7,
+      customRange: null,
+      data: null,
+      day: "ALL",
+      customerType: "ALL",
+      category: "ALL",
+      sortBy: "sales_inr",
+      sortDirection: "desc",
+      page: 0
     };
 
     // Helper to compute camelCase Nav ID from route name
@@ -3932,77 +4014,628 @@
       }
     }
 
-    // --- 3. Sales Insights & Phase 2 Analytics Loader ---
+    // --- 3. Sales Intelligence: Database-backed merchant analytics ---
     async function fetchSalesInsights() {
+      const note = document.getElementById("salesDataNote");
+      if (note) note.textContent = "Loading completed sales records…";
       try {
-        // 1. Sales summary & daily comparison
-        const resSummary = await fetch("/api/sales/summary");
-        const summary = await resSummary.json();
-        const tbody = document.getElementById("salesComparisonTableBody");
-        if (tbody && summary.daily_breakdown) {
-          tbody.innerHTML = summary.daily_breakdown.map(row => {
-            const isNegative = row.change_pct < 0;
-            const isSevere = row.change_pct <= -30;
-            return `
-              <tr>
-                <td><strong>${row.day}</strong></td>
-                <td>₹${row.last_week},000</td>
-                <td>₹${row.this_week},000</td>
-                <td style="color: ${isNegative ? 'var(--red)' : 'var(--green-dark)'}; font-weight: 700;">
-                  ${row.this_week - row.last_week >= 0 ? '+' : ''}${row.this_week - row.last_week}k
-                </td>
-                <td>
-                  <span class="${isNegative ? 'badge-pill nav-badge-alert' : 'badge-pill'}" style="font-weight: 700;">
-                    ${row.change_pct}%
-                  </span>
-                </td>
-                <td>
-                  <span class="badge" style="${isSevere ? 'background: #FEE2E2; color: #991B1B;' : 'background: var(--bg-subtle); color: var(--text-muted);'}">
-                    ${isSevere ? 'HIGH VOLUME DROP' : 'NORMAL'}
-                  </span>
-                </td>
-              </tr>
-            `;
-          }).join("");
+        const params = new URLSearchParams();
+        if (salesPageState.customRange) {
+          params.set("start_date", salesPageState.customRange.start);
+          params.set("end_date", salesPageState.customRange.end);
+        } else {
+          params.set("days", String(salesPageState.days));
         }
-
-        // 2. Sales drop detection evidence
-        const resDrop = await fetch("/api/sales/drop-detection");
-        const drop = await resDrop.json();
-        if (drop && drop.is_drop_detected) {
-          const expEl = document.getElementById("dropDetectionExplanation");
-          const evEl = document.getElementById("dropEvidenceList");
-          if (expEl) expEl.textContent = drop.explanation;
-          if (evEl && drop.supporting_evidence) {
-            evEl.innerHTML = drop.supporting_evidence.map(e => `<li>${e}</li>`).join("");
-          }
-        }
-
-        // 3. Product performance rankings
-        const resProds = await fetch("/api/products/performance");
-        const prods = await resProds.json();
-        const prodTbody = document.getElementById("productPerformanceTableBody");
-        if (prodTbody && Array.isArray(prods)) {
-          prodTbody.innerHTML = prods.map(p => `
-            <tr>
-              <td><span style="font-family: var(--font-mono); font-size: 12px; color: var(--paytm-blue);">${p.sku}</span></td>
-              <td><strong>${p.name}</strong></td>
-              <td><span class="badge" style="background: var(--bg-subtle);">${p.category}</span></td>
-              <td>₹${Number(p.unit_price).toLocaleString()}</td>
-              <td><strong>${p.units_sold_30d} units</strong></td>
-              <td style="font-weight: 700; color: var(--paytm-navy);">₹${Number(p.gross_revenue_inr).toLocaleString()}</td>
-              <td>
-                <span class="badge" style="${p.repeat_order_rate_pct >= 50 ? 'background: var(--green-bg); color: var(--green-dark);' : 'background: var(--bg-subtle);'}">
-                  ${p.repeat_order_rate_pct}% repeat
-                </span>
-              </td>
-            </tr>
-          `).join("");
-        }
-
-      } catch (e) {
-        console.error("Sales insights error:", e);
+        const response = await fetch(`/api/sales/visualization?${params.toString()}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Could not load sales (${response.status}).`);
+        salesPageState.data = result;
+        appState.salesAnalytics = result;
+        populateSalesCategoryFilter();
+        syncSalesDateControls();
+        renderSalesDashboard();
+      } catch (error) {
+        console.error("Sales intelligence error:", error);
+        if (note) note.textContent = `Sales data could not be loaded: ${error.message}`;
+        document.getElementById("salesTrendChart").innerHTML =
+          '<div class="sales-empty-state">Try refreshing the report. Your other business pages are unchanged.</div>';
       }
+    }
+
+    function setSalesPeriod(days) {
+      salesPageState.days = days;
+      salesPageState.customRange = null;
+      salesPageState.page = 0;
+      document.querySelectorAll(".sales-period-button").forEach(button => {
+        const active = Number(button.dataset.salesDays) === days;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      fetchSalesInsights();
+    }
+
+    function applySalesCustomRange() {
+      const start = document.getElementById("salesStartDate")?.value;
+      const end = document.getElementById("salesEndDate")?.value;
+      if (!start || !end || start > end) {
+        document.getElementById("salesDataNote").textContent = "Choose a start date and an end date on or after it.";
+        return;
+      }
+      salesPageState.customRange = { start, end };
+      document.querySelectorAll(".sales-period-button").forEach(button => {
+        button.classList.remove("active");
+        button.setAttribute("aria-pressed", "false");
+      });
+      salesPageState.page = 0;
+      fetchSalesInsights();
+    }
+
+    function syncSalesDateControls() {
+      const data = salesPageState.data;
+      if (!data) return;
+      const start = document.getElementById("salesStartDate");
+      const end = document.getElementById("salesEndDate");
+      if (start) start.value = data.period.start_date;
+      if (end) end.value = data.period.end_date;
+      if (start && data.latest_order_date) start.max = data.latest_order_date;
+      if (end && data.latest_order_date) end.max = data.latest_order_date;
+      const desc = document.getElementById("salesPeriodDescription");
+      if (desc) {
+        desc.textContent = `${formatSalesDate(data.period.start_date)} – ${formatSalesDate(data.period.end_date)} compared with ${formatSalesDate(data.period.previous_start_date)} – ${formatSalesDate(data.period.previous_end_date)}.`;
+      }
+      const last = document.getElementById("salesLastUpdated");
+      if (last) last.textContent = data.latest_order_date
+        ? `Sales records through ${formatSalesDate(data.latest_order_date)}`
+        : "No completed sales records yet";
+      const range = document.getElementById("salesTrendSubtitle");
+      if (range) range.textContent = `${formatSalesDate(data.period.start_date)} – ${formatSalesDate(data.period.end_date)} · compared with the previous ${data.period.days} days`;
+    }
+
+    function formatSalesDate(value) {
+      if (!value) return "date unavailable";
+      return new Date(`${value}T00:00:00Z`).toLocaleDateString("en-IN", {
+        day: "numeric", month: "short", timeZone: "UTC"
+      });
+    }
+
+    function escapeSalesHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    function populateSalesCategoryFilter() {
+      const select = document.getElementById("salesCategoryFilter");
+      if (!select || !salesPageState.data) return;
+      const categories = salesPageState.data.categories || [];
+      if (!categories.some(row => row.category === salesPageState.category)) {
+        salesPageState.category = "ALL";
+      }
+      select.replaceChildren(new Option("All categories", "ALL"));
+      categories.forEach(row => select.add(new Option(row.category, row.category)));
+      select.value = salesPageState.category;
+    }
+
+    function clearSalesFilters() {
+      salesPageState.day = "ALL";
+      salesPageState.customerType = "ALL";
+      salesPageState.category = "ALL";
+      salesPageState.page = 0;
+      document.getElementById("salesDayFilter").value = "ALL";
+      document.getElementById("salesCustomerFilter").value = "ALL";
+      document.getElementById("salesCategoryFilter").value = "ALL";
+      renderSalesDashboard();
+    }
+
+    function salesOrdersForPeriod(period) {
+      if (!salesPageState.data) return [];
+      const selectedDay = document.getElementById("salesDayFilter")?.value || "ALL";
+      const selectedCustomer = document.getElementById("salesCustomerFilter")?.value || "ALL";
+      const category = document.getElementById("salesCategoryFilter")?.value || "ALL";
+      const periodStart = period === "current"
+        ? salesPageState.data.period.start_date
+        : salesPageState.data.period.previous_start_date;
+      const periodEnd = period === "current"
+        ? salesPageState.data.period.end_date
+        : salesPageState.data.period.previous_end_date;
+      return salesPageState.data.orders
+        .filter(order => order.order_date >= periodStart && order.order_date <= periodEnd)
+        .filter(order => selectedCustomer === "ALL" || order.customer_type === selectedCustomer)
+        .filter(order => selectedDay === "ALL" || String(new Date(`${order.order_date}T00:00:00Z`).getUTCDay()) === selectedDay)
+        .map(order => {
+          const items = category === "ALL"
+            ? order.items
+            : order.items.filter(item => item.category === category);
+          if (category !== "ALL" && !items.length) return null;
+          return {
+            ...order,
+            filteredItems: items,
+            sales_value: category === "ALL"
+              ? order.order_value
+              : items.reduce((total, item) => total + Number(item.total_price || 0), 0)
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function salesTotals(orders) {
+      const sales = orders.reduce((total, order) => total + order.sales_value, 0);
+      const repeat = orders.filter(order => order.customer_type === "REPEAT").length;
+      return {
+        sales,
+        orders: orders.length,
+        repeat,
+        repeatPct: orders.length ? repeat * 100 / orders.length : 0,
+        average: orders.length ? sales / orders.length : 0,
+        units: orders.reduce((sum, order) => sum + order.filteredItems.reduce(
+          (itemSum, item) => itemSum + Number(item.quantity || 0), 0
+        ), 0)
+      };
+    }
+
+    function renderSalesDashboard() {
+      const data = salesPageState.data;
+      if (!data) return;
+      salesPageState.day = document.getElementById("salesDayFilter").value;
+      salesPageState.customerType = document.getElementById("salesCustomerFilter").value;
+      salesPageState.category = document.getElementById("salesCategoryFilter").value;
+      const currentOrders = salesOrdersForPeriod("current");
+      const previousOrders = salesOrdersForPeriod("previous");
+      const current = salesTotals(currentOrders);
+      const previous = salesTotals(previousOrders);
+      const changePct = previous.sales
+        ? (current.sales - previous.sales) * 100 / previous.sales
+        : null;
+
+      setSalesKpi("salesKpiCurrent", formatINR(current.sales));
+      setSalesKpi("salesKpiCurrentHint", `${current.orders} completed orders`);
+      setSalesKpi("salesKpiChange", changePct === null ? "—" : `${changePct > 0 ? "+" : ""}${changePct.toFixed(1)}%`);
+      setSalesKpi("salesKpiChangeHint", changePct === null ? "No previous-period sales to compare" : `${formatINR(Math.abs(current.sales - previous.sales))} ${changePct < 0 ? "lower" : "higher"} than the previous period`);
+      setSalesKpi("salesKpiOrders", current.orders.toLocaleString("en-IN"));
+      setSalesKpi("salesKpiOrdersHint", `${previous.orders} orders in the previous period`);
+      setSalesKpi("salesKpiAov", current.orders ? formatINR(current.average) : "—");
+      setSalesKpi("salesKpiRepeat", `${current.repeatPct.toFixed(1)}%`);
+      setSalesKpi("salesKpiRepeatHint", `${current.repeat} returning orders out of ${current.orders}`);
+      setSalesKpi("salesKpiUnits", current.units.toLocaleString("en-IN"));
+
+      const changeValue = document.getElementById("salesKpiChange");
+      if (changeValue) {
+        changeValue.classList.toggle("is-negative", changePct !== null && changePct < 0);
+        changeValue.classList.toggle("is-positive", changePct !== null && changePct > 0);
+      }
+
+      const activeLabels = [];
+      if (salesPageState.day !== "ALL") activeLabels.push(new Date(2024, 0, Number(salesPageState.day)).toLocaleDateString("en", { weekday: "long" }));
+      if (salesPageState.customerType !== "ALL") activeLabels.push(salesPageState.customerType === "NEW" ? "First-time orders" : "Returning orders");
+      if (salesPageState.category !== "ALL") activeLabels.push(salesPageState.category);
+      document.getElementById("salesActiveFilters").textContent = activeLabels.length
+        ? `Filtered by: ${activeLabels.join(" · ")}`
+        : "Showing all completed orders";
+      document.getElementById("salesClearFilters").hidden = !activeLabels.length;
+
+      const dataNote = document.getElementById("salesDataNote");
+      const coverage = data.summary.item_detail_coverage_pct;
+      dataNote.textContent = `${data.is_demo ? "Demo data" : "Completed order data"} · Orders through ${formatSalesDate(data.latest_order_date)}. Product, category and item counts use recorded order items (${coverage}% of orders have item detail). Gross profit is not shown because product cost data is not recorded.`;
+      document.getElementById("salesProductCoverage").textContent =
+        `Recorded product line items in the selected period · ${coverage}% of current-period orders have item details. Gross profit is unavailable because costs are not recorded.`;
+
+      renderSalesTrend(currentOrders, previousOrders, current, previous);
+      renderSalesWeekdayChart(currentOrders, previousOrders);
+      renderSalesRepeatChart(currentOrders);
+      renderSalesHeatmap(currentOrders);
+      const productRows = buildFilteredSalesProducts(currentOrders, previousOrders);
+      renderSalesProductChart(productRows);
+      renderSalesCategoryChart(productRows);
+      renderSalesProductMatrix(productRows);
+      renderSalesProductTable(productRows);
+      renderSalesInsight(currentOrders, previousOrders, current, previous, productRows, changePct);
+    }
+
+    function setSalesKpi(id, value) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
+
+    function renderSalesTrend(currentOrders, previousOrders, current, previous) {
+      const container = document.getElementById("salesTrendChart");
+      const days = salesPageState.data.period.days;
+      const groupSize = days > 35 ? 7 : 1;
+      const groupCount = Math.ceil(days / groupSize);
+      const currentValues = Array(groupCount).fill(0);
+      const previousValues = Array(groupCount).fill(0);
+      const start = salesPageState.data.period.start_date;
+      const previousStart = salesPageState.data.period.previous_start_date;
+      const addOrders = (orders, target, periodStart) => orders.forEach(order => {
+        const offset = Math.floor((Date.parse(`${order.order_date}T00:00:00Z`) - Date.parse(`${periodStart}T00:00:00Z`)) / 86400000);
+        if (offset >= 0 && offset < days) target[Math.floor(offset / groupSize)] += order.sales_value;
+      });
+      addOrders(currentOrders, currentValues, start);
+      addOrders(previousOrders, previousValues, previousStart);
+      const max = Math.max(...currentValues, ...previousValues, 1);
+      const width = 760, height = 270, left = 54, right = 18, top = 18, bottom = 38;
+      const chartWidth = width - left - right, chartHeight = height - top - bottom;
+      const x = index => left + (groupCount <= 1 ? chartWidth / 2 : index * chartWidth / (groupCount - 1));
+      const y = value => top + chartHeight - (value / max) * chartHeight;
+      const linePath = values => values.map((value, index) => `${index ? "L" : "M"}${x(index).toFixed(1)},${y(value).toFixed(1)}`).join(" ");
+      let markup = `<svg viewBox="0 0 ${width} ${height}" class="sales-trend-svg" role="presentation">`;
+      [0, .25, .5, .75, 1].forEach(part => {
+        const value = max * part;
+        const yPos = y(value);
+        markup += `<line x1="${left}" y1="${yPos}" x2="${width - right}" y2="${yPos}" class="sales-chart-gridline"/>`;
+        markup += `<text x="${left - 8}" y="${yPos + 4}" text-anchor="end" class="sales-chart-axis">${escapeSalesHtml(formatSalesAxis(value))}</text>`;
+      });
+      const labelStep = Math.max(1, Math.ceil(groupCount / 7));
+      for (let i = 0; i < groupCount; i += labelStep) {
+        const labelDate = new Date(Date.parse(`${start}T00:00:00Z`) + (i * groupSize * 86400000)).toISOString().slice(5, 10);
+        markup += `<text x="${x(i)}" y="${height - 10}" text-anchor="middle" class="sales-chart-axis">${labelDate}</text>`;
+      }
+      markup += `<path d="${linePath(previousValues)}" class="sales-chart-line previous"/>`;
+      markup += `<path d="${linePath(currentValues)}" class="sales-chart-line current"/>`;
+      currentValues.forEach((value, index) => {
+        markup += `<circle cx="${x(index)}" cy="${y(value)}" r="3.5" class="sales-chart-point current"><title>${escapeSalesHtml(formatINR(value))}</title></circle>`;
+      });
+      previousValues.forEach((value, index) => {
+        markup += `<circle cx="${x(index)}" cy="${y(value)}" r="3" class="sales-chart-point previous"><title>${escapeSalesHtml(formatINR(value))}</title></circle>`;
+      });
+      markup += "</svg>";
+      container.innerHTML = currentOrders.length || previousOrders.length
+        ? markup
+        : '<div class="sales-empty-state">No completed sales in this date range.</div>';
+      const insight = document.getElementById("salesTrendInsight");
+      if (insight) {
+        if (current.sales === 0 && previous.sales === 0) insight.textContent = "No sales were recorded in either period.";
+        else if (!previous.sales) insight.textContent = "There are no earlier completed sales records for comparison.";
+        else {
+          const pct = ((current.sales - previous.sales) * 100 / previous.sales).toFixed(1);
+          insight.textContent = `Recorded sales are ${Math.abs(pct)}% ${current.sales < previous.sales ? "lower" : "higher"} than the previous period.`;
+        }
+      }
+    }
+
+    function formatSalesAxis(value) {
+      if (value >= 1000000) return `₹${(value / 1000000).toFixed(1)}m`;
+      if (value >= 1000) return `₹${Math.round(value / 1000)}k`;
+      return `₹${Math.round(value)}`;
+    }
+
+    function weekdaySales(orders) {
+      const values = Array(7).fill(0);
+      orders.forEach(order => {
+        const day = new Date(`${order.order_date}T00:00:00Z`).getUTCDay();
+        values[day] += order.sales_value;
+      });
+      return values;
+    }
+
+    function renderSalesWeekdayChart(currentOrders, previousOrders) {
+      const container = document.getElementById("salesWeekdayChart");
+      const current = weekdaySales(currentOrders);
+      const previous = weekdaySales(previousOrders);
+      const max = Math.max(...current, ...previous, 1);
+      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const markup = days.map((label, index) => {
+        const dayIndex = (index + 1) % 7;
+        const change = previous[dayIndex] ? (current[dayIndex] - previous[dayIndex]) * 100 / previous[dayIndex] : null;
+        return `<button type="button" class="sales-weekday-row ${salesPageState.day === String(dayIndex) ? "selected" : ""}" aria-pressed="${salesPageState.day === String(dayIndex)}" aria-label="${label}: this period ${escapeSalesHtml(formatINR(current[dayIndex]))}; previous ${escapeSalesHtml(formatINR(previous[dayIndex]))}" onclick="setSalesDayFilter('${dayIndex}')">
+          <span class="sales-weekday-label">${label}</span>
+          <span class="sales-weekday-bars">
+            <i class="previous" style="width:${Math.max(1, previous[dayIndex] / max * 100)}%" title="Previous: ${escapeSalesHtml(formatINR(previous[dayIndex]))}"></i>
+            <i class="current" style="width:${Math.max(1, current[dayIndex] / max * 100)}%" title="This period: ${escapeSalesHtml(formatINR(current[dayIndex]))}"></i>
+          </span>
+          <span class="sales-weekday-change ${change !== null && change < 0 ? "negative" : ""}">${change === null ? "—" : `${change > 0 ? "+" : ""}${change.toFixed(0)}%`}</span>
+        </button>`;
+      }).join("");
+      container.innerHTML = markup || '<div class="sales-empty-state">No weekday sales are available.</div>';
+      const changes = days.map((label, index) => ({
+        label, delta: current[(index + 1) % 7] - previous[(index + 1) % 7]
+      })).sort((a, b) => a.delta - b.delta);
+      const insight = document.getElementById("salesWeekdayInsight");
+      if (insight) insight.textContent = currentOrders.length && previousOrders.length
+        ? `${changes[0].label} has the largest recorded drop (${formatINR(Math.abs(changes[0].delta))}) compared with the previous period.`
+        : "A weekday comparison will appear when both periods have sales records.";
+    }
+
+    function setSalesDayFilter(day) {
+      document.getElementById("salesDayFilter").value = day;
+      renderSalesDashboard();
+    }
+
+    function renderSalesRepeatChart(currentOrders) {
+      const container = document.getElementById("salesRepeatChart");
+      const insight = document.getElementById("salesRepeatInsight");
+      const start = new Date(`${salesPageState.data.period.start_date}T00:00:00Z`);
+      const buckets = new Map();
+      currentOrders.forEach(order => {
+        const date = new Date(`${order.order_date}T00:00:00Z`);
+        const monday = new Date(date);
+        monday.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 6) % 7));
+        const key = monday.toISOString().slice(0, 10);
+        if (!buckets.has(key)) buckets.set(key, { total: 0, repeat: 0 });
+        const bucket = buckets.get(key);
+        bucket.total++;
+        if (order.customer_type === "REPEAT") bucket.repeat++;
+      });
+      if (!buckets.size) {
+        container.innerHTML = '<div class="sales-empty-state">No customer orders in this period.</div>';
+        insight.textContent = "Returning orders are identified from an earlier completed order for the same customer.";
+        return;
+      }
+      const rows = [...buckets.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+      container.innerHTML = `<div class="sales-repeat-bars">${rows.map(([week, bucket]) => {
+        const rate = bucket.total ? bucket.repeat * 100 / bucket.total : 0;
+        return `<div class="sales-repeat-week" title="${escapeSalesHtml(formatSalesDate(week))}: ${bucket.repeat} returning orders of ${bucket.total}">
+          <div class="sales-repeat-value">${rate.toFixed(0)}%</div>
+          <div class="sales-repeat-track"><i style="height:${rate}%"></i></div>
+          <span>${escapeSalesHtml(formatSalesDate(week))}</span>
+        </div>`;
+      }).join("")}</div>`;
+      const total = currentOrders.length;
+      const repeat = currentOrders.filter(order => order.customer_type === "REPEAT").length;
+      insight.textContent = repeat
+        ? `${repeat} of ${total} completed orders came from customers with an earlier recorded order.`
+        : `No repeat orders were identified among these ${total} completed orders. This is based on the stored order history, not a forecast.`;
+    }
+
+    function renderSalesHeatmap(currentOrders) {
+      const panel = document.getElementById("salesHeatmapPanel");
+      if (salesPageState.data.period.days < 21) {
+        panel.hidden = true;
+        return;
+      }
+      panel.hidden = false;
+      const dailySales = new Map();
+      currentOrders.forEach(order => dailySales.set(
+        order.order_date, (dailySales.get(order.order_date) || 0) + order.sales_value
+      ));
+      const start = new Date(`${salesPageState.data.period.start_date}T00:00:00Z`);
+      const offset = (start.getUTCDay() + 6) % 7;
+      const values = Array(salesPageState.data.period.days).fill(0).map((_, index) => {
+        const day = new Date(start);
+        day.setUTCDate(day.getUTCDate() + index);
+        const key = day.toISOString().slice(0, 10);
+        return { date: key, sales: dailySales.get(key) || 0 };
+      });
+      const max = Math.max(...values.map(row => row.sales), 1);
+      const weekCount = Math.ceil((offset + values.length) / 7);
+      const cells = Array(offset).fill('<span class="sales-heatmap-cell empty"></span>');
+      values.forEach(row => {
+        const level = row.sales === 0 ? 0 : Math.min(4, Math.ceil(row.sales / max * 4));
+        cells.push(`<span class="sales-heatmap-cell level-${level}" title="${escapeSalesHtml(formatSalesDate(row.date))}: ${escapeSalesHtml(formatINR(row.sales))}" aria-label="${escapeSalesHtml(formatSalesDate(row.date))}: ${escapeSalesHtml(formatINR(row.sales))}"></span>`);
+      });
+      while (cells.length < weekCount * 7) cells.push('<span class="sales-heatmap-cell empty"></span>');
+      document.getElementById("salesHeatmap").innerHTML = `<div class="sales-heatmap-days">${["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => `<span>${day}</span>`).join("")}</div><div class="sales-heatmap-grid">${cells.join("")}</div>`;
+    }
+
+    function buildFilteredSalesProducts(currentOrders, previousOrders) {
+      const products = new Map();
+      const collect = (orders, period) => orders.forEach(order => {
+        order.filteredItems.forEach(item => {
+          if (!products.has(item.product_id)) {
+            products.set(item.product_id, {
+              product_id: item.product_id, sku: item.sku, name: item.product_name,
+              category: item.category, unit_price: Number(item.unit_price),
+              units_sold: 0, previous_units_sold: 0, sales_inr: 0,
+              previous_sales_inr: 0, currentOrders: new Set(), repeatOrders: new Set()
+            });
+          }
+          const product = products.get(item.product_id);
+          if (period === "current") {
+            product.units_sold += Number(item.quantity);
+            product.sales_inr += Number(item.total_price);
+            product.currentOrders.add(order.order_id);
+            if (order.customer_type === "REPEAT") product.repeatOrders.add(order.order_id);
+          } else {
+            product.previous_units_sold += Number(item.quantity);
+            product.previous_sales_inr += Number(item.total_price);
+          }
+        });
+      });
+      collect(currentOrders, "current");
+      collect(previousOrders, "previous");
+      return [...products.values()].map(product => {
+        product.repeat_order_share_pct = product.currentOrders.size
+          ? product.repeatOrders.size * 100 / product.currentOrders.size : 0;
+        product.growth_pct = product.previous_sales_inr
+          ? (product.sales_inr - product.previous_sales_inr) * 100 / product.previous_sales_inr : null;
+        delete product.currentOrders;
+        delete product.repeatOrders;
+        return product;
+      });
+    }
+
+    function renderSalesProductChart(products) {
+      const container = document.getElementById("salesProductChart");
+      const rows = products.filter(row => row.sales_inr > 0).sort((a, b) => b.sales_inr - a.sales_inr).slice(0, 6);
+      if (!rows.length) {
+        container.innerHTML = '<div class="sales-empty-state">No recorded product details match these filters.</div>';
+        return;
+      }
+      const max = Math.max(...rows.map(row => row.sales_inr), 1);
+      container.innerHTML = rows.map((row, index) => `
+        <div class="sales-product-bar-row">
+          <span class="sales-product-rank">${index + 1}</span>
+          <span class="sales-product-bar-name" title="${escapeSalesHtml(row.name)}">${escapeSalesHtml(row.name)}</span>
+          <span class="sales-product-bar-track"><i style="width:${Math.max(2, row.sales_inr / max * 100)}%"></i></span>
+          <strong>${escapeSalesHtml(formatINR(row.sales_inr))}</strong>
+        </div>`).join("");
+    }
+
+    function renderSalesCategoryChart(products) {
+      const container = document.getElementById("salesCategoryChart");
+      const categories = new Map();
+      products.filter(row => row.sales_inr > 0).forEach(row => {
+        const value = categories.get(row.category) || 0;
+        categories.set(row.category, value + row.sales_inr);
+      });
+      const rows = [...categories.entries()].sort((a, b) => b[1] - a[1]);
+      if (!rows.length) {
+        container.innerHTML = '<div class="sales-empty-state">No category detail matches these filters.</div>';
+        return;
+      }
+      const max = Math.max(...rows.map(row => row[1]), 1);
+      container.replaceChildren();
+      rows.forEach(([category, value]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `sales-category-row ${salesPageState.category === category ? "selected" : ""}`;
+        button.setAttribute("aria-pressed", String(salesPageState.category === category));
+        button.addEventListener("click", () => setSalesCategoryFilter(category));
+        const label = document.createElement("span");
+        label.textContent = category;
+        const track = document.createElement("span");
+        track.className = "sales-category-track";
+        const bar = document.createElement("i");
+        bar.style.width = `${Math.max(2, value / max * 100)}%`;
+        track.appendChild(bar);
+        const amount = document.createElement("strong");
+        amount.textContent = formatINR(value);
+        button.append(label, track, amount);
+        container.appendChild(button);
+      });
+    }
+
+    function setSalesCategoryFilter(category) {
+      document.getElementById("salesCategoryFilter").value = category;
+      salesPageState.page = 0;
+      renderSalesDashboard();
+    }
+
+    function renderSalesProductMatrix(products) {
+      const container = document.getElementById("salesProductMatrix");
+      const rows = products.filter(row => row.units_sold > 0 && row.sales_inr >= 0);
+      if (rows.length < 2) {
+        container.innerHTML = '<div class="sales-empty-state">The product comparison appears when at least two products have recorded sales.</div>';
+        return;
+      }
+      const width = 760, height = 260, left = 52, right = 24, top = 16, bottom = 38;
+      const maxUnits = Math.max(...rows.map(row => row.units_sold), 1);
+      const maxSales = Math.max(...rows.map(row => row.sales_inr), 1);
+      const plotWidth = width - left - right, plotHeight = height - top - bottom;
+      let svg = `<svg viewBox="0 0 ${width} ${height}" class="sales-matrix-svg" role="presentation">`;
+      [0, .25, .5, .75, 1].forEach(part => {
+        const y = top + plotHeight * (1 - part);
+        svg += `<line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" class="sales-chart-gridline"/>`;
+      });
+      rows.forEach(row => {
+        const x = left + row.units_sold / maxUnits * plotWidth;
+        const y = top + plotHeight - row.sales_inr / maxSales * plotHeight;
+        const radius = 5 + Math.min(9, Math.sqrt(row.sales_inr / maxSales) * 8);
+        svg += `<circle cx="${x}" cy="${y}" r="${radius}" class="sales-matrix-point"><title>${escapeSalesHtml(row.name)} · ${row.units_sold} items · ${escapeSalesHtml(formatINR(row.sales_inr))}</title></circle>`;
+      });
+      svg += `<text x="${left}" y="${height - 8}" class="sales-chart-axis">0 items</text><text x="${width - right}" y="${height - 8}" text-anchor="end" class="sales-chart-axis">${maxUnits} items</text>`;
+      svg += `<text x="12" y="${top + 8}" class="sales-chart-axis">${escapeSalesHtml(formatSalesAxis(maxSales))}</text><text x="12" y="${height - bottom}" class="sales-chart-axis">₹0</text>`;
+      svg += "</svg>";
+      container.innerHTML = svg;
+    }
+
+    function renderSalesInsight(currentOrders, previousOrders, current, previous, products, changePct) {
+      const text = document.getElementById("salesInsightText");
+      const evidence = document.getElementById("salesInsightEvidence");
+      if (!currentOrders.length && !previousOrders.length) {
+        text.textContent = "There are no completed sales records in this period. Try a wider date range.";
+        evidence.textContent = "";
+        return;
+      }
+      const topProduct = [...products].sort((a, b) => b.sales_inr - a.sales_inr)[0];
+      if (changePct === null) {
+        text.textContent = "There is no earlier sales history for this period, so a change cannot be calculated yet.";
+      } else if (changePct < 0) {
+        text.textContent = `Recorded sales are down ${Math.abs(changePct).toFixed(1)}% from the previous period. This shows a change in sales, but does not identify its cause.`;
+      } else if (changePct > 0) {
+        text.textContent = `Recorded sales are up ${changePct.toFixed(1)}% from the previous period. Review the product and weekday charts to see where the increase came from.`;
+      } else {
+        text.textContent = "Recorded sales are unchanged from the previous period.";
+      }
+      const facts = [
+        `${current.orders} completed orders · ${formatINR(current.sales)} recorded sales`,
+        `${current.repeat} returning orders based on earlier completed orders`
+      ];
+      if (topProduct && topProduct.sales_inr > 0) facts.push(`Top recorded product: ${topProduct.name} (${formatINR(topProduct.sales_inr)})`);
+      evidence.textContent = facts.join("  ·  ");
+    }
+
+    function getVisibleSalesProducts() {
+      const search = (document.getElementById("salesProductSearch")?.value || "").trim().toLowerCase();
+      const products = buildFilteredSalesProducts(salesOrdersForPeriod("current"), salesOrdersForPeriod("previous"));
+      const filtered = products.filter(product =>
+        !search || `${product.sku} ${product.name} ${product.category}`.toLowerCase().includes(search)
+      );
+      const key = salesPageState.sortBy;
+      filtered.sort((a, b) => {
+        const left = a[key] ?? -Infinity, right = b[key] ?? -Infinity;
+        const cmp = typeof left === "string" ? left.localeCompare(right) : left - right;
+        return salesPageState.sortDirection === "asc" ? cmp : -cmp;
+      });
+      return filtered;
+    }
+
+    function renderSalesProductTable() {
+      const body = document.getElementById("salesProductTableBody");
+      if (!body || !salesPageState.data) return;
+      const products = getVisibleSalesProducts();
+      const pageSize = 8;
+      const pageCount = Math.max(1, Math.ceil(products.length / pageSize));
+      salesPageState.page = Math.min(salesPageState.page, pageCount - 1);
+      const pageRows = products.slice(salesPageState.page * pageSize, (salesPageState.page + 1) * pageSize);
+      body.innerHTML = pageRows.length ? pageRows.map(product => `
+        <tr>
+          <td><span class="sales-sku">${escapeSalesHtml(product.sku || "—")}</span></td>
+          <td><strong>${escapeSalesHtml(product.name)}</strong></td>
+          <td>${escapeSalesHtml(product.category)}</td>
+          <td>${escapeSalesHtml(formatINR(product.unit_price))}</td>
+          <td>${product.units_sold.toLocaleString("en-IN")}</td>
+          <td><strong>${escapeSalesHtml(formatINR(product.sales_inr))}</strong></td>
+          <td class="${product.growth_pct !== null && product.growth_pct < 0 ? "sales-negative" : "sales-positive"}">${product.growth_pct === null ? "No earlier record" : `${product.growth_pct > 0 ? "+" : ""}${product.growth_pct.toFixed(1)}%`}</td>
+          <td class="sales-repeat-column">${product.repeat_order_share_pct.toFixed(1)}%</td>
+        </tr>`).join("") : '<tr><td colspan="8" class="sales-table-empty">No product records match these filters.</td></tr>';
+      document.getElementById("salesProductCount").textContent = `${products.length} product${products.length === 1 ? "" : "s"} · recorded line items only`;
+      document.getElementById("salesProductsPageLabel").textContent = `Page ${salesPageState.page + 1} of ${pageCount}`;
+      document.getElementById("salesProductsPrev").disabled = salesPageState.page === 0;
+      document.getElementById("salesProductsNext").disabled = salesPageState.page >= pageCount - 1;
+    }
+
+    function sortSalesProducts(key) {
+      if (salesPageState.sortBy === key) salesPageState.sortDirection = salesPageState.sortDirection === "asc" ? "desc" : "asc";
+      else {
+        salesPageState.sortBy = key;
+        salesPageState.sortDirection = key === "name" || key === "sku" || key === "category" ? "asc" : "desc";
+      }
+      salesPageState.page = 0;
+      renderSalesProductTable();
+    }
+
+    function changeSalesProductPage(delta) {
+      salesPageState.page = Math.max(0, salesPageState.page + delta);
+      renderSalesProductTable();
+    }
+
+    function toggleSalesRepeatColumn() {
+      document.querySelectorAll(".sales-repeat-column").forEach(cell => {
+        cell.hidden = !document.getElementById("salesShowRepeatColumn").checked;
+      });
+    }
+
+    function exportSalesProductsCsv() {
+      const products = getVisibleSalesProducts();
+      if (!products.length) {
+        showSiteToast("There are no product rows to download.");
+        return;
+      }
+      const columns = [
+        ["SKU", "sku"], ["Product", "name"], ["Category", "category"],
+        ["Unit price INR", "unit_price"], ["Items sold", "units_sold"],
+        ["Recorded sales INR", "sales_inr"], ["Change percent", "growth_pct"],
+        ["Returning order share percent", "repeat_order_share_pct"]
+      ];
+      const quote = value => `"${String(value ?? "").replace(/"/g, '""')}"`;
+      const csv = [columns.map(([label]) => quote(label)).join(","),
+        ...products.map(row => columns.map(([, key]) => quote(row[key])).join(","))].join("\r\n");
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `actionmate-sales-${salesPageState.data.period.start_date}-to-${salesPageState.data.period.end_date}.csv`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
     // --- 4. Customer Directory & Segmentation Loader ---

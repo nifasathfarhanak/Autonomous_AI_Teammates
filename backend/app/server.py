@@ -30,7 +30,8 @@ from .services.roi_service import get_roi_summary, simulate_and_verify_roi
 from .services.revenue_attribution_service import get_customer_followups
 from .services.sales_intelligence_service import (
     get_merchant_profile, calculate_sales_summary, calculate_repeat_analysis,
-    detect_sales_drop, get_customer_segments, get_product_performance, get_customer_purchase_history
+    detect_sales_drop, get_customer_segments, get_product_performance, get_customer_purchase_history,
+    get_sales_visualization_data
 )
 from .services.campaign_service import CampaignService
 from .services.simulated_execution_adapter import (
@@ -790,6 +791,22 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             return
 
         # 20. Phase 2 Data API: Sales Summary & Trends
+        elif path == "/api/sales/visualization":
+            try:
+                days = int(query.get("days", ["7"])[0])
+                data = get_sales_visualization_data(
+                    merchant_id=query.get("merchant_id", ["MERCH-001"])[0],
+                    days=days,
+                    start_date=query.get("start_date", [None])[0],
+                    end_date=query.get("end_date", [None])[0]
+                )
+                self._set_headers(200)
+                self.wfile.write(json.dumps(data).encode('utf-8'))
+            except ValueError as error:
+                self._set_headers(400)
+                self.wfile.write(json.dumps({"error": str(error)}).encode('utf-8'))
+            return
+
         elif path in ("/api/sales/summary", "/api/sales/trends"):
             summary = calculate_sales_summary("MERCH-001")
             self._set_headers(200)
