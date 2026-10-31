@@ -557,9 +557,9 @@
         <!-- View Header -->
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Autonomous Business Execution</div>
-            <h2 class="view-title" id="headingAssistant">Paytm AI ActionMate Assistant</h2>
-            <p class="view-description">Stateful autonomous teammate that understands requests, plans actions, calls tools, requests approval, and verifies outcomes.</p>
+            <div class="view-eyebrow">Your grocery shop</div>
+            <h2 class="view-title" id="headingAssistant">Ask ActionMate for help</h2>
+            <p class="view-description">Ask a question or describe a task. ActionMate checks your shop records, explains what it found, and asks before customer-facing actions.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchTaskDetails('WF-REC-1042')" title="Refresh task state">
@@ -571,11 +571,11 @@
         <!-- Conversational Prompt Bar -->
         <div class="actionmate-prompt-card">
           <label class="form-label" for="assistantPromptInput" style="font-size: 14px; font-weight: 700; color: var(--paytm-navy); margin-bottom: 8px; display: block;">
-            Enter Merchant Instruction or Operational Question:
+            What would you like help with?
           </label>
           <div class="prompt-input-row">
             <textarea id="assistantPromptInput" class="prompt-textarea" rows="2"
-                      placeholder="e.g. My sales have dropped this week. Help me bring customers back.">My sales have dropped this week. Help me bring customers back.</textarea>
+                      placeholder="For example: Which products are running low?">My sales have dropped this week. Help me bring customers back.</textarea>
             <button class="prompt-btn-send" id="btnAssistantSubmitPrompt" onclick="submitAssistantPrompt()">
               <span>Send Request</span>
             </button>
@@ -585,14 +585,14 @@
             <span class="suggestion-chip" onclick="setAssistantPrompt('My sales have dropped this week. Help me bring customers back.')">
               "My sales have dropped this week. Help me bring customers back."
             </span>
-            <span class="suggestion-chip" onclick="setAssistantPrompt('Analyze repeat customer drop-off this month')">
-              "Analyze repeat customer drop-off this month"
+            <span class="suggestion-chip" onclick="setAssistantPrompt('Are regular grocery shoppers coming back?')">
+              "Are regular shoppers coming back?"
             </span>
-            <span class="suggestion-chip" onclick="setAssistantPrompt('Draft a re-engagement offer for inactive diners')">
-              "Draft a re-engagement offer for inactive diners"
+            <span class="suggestion-chip" onclick="setAssistantPrompt('Suggest an offer for grocery shoppers')">
+              "Suggest an offer for grocery shoppers"
             </span>
-            <span class="suggestion-chip" onclick="setAssistantPrompt('Check outstanding quotations over ₹50,000')">
-              "Check outstanding quotations over ₹50,000"
+            <span class="suggestion-chip" onclick="setAssistantPrompt('Which grocery products may run out soon?')">
+              "Which products may run out soon?"
             </span>
           </div>
         </div>
@@ -602,8 +602,8 @@
         <div class="card" style="margin-bottom: 24px; border: 1.5px solid var(--border-light);">
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFD; border-bottom: 1px solid var(--border-light);">
             <div>
-              <div class="card-title" style="font-size: 15px;">Interactive Conversation &amp; Business Intelligence</div>
-              <div class="card-subtitle">Ask questions about sales, profit margins, stock risks, cash flow, or local market demand</div>
+              <div class="card-title" style="font-size: 15px;">Your conversation</div>
+              <div class="card-subtitle">Ask about sales, product profit, stock, bills, or regular shoppers</div>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="clearAssistantChat()" style="font-size: 11.5px;">Clear Conversation</button>
           </div>
@@ -614,17 +614,16 @@
               <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm);">
                 <div style="font-size: 11.5px; font-weight: 700; color: var(--paytm-blue); margin-bottom: 4px;">Paytm AI ActionMate</div>
                 <div style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">
-                  Namaste Ramesh ji! I am your AI Business Assistant. I analyze your Soundbox transactions, profit margins, inventory levels, and local demand trends to help you grow profitably.
+                  Namaste Ramesh ji! I can help you understand your recorded sales, product costs, stock, bills, and regular shoppers.
                   <br><br>
-                  What would you like to know today? Click any question below or type your query:
+                  Choose a question or type what you need. I’ll show the records behind my answer:
                 </div>
                 <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
                   <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Why did my sales drop this week?')" style="font-size: 11.5px; border-radius: 14px;">Why did sales drop?</button>
-                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Which products have highest gross profit?')" style="font-size: 11.5px; border-radius: 14px;">Highest profit items</button>
-                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my inventory risk?')" style="font-size: 11.5px; border-radius: 14px;">Check slow stock</button>
-                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my cash flow forecast?')" style="font-size: 11.5px; border-radius: 14px;">Cash-flow runway</button>
-                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is the local demand trend in Johari Bazaar?')" style="font-size: 11.5px; border-radius: 14px;">Bazaar demand trend</button>
-                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Compare 5% discount with bundle')" style="font-size: 11.5px; border-radius: 14px;">Compare strategies</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Which products have highest gross profit?')" style="font-size: 11.5px; border-radius: 14px;">Which products earn more?</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my inventory risk?')" style="font-size: 11.5px; border-radius: 14px;">What stock needs attention?</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my cash flow forecast?')" style="font-size: 11.5px; border-radius: 14px;">What bills are coming up?</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Compare a ₹50 offer on grocery baskets above ₹499 with no offer')" style="font-size: 11.5px; border-radius: 14px;">Compare a grocery offer</button>
                 </div>
               </div>
             </div>
@@ -638,10 +637,10 @@
             <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
               <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                  <span class="badge" style="background: var(--paytm-navy); color: #FFF; font-family: var(--font-mono); font-weight: 700;">TASK #1042</span>
+                  <span class="badge" style="background: var(--paytm-navy); color: #FFF; font-weight: 700;">OFFER TO REVIEW</span>
                   <div class="card-title" id="taskTitleHeader">Review regular grocery shoppers</div>
                 </div>
-                <div class="card-subtitle" id="taskPromptSubtitle">Prompt: "My sales have dropped this week. Help me bring customers back."</div>
+                <div class="card-subtitle" id="taskPromptSubtitle">You asked ActionMate to help bring back regular grocery shoppers.</div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="nav-badge-pill" id="taskFsmStatusPill" style="background: var(--amber-bg); color: var(--amber-dark); font-weight: 700;">AWAITING_APPROVAL</span>
@@ -650,18 +649,24 @@
 
             <!-- Live Backend Task State Pipeline (Phase 3 Orchestrator) -->
             <div class="backend-state-stepper" id="taskBackendStateStepper">
-              <div class="backend-state-step" id="stateStepReceived"><span class="state-dot"></span> 1. Request Received</div>
-              <div class="backend-state-step" id="stateStepUnderstanding"><span class="state-dot"></span> 2. Understanding Task</div>
-              <div class="backend-state-step" id="stateStepContext"><span class="state-dot"></span> 3. Retrieving Sales Data</div>
-              <div class="backend-state-step" id="stateStepAnalysing"><span class="state-dot"></span> 4. Analysing Performance</div>
-              <div class="backend-state-step" id="stateStepPlanning"><span class="state-dot"></span> 5. Preparing Recovery Plan</div>
-              <div class="backend-state-step" id="stateStepApproval"><span class="state-dot"></span> 6. Approval Required</div>
+              <div class="backend-state-step" id="stateStepReceived"><span class="state-dot"></span> 1. Request received</div>
+              <div class="backend-state-step" id="stateStepUnderstanding"><span class="state-dot"></span> 2. Understanding what you need</div>
+              <div class="backend-state-step" id="stateStepContext"><span class="state-dot"></span> 3. Checking shop records</div>
+              <div class="backend-state-step" id="stateStepAnalysing"><span class="state-dot"></span> 4. Finding useful next steps</div>
+              <div class="backend-state-step" id="stateStepPlanning"><span class="state-dot"></span> 5. Preparing a recommendation</div>
+              <div class="backend-state-step" id="stateStepApproval"><span class="state-dot"></span> 6. Your approval</div>
+            </div>
+
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 14px 16px; margin: 16px 0;">
+              <strong id="assistantNextStepTitle" style="color: #1E40AF;">Ready for your review</strong>
+              <div id="assistantNextStepDescription" style="font-size: 13px; color: #1E3A8A; margin-top: 4px;">ActionMate reviewed sample grocery records and prepared an offer for you to check. Nothing has been sent.</div>
+              <div style="font-size: 12px; color: #1E3A8A; margin-top: 6px;">Demo data · Review the shopper list and offer details before approving.</div>
             </div>
 
             <!-- Business Findings Box -->
             <div style="background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
               <div style="font-family: var(--font-heading); font-size: 13.5px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 10px;">
-                AI Diagnostic Findings:
+              What ActionMate found in the sample records:
               </div>
               <div class="kpi-grid-4" style="margin-bottom: 0;">
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
@@ -669,11 +674,11 @@
                   <div style="font-size: 18px; font-weight: 800; color: var(--red);">-27.2%</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
-                  <div style="font-size: 11.5px; color: var(--text-muted);">Estimated Revenue Leakage</div>
+                  <div style="font-size: 11.5px; color: var(--text-muted);">Estimated sales opportunity</div>
                   <div style="font-size: 18px; font-weight: 800; color: var(--amber-dark);">₹20,900</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
-                  <div style="font-size: 11.5px; color: var(--text-muted);">Missing Regular Patrons</div>
+                  <div style="font-size: 11.5px; color: var(--text-muted);">Regular shoppers to review</div>
                   <div style="font-size: 18px; font-weight: 800; color: var(--text-main);">46 Shoppers</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
@@ -684,12 +689,14 @@
             </div>
 
             <!-- Epistemic Reasoning & Evidence Grid -->
-            <div style="margin-bottom: 24px;">
+            <details style="margin-bottom: 18px;">
+              <summary style="cursor: pointer; font-weight: 800; color: var(--paytm-navy); padding: 10px 0;">See the evidence and recommendation</summary>
+              <div style="padding-top: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div style="font-family: var(--font-heading); font-size: 14px; font-weight: 800; color: var(--paytm-navy);">
-                  Evidence &amp; Reasoning:
+                  What the sample records show
                 </div>
-                <span class="traceable-badge" style="font-size: 11px;">Deterministic Reasoner (No Hallucinations)</span>
+                <span class="traceable-badge" style="font-size: 11px;">Based on demo records</span>
               </div>
               <div class="insight-grid" id="insightGridContainer">
                 <div class="insight-box confirmed">
@@ -725,26 +732,32 @@
                   </ul>
                 </div>
               </div>
-            </div>
+              </div>
+            </details>
 
             <!-- Autonomous Multi-Step Execution Plan & Outcome Verification -->
-            <div style="margin-bottom: 24px;">
+            <details style="margin-bottom: 24px;">
+              <summary style="cursor: pointer; font-weight: 800; color: var(--paytm-navy); padding: 10px 0;">See what ActionMate has done and what happens next</summary>
+              <div style="padding-top: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <div style="font-family: var(--font-heading); font-size: 14px; font-weight: 800; color: var(--paytm-navy);">
-                  Autonomous 10-Step Execution Plan &amp; Outcome Verification:
+                  Work plan
                 </div>
-                <span style="font-size: 12px; color: var(--text-muted);">Enforcing strict permission &amp; approval checks</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Customer messages always need your approval</span>
               </div>
               <div class="pipeline-stepper" id="assistantFullStepper">
                 <!-- Dynamically populated steps -->
               </div>
-            </div>
+              </div>
+            </details>
 
             <!-- Multilingual Message Drafts & Soundbox Script -->
-            <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+            <details style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+              <summary style="cursor: pointer; font-weight: 800; color: var(--paytm-navy);">Preview the draft message</summary>
+              <div style="padding-top: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div style="font-family: var(--font-heading); font-size: 13.5px; font-weight: 800; color: var(--paytm-navy);">
-                  Drafted Campaign Communications (Sarvam AI Indic Engine):
+                  Draft message
                 </div>
                 <div style="display: flex; gap: 6px;">
                   <button class="btn btn-secondary btn-sm" id="btnDraftLangEn" onclick="switchDraftLang('en')" style="padding: 4px 10px; font-size: 12px; background: var(--paytm-blue-soft);">English</button>
@@ -755,22 +768,23 @@
               <div id="draftMessagePreviewBox" style="background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: 6px; padding: 14px; font-size: 13.5px; line-height: 1.5; color: var(--text-main); min-height: 60px;">
                 <!-- Dynamically rendered copy -->
               </div>
-            </div>
+              </div>
+            </details>
 
             <!-- Task Operational Control Bar -->
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--border-light); padding-top: 16px;">
               <div id="assistantAuthStatusText" style="font-size: 13px; color: var(--text-muted);">
-                Awaiting merchant signature to execute campaign.
+                Nothing will be sent without your approval.
               </div>
               <div style="display: flex; gap: 10px;">
                 <button class="btn btn-secondary btn-sm" id="btnAssistantReject" onclick="rejectTaskFromAssistant()">
-                  Reject / Archive
+                  Decline offer
                 </button>
                 <button class="btn btn-primary btn-sm" id="btnAssistantApprove" onclick="approveTaskFromAssistant()">
-                  Approve &amp; Send
+                  Approve for simulation
                 </button>
                 <button class="btn btn-primary btn-sm" id="btnAssistantSimulateExec" onclick="simulateExecutionFromAssistant()" style="background: var(--green); border-color: var(--green);">
-                  Preview Campaign Result
+                  Preview simulated delivery
                 </button>
               </div>
             </div>
@@ -1654,7 +1668,7 @@
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchAnalyticsData()">Refresh</button>
             <button class="btn btn-primary btn-sm" onclick="openTaskReportModal('WF-REC-1042')">View Report</button>
-            <button class="btn btn-secondary btn-sm" onclick="downloadTaskReportMarkdown('WF-REC-1042')">⬇ Export (.md)</button>
+            <button class="btn btn-secondary btn-sm" onclick="downloadTaskReportMarkdown('WF-REC-1042')">Download report</button>
           </div>
         </div>
 
@@ -1673,23 +1687,16 @@
               <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Task Status</label>
               <select id="kpi-filter-status" class="form-input" style="padding: 6px 10px; font-size: 12px; height: 34px;" onchange="applyKpiFilters()">
                 <option value="">All Statuses</option>
-                <option value="VERIFIED">Verified Completed</option>
-                <option value="READY_FOR_APPROVAL">Pending Approval</option>
-                <option value="ESCALATED_TO_HUMAN">Escalated to Human</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="READY_FOR_APPROVAL">Waiting for approval</option>
+                <option value="ESCALATED_TO_HUMAN">Needs owner review</option>
                 <option value="PAUSED">Paused</option>
                 <option value="FAILED">Failed</option>
               </select>
             </div>
             <div style="flex: 1.5; min-width: 200px;">
-              <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Campaign Focus</label>
-              <select id="kpi-filter-campaign" class="form-input" style="padding: 6px 10px; font-size: 12px; height: 34px;" onchange="applyKpiFilters()">
-                <option value="">All Campaigns</option>
-                <option value="CAMP-REC-1042">Grocery Repeat-Visit Offer (CAMP-REC-1042)</option>
-              </select>
-            </div>
-            <div style="flex: 1; min-width: 140px;">
-              <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Merchant Scope</label>
-              <input type="text" class="form-input" value="MERCH-001 (Sharma)" readonly style="padding: 6px 10px; font-size: 12px; height: 34px; background: var(--bg-subtle);">
+            <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Shop</label>
+            <input type="text" class="form-input" value="Sharma Family Grocery · demo" readonly style="padding: 6px 10px; font-size: 12px; height: 34px; background: var(--bg-subtle);">
             </div>
             <div>
               <button class="btn btn-secondary btn-sm" style="height: 34px;" onclick="resetKpiFilters()">Reset Filters</button>
@@ -1697,83 +1704,64 @@
           </div>
         </div>
 
-        <!-- Presentation Benchmark Target Notice -->
+        <!-- Demo data notice -->
         <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="font-size: 12px; color: #1E40AF;">
-            <strong>Target vs. Actual Results:</strong> 
-            Benchmark targets (Completion: 92%, Avg Time: 4.0 min, Escalation: 12%, Compliance: 100%, Cost: ₹3.00, Engagement: 18%) shown alongside actual persisted database metrics.
+            <strong>Demo activity:</strong> These counts describe the sample ActionMate workflow, not real customer messages, sales, or savings. Results appear only when supported by recorded transactions.
           </div>
-          <span class="badge" style="background: #DBEAFE; color: #1E40AF; font-size: 11px;">LIVE OPERATIONAL TELEMETRY</span>
+          <span class="badge" style="background: #DBEAFE; color: #1E40AF; font-size: 11px;">SAMPLE DATA</span>
         </div>
 
         <!-- Empty Data Banner (hidden by default) -->
         <div id="kpi-empty-banner" style="display: none; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 16px; margin-bottom: 20px; text-align: center;">
-          <div style="font-weight: 700; color: #92400E; margin-bottom: 4px;">Insufficient Data for Selected Filter</div>
-          <div style="font-size: 12px; color: #B45309;">No persisted task records matched your filter criteria. Reset filters to view overall system metrics.</div>
+          <div style="font-weight: 700; color: #92400E; margin-bottom: 4px;">No activity found for these filters</div>
+          <div style="font-size: 12px; color: #B45309;">Try another date range or status to see matching demo tasks.</div>
         </div>
 
-        <!-- The 6 PPT Slide 8 KPIs -->
+        <!-- ActionMate activity summary -->
         <div class="kpi-grid-4" style="margin-bottom: 24px;">
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Task Completion Rate</div>
-              <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 92%</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-completion" style="color: var(--green-dark);">92.0%</div>
-            <div class="kpi-subtext" id="kpi-sub-completion">Completed eligible / Total eligible tasks</div>
+            <div class="kpi-title">Tasks finished</div>
+            <div class="kpi-metric" id="kpi-val-completion" style="color: var(--green-dark);">—</div>
+            <div class="kpi-subtext" id="kpi-sub-completion">Completed demo tasks</div>
           </div>
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Avg. Resolution Time</div>
-              <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 4.0 min</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-resolution">3.8 min</div>
-            <div class="kpi-subtext" id="kpi-sub-resolution">From prompt to completed action</div>
+            <div class="kpi-title">Time to finish</div>
+            <div class="kpi-metric" id="kpi-val-resolution">—</div>
+            <div class="kpi-subtext" id="kpi-sub-resolution">Estimated from demo task history</div>
           </div>
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Human Escalation Rate</div>
-              <span class="badge" style="background: #FEF3C7; color: #92400E; font-size: 10px;">Target: 12%</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-escalation" style="color: #D97706;">12.0%</div>
-            <div class="kpi-subtext" id="kpi-sub-escalation">Tasks escalated to merchant owner</div>
+            <div class="kpi-title">Needs owner review</div>
+            <div class="kpi-metric" id="kpi-val-escalation" style="color: #D97706;">—</div>
+            <div class="kpi-subtext" id="kpi-sub-escalation">Sent to the shop owner for review</div>
           </div>
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Approval Compliance</div>
-              <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 100%</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-compliance" style="color: var(--paytm-blue);">100.0%</div>
-            <div class="kpi-subtext" id="kpi-sub-compliance">Zero unapproved Category B dispatches</div>
+            <div class="kpi-title">Approval checks</div>
+            <div class="kpi-metric" id="kpi-val-compliance" style="color: var(--paytm-blue);">—</div>
+            <div class="kpi-subtext" id="kpi-sub-compliance">Unapproved actions recorded</div>
           </div>
         </div>
 
         <div class="kpi-grid-4" style="margin-bottom: 24px;">
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Cost per Completed Task</div>
-              <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: ₹3.00</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-cost">₹3.10</div>
-            <div class="kpi-subtext" id="kpi-sub-cost">Verified infrastructure unit cost</div>
+            <div class="kpi-title">Estimated cost per finished task</div>
+            <div class="kpi-metric" id="kpi-val-cost">—</div>
+            <div class="kpi-subtext" id="kpi-sub-cost">Illustrative only · not a bill</div>
           </div>
           <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="kpi-title">Campaign Engagement</div>
-              <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 18%</span>
-            </div>
-            <div class="kpi-metric" id="kpi-val-engagement" style="color: var(--green-dark);">18.2%</div>
-            <div class="kpi-subtext" id="kpi-sub-engagement">Soundbox QR scans &amp; promo code redemptions</div>
+            <div class="kpi-title">Offer interactions</div>
+            <div class="kpi-metric" id="kpi-val-engagement" style="color: var(--green-dark);">—</div>
+            <div class="kpi-subtext" id="kpi-sub-engagement">No demo deliveries recorded</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-title">Recovered Sales</div>
             <div class="kpi-metric" style="color: var(--amber-dark);">Not measured</div>
-            <div class="kpi-subtext">Awaiting post-campaign transactions</div>
+            <div class="kpi-subtext">Needs real offer and transaction data</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-title">Campaign ROI</div>
-            <div class="kpi-metric" style="color: var(--amber-dark);">Pending</div>
-            <div class="kpi-subtext">Calculated from verified transactions</div>
+            <div class="kpi-metric" style="color: var(--amber-dark);">Not measured</div>
+            <div class="kpi-subtext">Needs real offer and transaction data</div>
           </div>
         </div>
 
@@ -1784,97 +1772,45 @@
             <div id="kpiOutcomeChart" class="outcome-chart" role="img" aria-label="ActionMate work status distribution"></div>
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px;">
-                <span>Verified Completed</span>
-                <span id="dist-completed" class="badge" style="background: #D1FAE5; color: #065F46; font-weight: 700;">1 Task (92%)</span>
+                <span>Done</span>
+                <span id="dist-completed" class="badge" style="background: #D1FAE5; color: #065F46; font-weight: 700;">—</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px;">
-                <span>Escalated to Human</span>
-                <span id="dist-escalated" class="badge" style="background: #FEF3C7; color: #92400E; font-weight: 700;">0 Tasks (0%)</span>
+                <span>Needs owner review</span>
+                <span id="dist-escalated" class="badge" style="background: #FEF3C7; color: #92400E; font-weight: 700;">—</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px;">
-                <span>Pending Merchant Approval</span>
-                <span id="dist-pending" class="badge" style="background: #DBEAFE; color: #1E40AF; font-weight: 700;">1 Task</span>
+                <span>Waiting for approval</span>
+                <span id="dist-pending" class="badge" style="background: #DBEAFE; color: #1E40AF; font-weight: 700;">—</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px;">
-                <span>Failed / Blocked Violations</span>
-                <span id="dist-failed" class="badge" style="background: #FEE2E2; color: #991B1B; font-weight: 700;">0 Violations</span>
+                <span>Failed tasks or approval issues</span>
+                <span id="dist-failed" class="badge" style="background: #FEE2E2; color: #991B1B; font-weight: 700;">—</span>
               </div>
             </div>
           </div>
 
           <div class="card">
-            <div class="card-title" style="margin-bottom: 12px;">Period Comparison (Current vs Prior 7 Days)</div>
-            <table class="table" style="font-size: 12px;">
-              <thead>
-                <tr>
-                  <th>Metric</th>
-                  <th>Current Period</th>
-                  <th>Prior Period</th>
-                  <th>Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Completion Rate</td>
-                  <td id="pc-curr-comp">92.0%</td>
-                  <td>88.4%</td>
-                  <td><span style="color: var(--green-dark); font-weight: 700;">▲ +3.6%</span></td>
-                </tr>
-                <tr>
-                  <td>Avg Resolution Time</td>
-                  <td id="pc-curr-res">3.8 min</td>
-                  <td>4.4 min</td>
-                  <td><span style="color: var(--green-dark); font-weight: 700;">▼ -0.6 min</span></td>
-                </tr>
-                <tr>
-                  <td>Escalation Rate</td>
-                  <td id="pc-curr-esc">12.0%</td>
-                  <td>14.2%</td>
-                  <td><span style="color: var(--green-dark); font-weight: 700;">▼ -2.2%</span></td>
-                </tr>
-                <tr>
-                  <td>Cost per Task</td>
-                  <td id="pc-curr-cost">₹3.10</td>
-                  <td>₹3.40</td>
-                  <td><span style="color: var(--green-dark); font-weight: 700;">▼ -₹0.30</span></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="card-title" style="margin-bottom: 12px;">Offer results</div>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">Sales recovered and campaign profit will appear here only after actual offer redemptions can be matched to recorded shop transactions.</p>
+            <div id="kpi-campaign-result-note" style="font-size: 13px; font-weight: 700; color: var(--paytm-navy);">No offer deliveries recorded in this demo.</div>
           </div>
         </div>
 
-        <!-- 4-Tier Revenue Attribution Card -->
         <div class="card" style="margin-bottom: 24px;">
           <div class="card-header">
             <div>
-              <div class="card-title">4-Tier Closed-Loop Revenue Attribution Model</div>
-              <div class="card-subtitle">Strict mathematical accounting definitions avoiding inflated pipeline claims</div>
+              <div class="card-title">When will results be measured?</div>
+              <div class="card-subtitle">We only report business impact when the shop’s records support it.</div>
             </div>
-            <span class="badge" style="background: var(--bg-subtle);">Audited Accounting</span>
+            <span class="badge" style="background: var(--bg-subtle);">No guessed revenue</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 10px;">
-            <div style="background: var(--bg-subtle); padding: 14px; border-radius: 8px; border: 1px solid var(--border-light);">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">1. Potential Pipeline</div>
-              <div style="font-size: 20px; font-weight: 800; color: var(--text-main); margin: 6px 0;">₹4,50,000</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Discovered opportunities across 15 accounts</div>
-            </div>
-            <div style="background: var(--bg-subtle); padding: 14px; border-radius: 8px; border: 1px solid var(--border-light);">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">2. Influenced Revenue</div>
-              <div style="font-size: 20px; font-weight: 800; color: var(--text-main); margin: 6px 0;">₹1,20,000</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Purchases within 30 days of touchpoint</div>
-            </div>
-            <div style="background: #ECFDF5; padding: 14px; border-radius: 8px; border: 1px solid #A7F3D0;">
-              <div style="font-size: 12px; font-weight: 700; color: #065F46; text-transform: uppercase;">3. Verified Recovered</div>
-              <div style="font-size: 20px; font-weight: 800; color: #047857; margin: 6px 0;">₹85,000</div>
-              <div style="font-size: 12px; color: #065F46;">Directly bound to settled invoices</div>
-            </div>
-            <div style="background: var(--bg-subtle); padding: 14px; border-radius: 8px; border: 1px solid var(--border-light);">
-              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">4. Incremental Gain</div>
-              <div style="font-size: 20px; font-weight: 800; color: var(--text-main); margin: 6px 0;">₹42,500</div>
-              <div style="font-size: 12px; color: var(--text-muted);">Margin gain above control baseline</div>
-            </div>
-          </div>
+          <ul style="padding-left: 20px; margin: 8px 0 0; color: var(--text-main); font-size: 13px; line-height: 1.7;">
+            <li>Offer interactions need recorded deliveries and redemptions.</li>
+            <li>Recovered sales need matching completed transactions.</li>
+            <li>Profit and return need product costs and campaign costs.</li>
+          </ul>
         </div>
 
         <!-- Task Audit Report Viewer Drawer / Modal (Initially Hidden) -->
@@ -2363,53 +2299,59 @@
       <section class="route-view" id="view-opportunities" aria-labelledby="headingOpportunities">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Ideas to help your store grow</span>
+            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Your next best steps</span>
             <h1 class="view-title" id="headingOpportunities">Growth Opportunities</h1>
-            <p class="view-subtitle">Find practical ways to improve profit, manage stock, protect cash, and bring customers back.</p>
+            <p class="view-subtitle">ActionMate checks your sales, stock, bills, and customer visits, then shows what may need your attention.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchOpportunities()">Find Opportunities</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchOpportunities()">Refresh suggestions</button>
           </div>
         </div>
 
-        <!-- Opportunities Pipeline Summary -->
-        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+        <div class="opportunities-guide" role="note">
+          <strong>How to use this page</strong>
+          <span>Start with “Check soon,” review the evidence, then open the related page to decide what to do. ActionMate will not send offers or place orders from this page.</span>
+        </div>
+        <div class="opportunities-data-note" id="opportunitiesStatus" role="status">Loading suggestions from your store records…</div>
+
+        <div class="stats-grid opportunities-summary-grid" aria-label="Summary of store suggestions">
           <div class="stat-card">
-            <div class="stat-card-label">Identified Pipeline Value</div>
-            <div class="stat-card-value" id="valOppsValue" style="color: var(--green-dark);">₹1,37,200</div>
-            <div class="stat-card-hint">Total potential commercial impact</div>
+            <div class="stat-card-label">Estimated amounts involved</div>
+            <div class="stat-card-value" id="valOppsValue" style="color: var(--green-dark);">—</div>
+            <div class="stat-card-hint">Rough estimates to prioritize; may overlap and are not guaranteed profit or savings</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Active Opportunities</div>
-            <div class="stat-card-value" id="valOppsCount">6 Surfaced</div>
-            <div class="stat-card-hint">Scored &amp; prioritized deterministically</div>
+            <div class="stat-card-label">Suggestions to review</div>
+            <div class="stat-card-value" id="valOppsCount">—</div>
+            <div class="stat-card-hint">Based on the records currently available for your shop</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">High-Urgency Action</div>
-            <div class="stat-card-value" style="color: var(--amber-dark);">2 Immediate</div>
-            <div class="stat-card-hint">Stockout &amp; Cash pinch mitigation</div>
+            <div class="stat-card-label">Check soon</div>
+            <div class="stat-card-value" id="valOppsUrgent" style="color: var(--amber-dark);">—</div>
+            <div class="stat-card-hint">Items marked high priority by ActionMate</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Human Approvals Needed</div>
-            <div class="stat-card-value">3 Category B</div>
-            <div class="stat-card-hint">Controlled autonomy safeguard</div>
+            <div class="stat-card-label">Needs your approval</div>
+            <div class="stat-card-value" id="valOppsApproval">—</div>
+            <div class="stat-card-hint">Review before any offer or customer outreach</div>
           </div>
         </div>
 
-        <section class="chart-card" aria-labelledby="opportunityImpactChartHeading" style="margin-bottom: 24px;">
+        <section class="chart-card opportunities-chart-card" aria-labelledby="opportunityImpactChartHeading">
           <div class="chart-header">
             <div>
-              <h3 class="overview-visual-title" id="opportunityImpactChartHeading">Potential value by opportunity</h3>
-              <p class="overview-visual-subtitle">Estimated amounts from the opportunities found for your store</p>
+              <h3 class="overview-visual-title" id="opportunityImpactChartHeading">Compare the amounts involved</h3>
+              <p class="overview-visual-subtitle">Larger amounts are not necessarily better opportunities. Check the explanation and evidence below.</p>
             </div>
           </div>
-          <div id="opportunityImpactChart" class="horizontal-chart" role="img" aria-label="Estimated value by growth opportunity"></div>
+          <div id="opportunityImpactChart" class="horizontal-chart" role="img" aria-label="Estimated amounts involved in each store suggestion"></div>
         </section>
 
-        <!-- Opportunities List Container -->
-        <div id="opportunitiesListContainer" style="display: grid; gap: 16px;">
-          <!-- Dynamically populated -->
+        <div class="opportunities-list-heading">
+          <h2>Suggestions for your shop</h2>
+          <p>Each card explains what ActionMate noticed and where you can review it.</p>
         </div>
+        <div id="opportunitiesListContainer" class="opportunities-list"></div>
       </section>
 
       <!-- 15. /app/guardrails (Business Guardrails Engine) -->
@@ -2676,203 +2618,104 @@
         <div class="view-header">
           <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">COLLECTIVE INTELLIGENCE</span>
-              <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">k &ge; 5 PRIVACY PRESERVING</span>
+              <span class="badge" style="background: #fff7ed; color: #9a3412; font-weight: 700;">ILLUSTRATIVE DEMO DATA</span>
+              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">SHOP PRIVACY PROTECTED</span>
             </div>
-            <h2 id="headingBazaarIntelligence" class="view-title">Bazaar Intelligence Network</h2>
-            <p class="view-subtitle">Privacy-Preserving Neighbourhood Demand Pulse, Inventory Matching, and Collective Growth for Johari Bazaar, Jaipur.</p>
+            <h2 id="headingBazaarIntelligence" class="view-title">What shoppers nearby are buying</h2>
+            <p class="view-subtitle">A simple look at sample shopping trends from Johari Bazaar, Jaipur—and how a local shop might use them.</p>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <button class="btn btn-secondary btn-sm" onclick="fetchBazaarIntelligenceData()">Refresh</button>
-            <button class="btn btn-primary btn-sm" onclick="navigateToRoute('voice-copilot')">Open Voice Assistant</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchBazaarIntelligenceData()">Refresh trends</button>
+            <button class="btn btn-primary btn-sm" onclick="navigateToRoute('voice-copilot')">Ask ActionMate</button>
           </div>
         </div>
 
-        <!-- Privacy Assurance Banner -->
-        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(0, 186, 242, 0.08)); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width:28px;height:28px;background:var(--green-bg);border-radius:8px;border:1px solid var(--green-border);"></div>
+        <div class="bazaar-demo-note" role="note">
+          <strong>This is a sample, not live market data.</strong>
+          <span>Small groups are hidden to help protect shops. Only shared trends from groups of at least five shops are shown. These trends are not specific to Sharma Family Grocery.</span>
+        </div>
+
+        <div class="metrics-grid bazaar-summary-grid" aria-label="Nearby trend summary">
+          <div class="card metric-card">
+            <div class="metric-label">Shops in this sample</div>
+            <div class="metric-value" id="bazaarMerchantsCount">—</div>
+            <div class="metric-trend">Johari Bazaar, Jaipur</div>
+          </div>
+          <div class="card metric-card">
+            <div class="metric-label">Shared trends</div>
+            <div class="metric-value" id="bazaarPublishedCount">—</div>
+            <div class="metric-trend">Groups large enough to share</div>
+          </div>
+          <div class="card metric-card">
+            <div class="metric-label">Trends kept private</div>
+            <div class="metric-value" id="bazaarSuppressedCount">—</div>
+            <div class="metric-trend">Not enough shops to share safely</div>
+          </div>
+        </div>
+
+        <section class="card bazaar-section-card" aria-labelledby="bazaarDemandHeading">
+          <div class="bazaar-section-heading">
             <div>
-              <div style="font-size: 14px; font-weight: 800; color: #065f46;">Johari Bazaar Merchant Privacy Covenant (k &ge; 5 Small-Cell Suppression)</div>
-              <div style="font-size: 12.5px; color: var(--text-dark); margin-top: 2px;">
-                Collective intelligence is computed strictly across cohorts of 5 or more stores. No individual store sales, profit numbers, customer names, or phone numbers are ever shared.
-              </div>
+              <h3 id="bazaarDemandHeading">What is becoming more popular?</h3>
+              <p>Sample changes in shopping interest over the past 7 days. A rise in interest does not guarantee more sales for your shop.</p>
             </div>
-          </div>
-          <span class="badge" style="background: #10b981; color: #fff; font-weight: 700; padding: 6px 12px; font-size: 12px;">ACTIVE COHORT: 14 STORES</span>
-        </div>
-
-        <!-- KPI Metrics Ribbon -->
-        <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
-          <div class="card metric-card">
-            <div class="metric-label">Cluster Stores</div>
-            <div class="metric-value" id="bazaarMerchantsCount">14</div>
-            <div class="metric-trend trend-positive">Johari Bazaar, Jaipur</div>
-          </div>
-          <div class="card metric-card">
-            <div class="metric-label">Top Demand Surge</div>
-            <div class="metric-value" id="bazaarTopSurge">+38.5%</div>
-            <div class="metric-trend trend-positive">Festive Ethnic Wear</div>
-          </div>
-          <div class="card metric-card">
-            <div class="metric-label">Privacy Cell Suppression</div>
-            <div class="metric-value" style="color: var(--amber-dark);">1 Cohort</div>
-            <div class="metric-trend" style="color: var(--text-muted);">Blue Pottery (k=2 &lt; 5)</div>
-          </div>
-          <div class="card metric-card">
-            <div class="metric-label">Hussain Store Match</div>
-            <div class="metric-value" style="color: var(--paytm-blue);" id="bazaarMatchScore">94 / 100</div>
-            <div class="metric-trend trend-positive">High Inventory Fit</div>
-          </div>
-        </div>
-
-        <!-- Section 1: Local Demand Pulse & Small Cell Suppression -->
-        <div class="card" style="margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Neighbourhood Demand Pulse (Johari Bazaar Cluster)</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Aggregated demand momentum across 14 verified merchants over the past 7 days.</p>
-            </div>
-            <span class="badge" style="background: rgba(0, 186, 242, 0.12); color: #007799; font-weight: 700;">CLUSTER ID: NEIGHBOURHOOD-JP-01</span>
+            <span class="badge bazaar-period-badge">Past 7 days · Sample data</span>
           </div>
 
-          <section aria-labelledby="bazaarMomentumChartHeading" style="margin-bottom: 18px;">
-            <h4 class="overview-visual-title" id="bazaarMomentumChartHeading">Demand momentum by product category</h4>
-            <p class="overview-visual-subtitle">Only categories that meet the minimum privacy group size are shown</p>
-            <div id="bazaarMomentumChart" class="horizontal-chart" role="img" aria-label="Published neighbourhood demand momentum"></div>
-          </section>
+          <div id="bazaarMomentumChart" class="horizontal-chart bazaar-momentum-chart" role="img" aria-label="Sample neighborhood shopping trends"></div>
+          <div id="bazaarDemandSignalsList" class="bazaar-signals-list"></div>
+          <div id="bazaarDataStatus" class="bazaar-data-status" role="status">Loading sample market trends…</div>
+        </section>
 
-          <div style="overflow-x: auto;">
-            <table class="table" style="width: 100%; border-collapse: collapse;">
-              <thead>
-                <tr style="background: #f8fafc; text-align: left; font-size: 12px; color: var(--text-muted);">
-                  <th style="padding: 10px 14px;">SIGNAL NAME</th>
-                  <th style="padding: 10px 14px;">PRODUCT CATEGORY</th>
-                  <th style="padding: 10px 14px;">DEMAND TREND</th>
-                  <th style="padding: 10px 14px;">MOMENTUM</th>
-                  <th style="padding: 10px 14px;">REPORTING MERCHANTS</th>
-                  <th style="padding: 10px 14px;">PRIVACY STATUS</th>
-                </tr>
-              </thead>
-              <tbody id="bazaarDemandSignalsTbody" style="font-size: 13px;">
-                <!-- Populated dynamically via fetchBazaarIntelligenceData() -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Section 2: Contextual Opportunity Matching & Inventory Pairing -->
-        <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--paytm-blue);">
+        <section class="card bazaar-section-card">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
             <div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">MATCHED OPPORTUNITY #1</span>
-                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">MATCHING SCORE: 94 / 100</span>
-              </div>
-              <h3 style="font-size: 18px; font-weight: 800; color: var(--paytm-navy); margin: 6px 0 2px;">Festive Royal Bundle Re-engagement</h3>
-              <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Pairing trending Chikankari Kurtas with surplus Bandhani Silk Dupattas to capture local festive surge while unlocking ₹31,080 in trapped capital.</p>
-            </div>
-            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700; font-size: 13px; padding: 6px 12px;">AVAILABLE FOR EXECUTION</span>
-          </div>
-
-          <!-- Matching Score Explainability Meters -->
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 16px;">
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                <span style="font-weight: 600; color: var(--text-muted);">Product Relevance</span>
-                <span style="font-weight: 800; color: var(--paytm-navy);">96%</span>
-              </div>
-              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                <div style="width: 96%; height: 100%; background: #00baf2;"></div>
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Festive ethnic wear query match</div>
-            </div>
-
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                <span style="font-weight: 600; color: var(--text-muted);">Inventory Depth</span>
-                <span style="font-weight: 800; color: var(--paytm-navy);">92%</span>
-              </div>
-              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                <div style="width: 92%; height: 100%; background: #10b981;"></div>
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Kurtas: 42 stock | Dupattas: 74 stock</div>
-            </div>
-
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                <span style="font-weight: 600; color: var(--text-muted);">Margin Headroom</span>
-                <span style="font-weight: 800; color: var(--paytm-navy);">95%</span>
-              </div>
-              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                <div style="width: 95%; height: 100%; background: #6366f1;"></div>
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Unit margins 51.4% &amp; 52.8%</div>
-            </div>
-
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                <span style="font-weight: 600; color: var(--text-muted);">Local Momentum</span>
-                <span style="font-weight: 800; color: var(--paytm-navy);">93%</span>
-              </div>
-              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                <div style="width: 93%; height: 100%; background: #f59e0b;"></div>
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">+38.5% Johari Bazaar surge</div>
+              <span class="badge bazaar-example-badge">Example for a clothing shop</span>
+              <h3 class="bazaar-example-heading">One way a shop could use a trend</h3>
+              <p class="bazaar-example-intro">This example uses separate sample data from Hussain Fashion Store. It is not a recommendation for Sharma Family Grocery.</p>
             </div>
           </div>
 
-          <!-- Paired Inventory SKUs -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-            <div style="background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span class="badge" style="background: #e0f2fe; color: #0284c7; font-weight: 700;">FAST-MOVING HERO SKU</span>
-                <span style="font-size: 12px; font-weight: 700; color: #10b981;">51.4% Margin</span>
-              </div>
-              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 4px;">Handcrafted Chikankari Kurta Set</h4>
-              <div style="font-size: 12.5px; color: var(--text-dark);">
-                Stock: <strong>42 units</strong> · Unit Cost: ₹850 · Retail: ₹1,750 · Velocity: 3.5 units/day
-              </div>
+          <div class="bazaar-example-flow">
+            <div class="bazaar-example-product">
+              <span class="bazaar-example-step">Sells regularly</span>
+              <h4>Handcrafted Chikankari Kurta Set</h4>
+              <p>42 in stock · ₹1,750 selling price · 51.4% gross margin</p>
             </div>
-
-            <div style="background: #fff; border: 1px solid #fed7aa; border-radius: 8px; padding: 14px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span class="badge" style="background: #ffedd5; color: #c2410c; font-weight: 700;">SLOW-MOVING SURPLUS SKU</span>
-                <span style="font-size: 12px; font-weight: 700; color: #c2410c;">92 Days Aging</span>
-              </div>
-              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 4px;">Surplus Bandhani Pure Silk Dupattas</h4>
-              <div style="font-size: 12.5px; color: var(--text-dark);">
-                Stock: <strong>74 units</strong> · Unit Cost: ₹420 · Trapped Capital: <strong>₹31,080</strong> (Liquidity unlock target)
-              </div>
+            <div class="bazaar-example-plus" aria-hidden="true">+</div>
+            <div class="bazaar-example-product is-slow">
+              <span class="bazaar-example-step">Has been on shelf a while</span>
+              <h4>Bandhani Silk Dupatta</h4>
+              <p>74 in stock · 92 days on shelf · ₹31,080 tied up in stock cost</p>
             </div>
           </div>
-        </div>
+          <p class="bazaar-example-takeaway"><strong>Possible idea:</strong> Offer the two items as a bundle. Check your own costs and customer interest before deciding—this example is not a sales forecast.</p>
+        </section>
 
-        <!-- Section 3: Decision Twin Simulation for Bazaar Opportunity -->
-        <div class="card" style="margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <section class="card bazaar-section-card">
+          <div class="bazaar-section-heading">
             <div>
-              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Strategy Comparison &amp; Guardrail Check</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Compare 3 merchant strategies tested deterministically against configured business guardrails.</p>
+              <h3>Compare the example options</h3>
+              <p>These are estimates for the clothing-shop example above—not actual results or promises.</p>
             </div>
-            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SIMULATED ESTIMATES</span>
+            <span class="badge bazaar-period-badge">Example only</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-            <!-- Conservative -->
+          <div class="bazaar-strategy-grid">
+            <!-- Lower-risk example -->
             <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; background: #fff;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="badge" style="background: #e2e8f0; color: #334155; font-weight: 700;">CONSERVATIVE</span>
-                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">GUARDRAIL PASS</span>
+                <span class="badge" style="background: #e2e8f0; color: #334155; font-weight: 700;">LOWER-RISK IDEA</span>
+                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">Within shop limits</span>
               </div>
               <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">VIP Festive Preview</h4>
-              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Top 10 VIP patrons preview with 0% discount.</p>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Invite 10 regular customers to preview the offer, with no discount.</p>
               <div style="border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 13px; line-height: 1.8;">
-                <div>Projected Revenue: <strong>₹10,500</strong></div>
-                <div>Gross Profit: <strong>₹5,400</strong> (51.4%)</div>
-                <div>Marketing Cost: <strong>₹150</strong></div>
-                <div>Net Profit: <strong>₹5,250</strong> (35x ROI)</div>
-                <div>Stock Liquidation: <strong>Slow</strong></div>
+                <div>Possible sales: <strong>₹10,500</strong></div>
+                <div>Product profit before expenses: <strong>₹5,400</strong> (51.4%)</div>
+                <div>Estimated promotion cost: <strong>₹150</strong></div>
+                <div>Estimated amount after promotion cost: <strong>₹5,250</strong></div>
+                <div>Slow-moving stock sold: <strong>Low</strong></div>
               </div>
             </div>
 
@@ -2880,101 +2723,49 @@
             <div style="border: 2px solid var(--paytm-blue); border-radius: 10px; padding: 16px; background: rgba(0, 186, 242, 0.04); position: relative;">
               <div style="position: absolute; top: -10px; right: 14px; background: var(--paytm-blue); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">RECOMMENDED</div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">BALANCED</span>
-                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">GUARDRAIL PASS</span>
+                <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">BALANCED IDEA</span>
+                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">Within shop limits</span>
               </div>
               <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">Festive Royal Bundle</h4>
-              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Pair Kurta + Dupatta at ₹2,299 (8% bundle savings).</p>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Pair a kurta and dupatta for ₹2,299 (8% off their combined price).</p>
               <div style="border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 13px; line-height: 1.8;">
-                <div>Projected Revenue: <strong>₹32,186</strong></div>
-                <div>Gross Profit: <strong>₹14,406</strong> (44.8%)</div>
-                <div>Marketing Cost: <strong>₹450</strong></div>
-                <div>Net Profit: <strong>₹13,956</strong> (31x ROI)</div>
-                <div>Stock Liquidation: <strong>High (14 dupattas cleared)</strong></div>
+                <div>Possible sales: <strong>₹32,186</strong></div>
+                <div>Product profit before expenses: <strong>₹14,406</strong> (44.8%)</div>
+                <div>Estimated promotion cost: <strong>₹450</strong></div>
+                <div>Estimated amount after promotion cost: <strong>₹13,956</strong></div>
+                <div>Slow-moving stock sold: <strong>Up to 14 dupattas</strong></div>
               </div>
             </div>
 
             <!-- Aggressive (Blocked by Guardrails) -->
             <div style="border: 1px solid #fca5a5; border-radius: 10px; padding: 16px; background: #fff1f2;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 700;">AGGRESSIVE</span>
-                <span class="badge" style="background: #dc2626; color: #fff; font-weight: 700;">BLOCKED</span>
+                <span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 700;">HIGH-DISCOUNT IDEA</span>
+                <span class="badge" style="background: #dc2626; color: #fff; font-weight: 700;">Not allowed</span>
               </div>
               <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">Storewide Clearance Sprint</h4>
-              <p style="font-size: 12px; color: #991b1b; margin: 0 0 12px;">18% discount blast across all shoppers.</p>
+              <p style="font-size: 12px; color: #991b1b; margin: 0 0 12px;">An 18% discount to all shoppers would exceed this example shop's 10% limit.</p>
               <div style="border-top: 1px solid #fecaca; padding-top: 10px; font-size: 13px; line-height: 1.8;">
-                <div>Projected Revenue: <strong>₹43,296</strong></div>
-                <div>Gross Profit: <strong>₹14,696</strong> (33.9%)</div>
-                <div>Marketing Cost: <strong>₹900</strong></div>
-                <div style="color: #dc2626; font-weight: 700; margin-top: 6px;">Business Limit Exceeded (Rule RULE-HFS-02):</div>
-                <div style="font-size: 11.5px; color: #991b1b;">18.0% discount exceeds maximum permitted ceiling of 10.0%.</div>
+                <div>Possible sales: <strong>₹43,296</strong></div>
+                <div>Product profit before expenses: <strong>₹14,696</strong> (33.9%)</div>
+                <div>Estimated promotion cost: <strong>₹900</strong></div>
+                <div style="color: #dc2626; font-weight: 700; margin-top: 6px;">Why it is not allowed:</div>
+                <div style="font-size: 11.5px; color: #991b1b;">The shop set a maximum discount of 10%.</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Section 4: Merchant Approval & Controlled Execution Gate -->
-        <div class="card" style="margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Approval &amp; Send Gate: Merchant Sign-Off</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Customer-facing outreach requires explicit merchant approval. All dispatches undergo randomized holdout verification.</p>
-            </div>
-            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">85% TREATMENT · 15% HOLDOUT</span>
+        </section>
+
+        <div class="bazaar-owner-note" role="note">
+          <div>
+            <strong>Keep control of your shop</strong>
+            <p>These market trends and the clothing-shop example do not apply directly to Sharma Family Grocery. Review your own shop's suggestions before taking action. Nothing is sent from this page.</p>
           </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
-            <div>
-              <div style="font-size: 14px; font-weight: 800; color: var(--paytm-navy);">Execute Festive Royal Bundle Campaign (BALANCED STRATEGY)</div>
-              <div style="font-size: 12.5px; color: var(--text-dark); margin-top: 4px;">
-                Target: 20 past ethnic wear patrons · WhatsApp + Soundbox · 8% bundle price (₹2,299) · Marketing Budget: ₹450
-              </div>
-              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
-                Authorized by: Zubair Hussain (Store Owner) · Cryptographic Secure Approval-SHA256 signature generated upon submission.
-              </div>
-            </div>
-            <button id="btnExecuteBazaarCampaign" class="btn btn-primary" onclick="executeBazaarCampaign()" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 8px;">
-              Approve &amp; Send Campaign
-            </button>
-          </div>
-
-          <!-- Execution Result & Outcome Verification Details -->
-          <div id="bazaarExecutionResultCard" style="display: none; margin-top: 16px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <span class="badge" style="background: #10b981; color: #fff; font-weight: 800;">7-POINT VERIFICATION: PASSED (VERIFIED)</span>
-              <span id="bazaarExecutionTimestamp" style="font-size: 12px; color: #166534; font-family: monospace;"></span>
-            </div>
-            <h4 style="font-size: 16px; font-weight: 800; color: #14532d; margin: 0 0 8px;">Campaign Executed &amp; Holdout Data Verified</h4>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; font-size: 13px;">
-              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                <div style="color: var(--text-muted); font-size: 11px;">Treatment Group (85%)</div>
-                <div style="font-weight: 800; font-size: 16px; color: var(--paytm-navy);" id="resTreatmentAudience">17 Patrons</div>
-              </div>
-              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                <div style="color: var(--text-muted); font-size: 11px;">Holdout Group (15%)</div>
-                <div style="font-weight: 800; font-size: 16px; color: var(--paytm-navy);" id="resHoldoutAudience">3 Patrons</div>
-              </div>
-              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                <div style="color: var(--text-muted); font-size: 11px;">Incremental Revenue</div>
-                <div style="font-weight: 800; font-size: 16px; color: #16a34a;" id="resIncrementalRevenue">₹32,186</div>
-              </div>
-              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                <div style="color: var(--text-muted); font-size: 11px;">Net Incremental Profit</div>
-                <div style="font-weight: 800; font-size: 16px; color: #16a34a;" id="resNetIncrementalProfit">₹13,956 (31x ROI)</div>
-              </div>
-            </div>
-
-            <!-- Soundbox Voice Broadcast Player -->
-            <div style="background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px;">
-              <div style="font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 4px;">Paytm Soundbox Announcement</div>
-              <div id="soundboxVoiceScriptHi" style="font-size: 13px; color: var(--text-dark); margin-bottom: 8px;">
-                "पेटीएम पर हुसैन फैशन स्टोर को फेस्टिव रॉयल बंडल से ₹32,186 का ऑर्डर प्राप्त हुआ।"
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <button class="btn btn-secondary btn-sm" onclick="playVoiceTone()">Test Soundbox Chime</button>
-                <span style="font-size: 11.5px; color: var(--text-muted);">SBOX-JP-8891 · Data Online</span>
-              </div>
-            </div>
+          <div class="bazaar-owner-actions">
+            <button class="btn btn-secondary btn-sm" type="button" onclick="navigateToRoute('opportunities')">Review my shop suggestions</button>
+            <button class="btn btn-primary btn-sm" type="button" onclick="navigateToRoute('approvals')">Review my approvals</button>
           </div>
         </div>
       </section>
@@ -3698,7 +3489,9 @@
 
     function renderAssistantTaskView(task) {
       if (!task) return;
-      document.getElementById("taskFsmStatusPill").textContent = task.current_state;
+      const taskStatus = task.is_completed ? "SIMULATION COMPLETE" :
+        task.is_approved ? "APPROVED FOR SIMULATION" : "WAITING FOR YOUR APPROVAL";
+      document.getElementById("taskFsmStatusPill").textContent = taskStatus;
 
       // Update Live Backend State Pipeline
       const statesOrder = ["RECEIVED", "UNDERSTANDING", "RETRIEVING_CONTEXT", "ANALYSING", "PLANNING", "READY_FOR_APPROVAL"];
@@ -3706,7 +3499,7 @@
 
       const currentState = task.current_state || "READY_FOR_APPROVAL";
       const curIdx = statesOrder.indexOf(currentState);
-      const activeIdx = curIdx >= 0 ? curIdx : (["APPROVED", "EXECUTING", "VERIFYING", "COMPLETED"].includes(currentState) ? 5 : 4);
+      const activeIdx = curIdx >= 0 ? curIdx : (["APPROVED", "EXECUTING", "VERIFYING", "COMPLETED"].includes(currentState) ? 6 : 4);
 
       stepIds.forEach((id, idx) => {
         const el = document.getElementById(id);
@@ -3741,15 +3534,31 @@
       if (stepper && task.plan) {
         stepper.innerHTML = task.plan.map(step => {
           const num = step.step_number || step.step;
-          const statusClass = step.status === "COMPLETED" ? "status-completed" :
-                              step.status === "PENDING_APPROVAL" ? "status-pending" :
-                              step.status === "READY_FOR_EXECUTION" ? "status-pending" : "status-queued";
-          const icon = step.status === "COMPLETED" ? "✓" : num;
-          const tool = step.tool_required || step.tool || "";
-          const risk = step.risk_level || "LOW";
-          const riskClass = risk.toLowerCase() === "high" ? "risk-high" : (risk.toLowerCase() === "medium" ? "risk-medium" : "risk-low");
-          const desc = step.description || step.summary || "";
-          const expected = step.expected_output ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;"><strong>Expected:</strong> ${step.expected_output}</div>` : "";
+          const number = Number(num);
+          const status = number <= (task.is_approved ? 7 : 6) ? "COMPLETED" :
+            number === 7 && !task.is_approved ? "PENDING_APPROVAL" :
+            number === 8 && task.is_approved && !task.is_completed ? "READY_FOR_EXECUTION" :
+            number === 8 && task.is_completed ? "COMPLETED" : "NOT_STARTED";
+          const statusClass = status === "COMPLETED" ? "status-completed" :
+                              status === "PENDING_APPROVAL" || status === "READY_FOR_EXECUTION" ? "status-pending" : "status-queued";
+          const icon = status === "COMPLETED" ? "✓" : number;
+          const statusLabel = status === "COMPLETED" ? "Done" :
+            status === "PENDING_APPROVAL" ? "Waiting for your approval" :
+            status === "READY_FOR_EXECUTION" ? "Ready for demo preview" :
+            number > 8 && task.is_completed ? "Waiting for real results" : "Not started yet";
+          const stepName = number === 1 ? "Check recent sales" :
+            number === 2 ? "Compare sales periods" :
+            number === 3 ? "Check repeat visits" :
+            number === 4 ? "Find shoppers to review" :
+            number === 5 ? "Prepare an offer" :
+            number === 6 ? "Draft the message" :
+            number === 7 ? "Get your approval" :
+            number === 8 ? "Preview simulated delivery" :
+            number === 9 ? "Measure real offer results" : "Summarize what happened";
+          const detail = number === 7 ? "Review the offer and its ₹3,600 maximum budget before approving." :
+            number === 8 ? "This only previews delivery in the demo; it does not contact shoppers." :
+            number > 8 ? "Real redemptions and profit can only be measured from recorded transactions." :
+            step.description || step.summary || "";
 
           return `
             <div class="pipeline-step-item ${statusClass}">
@@ -3757,14 +3566,11 @@
               <div class="step-content-body">
                 <div class="step-title-row">
                   <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <span class="step-title-text">${num}. ${step.name}</span>
-                    ${tool ? `<span class="tool-tag">${tool}</span>` : ""}
-                    <span class="risk-badge ${riskClass}">${risk} RISK</span>
+                    <span class="step-title-text">${number}. ${escapeHtml(stepName)}</span>
                   </div>
-                  <span class="badge" style="font-size: 11px;">${step.status}</span>
+                  <span class="badge" style="font-size: 11px;">${statusLabel}</span>
                 </div>
-                <div class="step-desc-text">${desc}</div>
-                ${expected}
+                <div class="step-desc-text">${escapeHtml(detail)}</div>
               </div>
             </div>
           `;
@@ -3777,23 +3583,32 @@
       const btnSimulate = document.getElementById("btnAssistantSimulateExec");
       const statusText = document.getElementById("assistantAuthStatusText");
       const outcomeBox = document.getElementById("verifiedRoiOutcomeBox");
+      const nextStepTitle = document.getElementById("assistantNextStepTitle");
+      const nextStepDescription = document.getElementById("assistantNextStepDescription");
 
       if (task.is_completed) {
         btnApprove.style.display = "none";
         btnSimulate.style.display = "none";
-        statusText.innerHTML = "<strong>Status:</strong> Dispatch simulation complete; redemption and profit measurement pending.";
+        statusText.textContent = "Demo preview complete. No real messages were sent; sales and profit are not measured.";
+        nextStepTitle.textContent = "Demo preview complete";
+        nextStepDescription.textContent = "The offer delivery was simulated only. Check Results for any real transaction data; recovered sales and profit remain unmeasured.";
         outcomeBox.style.display = "block";
       } else if (task.is_approved) {
         btnApprove.disabled = true;
-        btnApprove.textContent = "Approved & Ready to Send";
+        btnApprove.textContent = "Approved for simulation";
         btnSimulate.style.display = "inline-flex";
-        statusText.textContent = "Approved by Ramesh Sharma. Ready to simulate execution.";
+        btnSimulate.textContent = "Preview simulated delivery";
+        statusText.textContent = "Approved by you. The next step is a demo preview only; no real messages will be sent.";
+        nextStepTitle.textContent = "Approved — ready for a demo preview";
+        nextStepDescription.textContent = "Your approval is recorded. Choose “Preview simulated delivery” to see the sandbox flow; this will not contact shoppers.";
         outcomeBox.style.display = "none";
       } else {
         btnApprove.disabled = false;
-        btnApprove.textContent = "Approve Campaign";
+        btnApprove.textContent = "Approve for simulation";
         btnSimulate.style.display = "none";
-        statusText.textContent = "Awaiting merchant authorization signature.";
+        statusText.textContent = "Nothing will be sent without your approval.";
+        nextStepTitle.textContent = "Ready for your review";
+        nextStepDescription.textContent = "Check the offer terms and shopper list. Approving records your choice for the demo; it does not send a message.";
         outcomeBox.style.display = "none";
       }
     }
@@ -4049,9 +3864,11 @@
           body: JSON.stringify({ approved_by: "Ramesh Sharma (Merchant Owner)", max_budget_authorized: 3600.0 })
         });
         const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || data.error || `Approval failed (${res.status}).`);
+        if (!data.task) throw new Error("Approval response did not include the updated offer.");
         appState.activeTask = data.task;
         renderAssistantTaskView(data.task);
-        showSiteToast("Secure Approval-SHA256 authorization signature recorded!");
+        showSiteToast("Your approval is saved. The next step is a demo preview; no messages will be sent.");
       } catch (e) {
         showSiteToast("Approval error: " + e.message);
       }
@@ -4066,9 +3883,11 @@
           body: JSON.stringify({})
         });
         const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || data.error || `Demo preview failed (${res.status}).`);
+        if (!data.task) throw new Error("Preview response did not include the updated offer.");
         appState.activeTask = data.task;
         renderAssistantTaskView(data.task);
-        showSiteToast("Dispatch simulation complete. Track transactions to measure redemptions and profit.");
+        showSiteToast("Demo preview complete. No real messages were sent; sales and profit remain unmeasured.");
       } catch (e) {
         showSiteToast("Simulation error: " + e.message);
       }
@@ -5820,7 +5639,7 @@ async function refreshAuditTrail() {
       if (!container) return;
       const statuses = [
         { key: "COMPLETED", label: "Done", color: "#16a36a" },
-        { key: "ESCALATED", label: "Needs review", color: "#f59e0b" },
+        { key: "ESCALATED", label: "Needs owner review", color: "#f59e0b" },
         { key: "PENDING_APPROVAL", label: "Waiting for your approval", color: "#3b82f6" },
         { key: "FAILED", label: "Could not complete", color: "#dc3545" },
         { key: "PAUSED", label: "Paused", color: "#64748b" },
@@ -5848,14 +5667,20 @@ async function refreshAuditTrail() {
       try {
         const dateFilter = document.getElementById("kpi-filter-date") ? document.getElementById("kpi-filter-date").value : "7D";
         const statusFilter = document.getElementById("kpi-filter-status") ? document.getElementById("kpi-filter-status").value : "";
-        const campaignFilter = document.getElementById("kpi-filter-campaign") ? document.getElementById("kpi-filter-campaign").value : "";
+        const params = new URLSearchParams({ merchant_id: "MERCH-001" });
+        if (dateFilter !== "ALL") {
+          const endDate = new Date();
+          const startDate = new Date(endDate);
+          startDate.setDate(startDate.getDate() - (dateFilter === "30D" ? 29 : 6));
+          const formatDate = date => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+          params.set("start_date", `${formatDate(startDate)}T00:00:00`);
+          params.set("end_date", `${formatDate(endDate)}T23:59:59`);
+        }
+        if (statusFilter) params.set("status", statusFilter);
 
-        let url = `/api/analytics/kpis?merchant_id=MERCH-001`;
-        if (statusFilter) url += `&status=${encodeURIComponent(statusFilter)}`;
-        if (campaignFilter) url += `&campaign_id=${encodeURIComponent(campaignFilter)}`;
-
-        const res = await fetch(url);
+        const res = await fetch(`/api/analytics/kpis?${params.toString()}`);
         const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Could not load ActionMate results (${res.status}).`);
 
         const banner = document.getElementById("kpi-empty-banner");
         if (!data.has_data) {
@@ -5867,60 +5692,68 @@ async function refreshAuditTrail() {
         const kpis = data.kpis || {};
         const counts = data.counts || {};
         const dist = data.outcome_distribution || {};
-        const pc = data.period_comparison || {};
         renderOutcomeDistributionChart(dist);
+        const completedTasks = Number(counts.completed_tasks) || 0;
+        const eligibleTasks = Number(counts.total_eligible_tasks) || 0;
+        const escalatedTasks = Number(counts.escalated_tasks) || 0;
+        const approvalViolations = Number(counts.approval_violations) || 0;
+        const totalCost = Number(counts.total_operating_cost_inr) || 0;
+        const delivered = Number(counts.total_delivered_recipients) || 0;
+        const engaged = Number(counts.total_engaged_recipients) || 0;
 
-        // Update Primary KPI Cards
         if (document.getElementById("kpi-val-completion"))
-          document.getElementById("kpi-val-completion").innerText = kpis.task_completion_display || "0.0%";
+          document.getElementById("kpi-val-completion").innerText = String(completedTasks);
         if (document.getElementById("kpi-sub-completion"))
-          document.getElementById("kpi-sub-completion").innerText = `${counts.completed_tasks || 0} completed / ${counts.total_eligible_tasks || 0} eligible tasks`;
+          document.getElementById("kpi-sub-completion").innerText = `${completedTasks} of ${eligibleTasks} demo tasks finished`;
 
         if (document.getElementById("kpi-val-resolution"))
-          document.getElementById("kpi-val-resolution").innerText = kpis.average_resolution_display || "0.0 min";
+          document.getElementById("kpi-val-resolution").innerText = kpis.average_resolution_display || "Not measured";
+        if (document.getElementById("kpi-sub-resolution"))
+          document.getElementById("kpi-sub-resolution").innerText = "Based on recorded task times, when available";
 
         if (document.getElementById("kpi-val-escalation"))
-          document.getElementById("kpi-val-escalation").innerText = kpis.human_escalation_display || "0.0%";
+          document.getElementById("kpi-val-escalation").innerText = String(escalatedTasks);
         if (document.getElementById("kpi-sub-escalation"))
-          document.getElementById("kpi-sub-escalation").innerText = `${counts.escalated_tasks || 0} escalated to merchant owner`;
+          document.getElementById("kpi-sub-escalation").innerText = "Sent to the shop owner for review";
 
         if (document.getElementById("kpi-val-compliance"))
-          document.getElementById("kpi-val-compliance").innerText = kpis.approval_compliance_display || "100.0%";
+          document.getElementById("kpi-val-compliance").innerText = kpis.approval_compliance === null ? "Not checked" : kpis.approval_compliance_display;
         if (document.getElementById("kpi-sub-compliance"))
-          document.getElementById("kpi-sub-compliance").innerText = `${counts.approval_violations || 0} unapproved violations detected`;
+          document.getElementById("kpi-sub-compliance").innerText = `${approvalViolations} unapproved actions recorded`;
 
         if (document.getElementById("kpi-val-cost"))
-          document.getElementById("kpi-val-cost").innerText = kpis.cost_per_completed_task_display || "₹3.10";
+          document.getElementById("kpi-val-cost").innerText = kpis.cost_per_completed_task_display || "Not available";
         if (document.getElementById("kpi-sub-cost"))
-          document.getElementById("kpi-sub-cost").innerText = `Total demo cost: ₹${(counts.total_operating_cost_inr || 3.10).toFixed(2)}`;
+          document.getElementById("kpi-sub-cost").innerText = `Estimated total: ₹${totalCost.toFixed(2)} · not a bill`;
 
         if (document.getElementById("kpi-val-engagement"))
-          document.getElementById("kpi-val-engagement").innerText = kpis.campaign_engagement_display || "18.2%";
+          document.getElementById("kpi-val-engagement").innerText = delivered > 0 ? `${engaged} / ${delivered}` : "No data";
         if (document.getElementById("kpi-sub-engagement"))
-          document.getElementById("kpi-sub-engagement").innerText = `${counts.total_engaged_recipients || 8} / ${counts.total_delivered_recipients || 40} delivered QR scans (DEMO)`;
+          document.getElementById("kpi-sub-engagement").innerText = delivered > 0 ? `Demo recipients who interacted · ${kpis.campaign_engagement_display}` : "No demo deliveries recorded";
+        const campaignNote = document.getElementById("kpi-campaign-result-note");
+        if (campaignNote) {
+          campaignNote.textContent = delivered > 0
+            ? `${delivered} demo deliveries recorded; ${engaged} interactions. This is not a real sales result.`
+            : "No offer deliveries recorded in this demo.";
+        }
 
-        // Outcome Distribution
+        const formatTaskCount = count => `${count} ${count === 1 ? "task" : "tasks"}`;
         if (document.getElementById("dist-completed"))
-          document.getElementById("dist-completed").innerText = `${dist.COMPLETED || 0} Tasks (${kpis.task_completion_display || '0.0%'})`;
+          document.getElementById("dist-completed").innerText = formatTaskCount(Number(dist.COMPLETED) || 0);
         if (document.getElementById("dist-escalated"))
-          document.getElementById("dist-escalated").innerText = `${dist.ESCALATED || 0} Tasks (${kpis.human_escalation_display || '0.0%'})`;
+          document.getElementById("dist-escalated").innerText = formatTaskCount(Number(dist.ESCALATED) || 0);
         if (document.getElementById("dist-pending"))
-          document.getElementById("dist-pending").innerText = `${dist.PENDING_APPROVAL || 0} Tasks`;
+          document.getElementById("dist-pending").innerText = formatTaskCount(Number(dist.PENDING_APPROVAL) || 0);
         if (document.getElementById("dist-failed"))
-          document.getElementById("dist-failed").innerText = `${dist.FAILED || counts.approval_violations || 0} Violations / Failures`;
-
-        // Period Comparison Table
-        if (pc.completion_rate && document.getElementById("pc-curr-comp"))
-          document.getElementById("pc-curr-comp").innerText = pc.completion_rate.current || "92.0%";
-        if (pc.resolution_time && document.getElementById("pc-curr-res"))
-          document.getElementById("pc-curr-res").innerText = pc.resolution_time.current || "3.8 min";
-        if (pc.escalation_rate && document.getElementById("pc-curr-esc"))
-          document.getElementById("pc-curr-esc").innerText = pc.escalation_rate.current || "12.0%";
-        if (pc.operating_cost && document.getElementById("pc-curr-cost"))
-          document.getElementById("pc-curr-cost").innerText = pc.operating_cost.current || "₹3.10";
+          document.getElementById("dist-failed").innerText = `${Number(dist.FAILED) || 0} failed · ${approvalViolations} approval issues`;
 
       } catch (e) {
         console.error("Analytics fetch error:", e);
+        const banner = document.getElementById("kpi-empty-banner");
+        if (banner) {
+          banner.style.display = "block";
+          banner.textContent = `ActionMate results could not be loaded: ${e.message}`;
+        }
       }
     }
 
@@ -5931,7 +5764,6 @@ async function refreshAuditTrail() {
     function resetKpiFilters() {
       if (document.getElementById("kpi-filter-date")) document.getElementById("kpi-filter-date").value = "ALL";
       if (document.getElementById("kpi-filter-status")) document.getElementById("kpi-filter-status").value = "";
-      if (document.getElementById("kpi-filter-campaign")) document.getElementById("kpi-filter-campaign").value = "";
       fetchAnalyticsData();
     }
 
@@ -6619,67 +6451,131 @@ async function refreshAuditTrail() {
 
     // 5. Proactive Opportunities Radar
     async function fetchOpportunities() {
+      const status = document.getElementById("opportunitiesStatus");
+      if (status) status.textContent = "Checking your store records…";
       try {
         const [oppRes, sumRes] = await Promise.all([
-          fetch("/api/opportunities/ranked"),
-          fetch("/api/opportunities/summary")
+          fetch("/api/opportunities/ranked?merchant_id=MERCH-001"),
+          fetch("/api/opportunities/summary?merchant_id=MERCH-001")
         ]);
+        if (!oppRes.ok || !sumRes.ok) throw new Error("Suggestions could not be loaded. Please try again.");
         const opps = await oppRes.json();
         const sum = await sumRes.json();
+        if (!Array.isArray(opps) || !sum || typeof sum !== "object") {
+          throw new Error("The suggestions response was not in the expected format.");
+        }
+        const formatRupees = value => {
+          const amount = Number(value);
+          return Number.isFinite(amount)
+            ? `₹${amount.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`
+            : "Not available";
+        };
         renderHorizontalBarChart(
           "opportunityImpactChart",
-          Array.isArray(opps) ? opps : [],
+          opps,
           "title",
           "financial_impact_inr",
-          value => `₹${Number(value).toLocaleString("en-IN")}`,
+          formatRupees,
           "#16A36A"
         );
 
-        // Populate summary
+        const openOpps = opps.filter(opportunity => opportunity.status !== "DISMISSED");
+        const urgentCount = openOpps.filter(opportunity => opportunity.urgency_level === "HIGH").length;
+        const approvalCount = openOpps.filter(opportunity => opportunity.required_permission === "CATEGORY_B").length;
         const elVal = document.getElementById("valOppsValue");
-        if (elVal) elVal.innerText = "₹" + Number(sum.total_pipeline_value_inr).toLocaleString("en-IN");
+        if (elVal) elVal.textContent = formatRupees(sum.total_unlocked_value_inr ?? 0);
         const elCount = document.getElementById("valOppsCount");
-        if (elCount) elCount.innerText = sum.total_opportunities_identified + " Surfaced";
+        if (elCount) elCount.textContent = String(openOpps.length);
+        const elUrgent = document.getElementById("valOppsUrgent");
+        if (elUrgent) elUrgent.textContent = String(urgentCount);
+        const elApproval = document.getElementById("valOppsApproval");
+        if (elApproval) elApproval.textContent = String(approvalCount);
 
-        // Populate Cards
         const container = document.getElementById("opportunitiesListContainer");
-        if (container && Array.isArray(opps)) {
-          container.innerHTML = opps.map(o => {
-            const urgBg = o.urgency_level === "HIGH" ? "#fee2e2" : "#fef3c7";
-            const urgColor = o.urgency_level === "HIGH" ? "#991b1b" : "#92400e";
-            const permBadge = o.required_permission === "CATEGORY_A" ? 
-              '<span class="badge" style="background: #dcfce7; color: #166534;">Category A · Auto-Executable</span>' :
-              '<span class="badge" style="background: #eff6ff; color: #1e40af;">Category B · Merchant Approval Required</span>';
-
+        if (container) {
+          container.innerHTML = openOpps.length ? openOpps.map(opportunity => {
+            const title = escapeHtml(opportunity.title || "Store suggestion");
+            const categoryNames = {
+              CASH_FLOW: "Cash and bills",
+              CUSTOMER_RETENTION: "Regular customers",
+              PROFITABILITY: "Product profit",
+              INVENTORY: "Stock"
+            };
+            const reviewRoutes = {
+              CASH_FLOW: ["cashflow", "Review cash flow"],
+              CUSTOMER_RETENTION: ["customers", "Review customers"],
+              PROFITABILITY: ["profit", "Review product profit"],
+              INVENTORY: ["inventory", "Review stock"]
+            };
+            const [route, buttonLabel] = reviewRoutes[opportunity.category] || ["overview", "Review suggestion"];
+            const urgencyLabel = opportunity.urgency_level === "HIGH" ? "Check soon" : "Worth a look";
+            const approvalLabel = opportunity.required_permission === "CATEGORY_B"
+              ? "Your approval needed"
+              : "Review before acting";
+            const amount = Number(opportunity.financial_impact_inr);
+            const confidence = Number(opportunity.confidence_level);
+            const confidenceText = Number.isFinite(confidence)
+              ? `${Math.round(confidence * 100)}% confidence`
+              : "Confidence not available";
+            const evidenceLabels = {
+              committed_outflows: ["Bills due", value => formatRupees(value)],
+              expected_inflows_early: ["Expected collections", value => formatRupees(value)],
+              liquidity_buffer: ["Cash buffer", value => formatRupees(value)],
+              week_1_pct: ["Repeat baskets before", value => `${value}%`],
+              week_4_pct: ["Repeat baskets now", value => `${value}%`],
+              at_risk_shoppers: ["Shoppers to review", value => value],
+              selling_price: ["Shelf price", value => formatRupees(value)],
+              unit_cost: ["Cost to shop", value => formatRupees(value)],
+              margin_pct: ["Gross margin", value => `${value}%`],
+              floor_pct: ["Margin target", value => `${value}%`],
+              current_stock: ["Tomatoes remaining", value => `${value} kg`],
+              daily_velocity: ["Sold each day", value => `${value} kg`],
+              lead_time_days: ["Supplier delivery", value => `${value} ${Number(value) === 1 ? "day" : "days"}`],
+              stock_units: ["Packs on shelf", value => value],
+              age_days: ["Days on shelf", value => value],
+              trapped_capital_inr: ["Cost of stock", value => formatRupees(value)],
+              inactive_regular_count: ["Regulars to review", value => value],
+              combined_ltv_inr: ["Past customer value", value => formatRupees(value)]
+            };
+            const evidence = opportunity.evidence && typeof opportunity.evidence === "object"
+              ? Object.entries(opportunity.evidence)
+                  .filter(([key, value]) => evidenceLabels[key] && ["string", "number", "boolean"].includes(typeof value))
+                  .slice(0, 3)
+                  .map(([key, value]) => {
+                    const [label, formatValue] = evidenceLabels[key];
+                    return `<span>${escapeHtml(label)}: <strong>${escapeHtml(formatValue(value))}</strong></span>`;
+                  })
+                  .join("")
+              : "";
             return `
-              <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; background: #fff; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
-                <div style="flex: 1;">
-                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                    <span class="badge" style="background: #f1f5f9; color: #475569;">${o.category}</span>
-                    <span class="badge" style="background: ${urgBg}; color: ${urgColor}; font-weight: 700;">${o.urgency_level} URGENCY</span>
-                    ${permBadge}
+              <article class="opportunity-card">
+                <div class="opportunity-card-main">
+                  <div class="opportunity-card-badges">
+                    <span class="opportunity-category">${escapeHtml(categoryNames[opportunity.category] || opportunity.category || "Suggestion")}</span>
+                    <span class="opportunity-priority ${opportunity.urgency_level === "HIGH" ? "is-high" : ""}">${urgencyLabel}</span>
+                    <span class="opportunity-approval">${approvalLabel}</span>
                   </div>
-                  <h4 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 4px;">${o.title}</h4>
-                  <p style="font-size: 13px; color: var(--text-dark); margin-bottom: 6px;">${o.problem_statement}</p>
-                  <div style="font-size: 12.5px; color: var(--text-muted);">
-                    <strong>ActionMate Strategy:</strong> ${o.recommended_action}
-                  </div>
+                  <h3>${title}</h3>
+                  <p class="opportunity-evidence">${escapeHtml(opportunity.problem_statement || "Review the available store records to learn more.")}</p>
+                  ${evidence ? `<div class="opportunity-evidence-points">${evidence}</div>` : ""}
+                  <div class="opportunity-next-step"><strong>Suggested next step:</strong> ${escapeHtml(opportunity.recommended_action || "Review this suggestion before deciding.")}</div>
                 </div>
-
-                <div style="text-align: right; min-width: 180px;">
-                  <div style="font-size: 12px; color: var(--text-muted);">Potential Benefit</div>
-                  <div style="font-size: 20px; font-weight: 900; color: var(--green-dark);">${o.financial_impact_display}</div>
-                  <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">Confidence: ${o.confidence_display}</div>
-                  <button class="btn btn-primary btn-sm" onclick="showSiteToast('ActionMate task spawned for opportunity: ${o.opportunity_id}.')">
-                    Plan &amp; Execute →
-                  </button>
-                </div>
-              </div>
+                <aside class="opportunity-card-side">
+                  <span class="opportunity-amount-label">Estimated amount involved</span>
+                  <strong class="opportunity-amount">${Number.isFinite(amount) ? formatRupees(amount) : "Not available"}</strong>
+                  <span class="opportunity-confidence">${confidenceText}</span>
+                  <button class="btn btn-primary btn-sm" type="button" onclick="navigateToRoute('${route}')">${buttonLabel} →</button>
+                </aside>
+              </article>
             `;
-          }).join("");
+          }).join("") : '<div class="opportunities-empty-state">No open suggestions right now. Refresh later to check for new changes in your store.</div>';
         }
+        if (status) status.textContent = `${openOpps.length} ${openOpps.length === 1 ? "suggestion" : "suggestions"} · Illustrative demo records for Sharma Family Grocery`;
       } catch (e) {
         console.error("Failed to load opportunities:", e);
+        if (status) status.textContent = e.message || "Suggestions could not be loaded. Please try again.";
+        const container = document.getElementById("opportunitiesListContainer");
+        if (container) container.innerHTML = '<div class="opportunities-empty-state">We could not load your suggestions. Please use “Refresh suggestions” to try again.</div>';
       }
     }
 
@@ -7333,124 +7229,80 @@ async function refreshAuditTrail() {
     // ====================================================================
 
     async function fetchBazaarIntelligenceData() {
+      const status = document.getElementById("bazaarDataStatus");
+      if (status) status.textContent = "Loading sample market trends…";
       try {
         const [pulseRes, netRes] = await Promise.all([
           fetch("/api/bazaar/pulse?neighbourhood_id=NEIGHBOURHOOD-JP-01"),
           fetch("/api/bazaar/network?neighbourhood_id=NEIGHBOURHOOD-JP-01")
         ]);
+        if (!pulseRes.ok || !netRes.ok) throw new Error("Sample market trends could not be loaded. Please try again.");
 
         const pulseData = await pulseRes.json();
         const netData = await netRes.json();
-
-        const merchCountEl = document.getElementById("bazaarMerchantsCount");
-        if (merchCountEl) merchCountEl.textContent = netData.total_participating_merchants || 14;
-
-        const topSurgeEl = document.getElementById("bazaarTopSurge");
-        if (topSurgeEl && pulseData.top_signal) {
-          topSurgeEl.textContent = `+${pulseData.top_signal.growth_rate_pct}%`;
+        if (!Array.isArray(pulseData.signals) || typeof netData.total_participating_merchants !== "number") {
+          throw new Error("The market trend response was not in the expected format.");
         }
 
-        const tbody = document.getElementById("bazaarDemandSignalsTbody");
-        if (tbody && Array.isArray(pulseData.signals)) {
-          const publishedSignals = pulseData.signals.filter(signal => !signal.privacy_suppressed);
-          renderHorizontalBarChart(
-            "bazaarMomentumChart",
-            publishedSignals,
-            "product_category",
-            "growth_rate_pct",
-            value => `+${Number(value).toFixed(1)}%`,
-            "#16A36A"
-          );
-          tbody.innerHTML = pulseData.signals.map(sig => {
-            const isSuppressed = sig.privacy_suppressed;
-            const statusBadge = isSuppressed
-              ? `<span class="badge" style="background: #fef3c7; color: #92400e; font-weight: 700;">CELL SUPPRESSED (k=2 &lt; 5)</span>`
-              : `<span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">PUBLISHED (k=${sig.reporting_merchants_count} &ge; 5)</span>`;
+        const merchCountEl = document.getElementById("bazaarMerchantsCount");
+        if (merchCountEl) merchCountEl.textContent = String(netData.total_participating_merchants);
+        const publishedSignals = pulseData.signals.filter(signal => !signal.privacy_suppressed);
+        const publishedCountEl = document.getElementById("bazaarPublishedCount");
+        if (publishedCountEl) publishedCountEl.textContent = String(publishedSignals.length);
+        const suppressedCountEl = document.getElementById("bazaarSuppressedCount");
+        if (suppressedCountEl) {
+          suppressedCountEl.textContent = String(pulseData.signals.filter(signal => signal.privacy_suppressed).length);
+        }
 
-            const trendBadge = sig.demand_trend === "SURGE"
-              ? `<span style="color: #16a34a; font-weight: 700;">SURGE</span>`
-              : `<span style="color: #0284c7; font-weight: 700;">GROWING</span>`;
+        renderHorizontalBarChart(
+          "bazaarMomentumChart",
+          publishedSignals,
+          "product_category",
+          "growth_rate_pct",
+          value => `+${Number(value).toFixed(1)}%`,
+          "#16A36A"
+        );
 
-            const countDisplay = isSuppressed
-              ? `<span style="color: var(--text-muted); font-style: italic;">Withheld (k &lt; 5)</span>`
-              : `<strong>${sig.reporting_merchants_count} Stores</strong>`;
-
+        const signalsList = document.getElementById("bazaarDemandSignalsList");
+        if (signalsList) {
+          signalsList.innerHTML = pulseData.signals.map(signal => {
+            if (signal.privacy_suppressed) {
+              return `
+                <article class="bazaar-signal-card is-private">
+                  <div class="bazaar-signal-copy">
+                    <span class="bazaar-signal-status">Kept private</span>
+                    <h4>Some trend details are hidden</h4>
+                    <p>Not enough shops shared this information to show it safely.</p>
+                  </div>
+                </article>
+              `;
+            }
+            const growth = Number(signal.growth_rate_pct);
+            const growthText = Number.isFinite(growth) ? `+${growth.toFixed(1)}%` : "—";
             return `
-              <tr style="border-bottom: 1px solid var(--border-color);">
-                <td style="padding: 12px 14px; font-weight: 600; color: var(--paytm-navy);">
-                  ${sig.signal_name}
-                  <div style="font-size: 11px; color: var(--text-muted); font-weight: normal; margin-top: 2px;">${sig.provenance_note}</div>
-                </td>
-                <td style="padding: 12px 14px; color: var(--text-dark);">${sig.product_category}</td>
-                <td style="padding: 12px 14px;">${trendBadge}</td>
-                <td style="padding: 12px 14px; font-weight: 800; color: #16a34a;">+${sig.growth_rate_pct}%</td>
-                <td style="padding: 12px 14px;">${countDisplay}</td>
-                <td style="padding: 12px 14px;">${statusBadge}</td>
-              </tr>
+              <article class="bazaar-signal-card">
+                <div class="bazaar-signal-copy">
+                  <span class="bazaar-signal-status is-shared">${signal.demand_trend === "SURGE" ? "Growing quickly" : "Growing"}</span>
+                  <h4>${escapeHtml(signal.product_category || "Local shopping category")}</h4>
+                  <p>${escapeHtml(signal.sub_category || "Interest has increased in this category.")}</p>
+                </div>
+                <div class="bazaar-signal-result">
+                  <strong>${growthText}</strong>
+                  <span>change in sample interest</span>
+                  <small>Shared by ${escapeHtml(signal.reporting_merchants_count)} participating shops</small>
+                </div>
+              </article>
             `;
           }).join("");
         }
+        if (status) {
+          status.textContent = `Illustrative sample · ${pulseData.neighbourhood_name} · ${pulseData.signals[0]?.time_window || "past 7 days"}. Not live merchant data.`;
+        }
       } catch (err) {
         console.error("Failed to load bazaar intelligence data:", err);
-      }
-    }
-
-    async function executeBazaarCampaign() {
-      const btn = document.getElementById("btnExecuteBazaarCampaign");
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "Sending & Verifying...";
-      }
-
-      try {
-        const res = await fetch("/api/bazaar/execute", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            merchant_id: "MERCH-002",
-            match_id: "MATCH-HFS-001",
-            strategy_key: "BALANCED",
-            actor: "Zubair Hussain (Store Owner)"
-          })
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          showSiteToast("Campaign Approved & Executed! 7-point Verification Passed.");
-
-          const card = document.getElementById("bazaarExecutionResultCard");
-          if (card) {
-            card.style.display = "block";
-            document.getElementById("bazaarExecutionTimestamp").textContent = `EXEC ID: ${data.execution_id} · ${new Date().toLocaleTimeString()}`;
-            document.getElementById("resTreatmentAudience").textContent = `${data.treatment_audience} Patrons`;
-            document.getElementById("resHoldoutAudience").textContent = `${data.holdout_audience} Patrons`;
-            document.getElementById("resIncrementalRevenue").textContent = `₹${Number(data.incremental_revenue_inr).toLocaleString('en-IN')}`;
-            document.getElementById("resNetIncrementalProfit").textContent = `₹${Number(data.net_incremental_profit_inr).toLocaleString('en-IN')} (${data.roi_multiple}x ROI)`;
-
-            if (data.soundbox_announcement && data.soundbox_announcement.hi) {
-              document.getElementById("soundboxVoiceScriptHi").textContent = `"${data.soundbox_announcement.hi}"`;
-            }
-          }
-
-          if (btn) {
-            btn.textContent = "Sent & Verified";
-            btn.style.background = "#10b981";
-            btn.style.borderColor = "#10b981";
-          }
-        } else {
-          showSiteToast("Execution blocked: " + (data.message || "Guardrail violation"));
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "Approve & Send Campaign";
-          }
-        }
-      } catch (e) {
-        console.error("Campaign execution error:", e);
-        showSiteToast("Campaign execution failed");
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = "Approve & Send Campaign";
-        }
+        if (status) status.textContent = err.message || "Sample market trends could not be loaded. Please try again.";
+        const signalsList = document.getElementById("bazaarDemandSignalsList");
+        if (signalsList) signalsList.innerHTML = '<div class="bazaar-signals-empty">We could not load the sample trends. Please choose “Refresh trends” to try again.</div>';
       }
     }
 

@@ -4,6 +4,7 @@ and transparent fallback when credentials are not configured.
 """
 
 import json
+import socket
 import time
 import uuid
 import urllib.request
@@ -114,14 +115,24 @@ class SarvamClient:
                 else:
                     last_error = SarvamError(f"HTTP {e.code}: {err_body}", status_code=e.code)
             except (urllib.error.URLError, TimeoutError) as e:
-                last_error = SarvamConnectionError(f"Failed to reach Sarvam AI: {e}")
+                if self._is_dns_resolution_error(e):
+                    last_error = SarvamConnectionError(
+                        "Could not resolve the Sarvam AI host. Check your internet, DNS, or VPN connection, then try again."
+                    )
+                else:
+                    last_error = SarvamConnectionError(f"Failed to reach Sarvam AI: {e}")
                 if attempt < MAX_RETRIES:
-                    time.sleep(0.5 * (attempt + 1))
+                    time.sleep((2 ** attempt) if self._is_dns_resolution_error(e) else 0.5 * (attempt + 1))
                     continue
 
         if last_error:
             raise last_error
         raise SarvamError("Request to Sarvam AI failed after retries.")
+
+    @staticmethod
+    def _is_dns_resolution_error(error: Exception) -> bool:
+        reason = getattr(error, "reason", error)
+        return isinstance(reason, socket.gaierror)
 
     def post_multipart(
         self,
@@ -165,20 +176,27 @@ class SarvamClient:
             },
             method="POST"
         )
-        try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
-                result = json.loads(response.read().decode("utf-8"))
-                if not isinstance(result, dict):
-                    raise SarvamError("Sarvam AI returned an invalid response.")
-                return result
-        except urllib.error.HTTPError as error:
-            details = error.read().decode("utf-8", errors="ignore")
-            if error.code in (401, 403):
-                raise SarvamAuthError("Sarvam AI authentication failed.", status_code=error.code) from error
-            if error.code == 429:
-                raise SarvamRateLimitError("Sarvam AI rate limit exceeded.", status_code=429) from error
-            if error.code == 400:
-                raise SarvamValidationError(f"Sarvam AI rejected the audio request: {details}", status_code=400) from error
-            raise SarvamError(f"Sarvam AI audio request failed with HTTP {error.code}: {details}", status_code=error.code) from error
-        except (urllib.error.URLError, TimeoutError) as error:
-            raise SarvamConnectionError(f"Failed to reach Sarvam AI: {error}") from error
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    result = json.loads(response.read().decode("utf-8"))
+                    if not isinstance(result, dict):
+                        raise SarvamError("Sarvam AI returned an invalid response.")
+                    return result
+            except urllib.error.HTTPError as error:
+                details = error.read().decode("utf-8", errors="ignore")
+                if error.code in (401, 403):
+                    raise SarvamAuthError("Sarvam AI authentication failed.", status_code=error.code) from error
+                if error.code == 429:
+                    raise SarvamRateLimitError("Sarvam AI rate limit exceeded.", status_code=429) from error
+                if error.code == 400:
+                    raise SarvamValidationError(f"Sarvam AI rejected the audio request: {details}", status_code=400) from error
+                raise SarvamError(f"Sarvam AI audio request failed with HTTP {error.code}: {details}", status_code=error.code) from error
+            except (urllib.error.URLError, TimeoutError) as error:
+                if not self._is_dns_resolution_error(error):
+                    raise SarvamConnectionError(f"Failed to reach Sarvam AI: {error}") from error
+                if attempt == MAX_RETRIES:
+                    raise SarvamConnectionError(
+                        "Could not resolve the Sarvam AI host. Check your internet, DNS, or VPN connection, then try again."
+                    ) from error
+                time.sleep(2 ** attempt)

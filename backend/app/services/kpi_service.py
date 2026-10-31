@@ -64,8 +64,8 @@ class KPIService:
                 "kpis": {
                     "task_completion_rate": 0.0,
                     "task_completion_display": "0.0%",
-                    "average_resolution_time_min": 0.0,
-                    "average_resolution_display": "0.0 min",
+                    "average_resolution_time_min": None,
+                    "average_resolution_display": "Not measured",
                     "human_escalation_rate": 0.0,
                     "human_escalation_display": "0.0%",
                     "approval_compliance": None,
@@ -83,14 +83,6 @@ class KPIService:
                     "approval_violations": 0
                 },
                 "period_comparison": {},
-                "presentation_benchmarks": {
-                    "task_completion_rate": "92.0%",
-                    "average_resolution_time": "4.0 min",
-                    "human_escalation_rate": "12.0%",
-                    "approval_compliance": "100.0%",
-                    "cost_per_completed_task": "₹3.00",
-                    "campaign_engagement": "18.0%"
-                },
                 "calculated_at": now_utc,
                 "is_demo": True
             }
@@ -114,33 +106,37 @@ class KPIService:
         # -------------------------------------------------------------
         durations = []
         for t in completed_tasks:
+            has_duration = False
             dur = t.get("duration_seconds")
-            if dur is not None and dur > 0:
-                durations.append(float(dur))
-            elif t.get("created_at") and t.get("completed_at"):
+            if dur is not None:
+                try:
+                    duration_seconds = float(dur)
+                    if duration_seconds > 0:
+                        durations.append(duration_seconds)
+                        has_duration = True
+                except (TypeError, ValueError):
+                    pass
+            if not has_duration and t.get("created_at") and t.get("completed_at"):
                 try:
                     c_dt = datetime.fromisoformat(t["created_at"].replace("Z", "+00:00"))
                     end_dt = datetime.fromisoformat(t["completed_at"].replace("Z", "+00:00"))
-                    diff_sec = max(60.0, (end_dt - c_dt).total_seconds())
-                    durations.append(diff_sec)
-                except Exception:
-                    durations.append(228.0)  # ~3.8 min baseline
-            else:
-                durations.append(228.0)
+                    diff_sec = (end_dt - c_dt).total_seconds()
+                    if diff_sec > 0:
+                        durations.append(diff_sec)
+                except (AttributeError, TypeError, ValueError, OverflowError):
+                    pass
 
-        avg_res_min = round((sum(durations) / len(durations)) / 60.0, 1) if durations else 0.0
+        avg_res_min = round((sum(durations) / len(durations)) / 60.0, 1) if durations else None
+        avg_res_display = f"{avg_res_min:.1f} min" if avg_res_min is not None else "Not measured"
 
         # -------------------------------------------------------------
         # KPI 3 — Human Escalation Rate
         # -------------------------------------------------------------
-        cur.execute("SELECT COUNT(DISTINCT task_id) FROM task_escalations")
-        esc_table_count = cur.fetchone()[0] or 0
-
         escalated_tasks = [
             t for t in tasks
             if t.get("current_state") in ("ESCALATED_TO_HUMAN", "REQUIRES_HUMAN") or t.get("escalated_to")
         ]
-        total_escalated = max(len(escalated_tasks), esc_table_count)
+        total_escalated = len(escalated_tasks)
         escalation_rate = round((total_escalated / total_eligible) * 100.0, 1) if total_eligible > 0 else 0.0
 
         # -------------------------------------------------------------
@@ -181,18 +177,26 @@ class KPIService:
         # -------------------------------------------------------------
         # KPI 6 — Campaign Engagement
         # -------------------------------------------------------------
-        cur.execute("SELECT COUNT(*) FROM campaign_recipient_statuses WHERE simulated_status = 'DELIVERED'")
+        campaign_query = """
+        SELECT COUNT(*) FROM campaign_recipient_statuses r
+        JOIN campaign_drafts c ON c.campaign_id = r.campaign_id
+        WHERE r.simulated_status = 'DELIVERED' AND c.merchant_id = ?
+        """
+        campaign_params: List[Any] = [merchant_id]
+        if campaign_filter:
+            campaign_query += " AND r.campaign_id = ?"
+            campaign_params.append(campaign_filter)
+        cur.execute(campaign_query, campaign_params)
         delivered_count = cur.fetchone()[0] or 0
 
-        cur.execute("""
-        SELECT COUNT(*) FROM campaign_recipient_statuses
-        WHERE simulated_status = 'DELIVERED' AND simulated_engaged = 1
-        """)
+        engaged_query = """
+        SELECT COUNT(*) FROM campaign_recipient_statuses r
+        JOIN campaign_drafts c ON c.campaign_id = r.campaign_id
+        WHERE r.simulated_status = 'DELIVERED' AND r.simulated_engaged = 1 AND c.merchant_id = ?
+        """
+        cur.execute(engaged_query + (" AND r.campaign_id = ?" if campaign_filter else ""),
+                    campaign_params)
         engaged_count = cur.fetchone()[0] or 0
-
-        # If simulated_engaged was not specifically toggled on older rows, simulate realistic ~18.6% benchmark engagement
-        if delivered_count > 0 and engaged_count == 0:
-            engaged_count = max(1, int(delivered_count * 0.186))
 
         engagement_rate = round((engaged_count / delivered_count) * 100.0, 1) if delivered_count > 0 else 0.0
 
@@ -211,33 +215,6 @@ class KPIService:
         # -------------------------------------------------------------
         # Period Comparison (Current vs Prior Period)
         # -------------------------------------------------------------
-        period_comparison = {
-            "completion_rate": {
-                "current": f"{completion_rate:.1f}%",
-                "prior": "88.4%",
-                "delta": f"+{round(completion_rate - 88.4, 1):.1f}%",
-                "trend": "UP"
-            },
-            "resolution_time": {
-                "current": f"{avg_res_min:.1f} min",
-                "prior": "4.4 min",
-                "delta": f"-{round(4.4 - avg_res_min, 1):.1f} min",
-                "trend": "DOWN"
-            },
-            "escalation_rate": {
-                "current": f"{escalation_rate:.1f}%",
-                "prior": "14.2%",
-                "delta": f"{round(escalation_rate - 14.2, 1):.1f}%",
-                "trend": "DOWN"
-            },
-            "operating_cost": {
-                "current": f"₹{cost_per_task:.2f}",
-                "prior": "₹3.40",
-                "delta": "-₹0.30",
-                "trend": "DOWN"
-            }
-        }
-
         conn.close()
         now_utc = datetime.now(timezone.utc).isoformat()
 
@@ -248,7 +225,7 @@ class KPIService:
                 "task_completion_rate": completion_rate,
                 "task_completion_display": f"{completion_rate:.1f}%",
                 "average_resolution_time_min": avg_res_min,
-                "average_resolution_display": f"{avg_res_min:.1f} min",
+                "average_resolution_display": avg_res_display,
                 "human_escalation_rate": escalation_rate,
                 "human_escalation_display": f"{escalation_rate:.1f}%",
                 "approval_compliance": approval_compliance,
@@ -279,16 +256,7 @@ class KPIService:
                 "disclaimer": "Demo mode uses clearly labelled configurable illustrative costs. Never actual billing."
             },
             "outcome_distribution": outcome_distribution,
-            "period_comparison": period_comparison,
-            "presentation_benchmarks": {
-                "task_completion_rate": "92.0%",
-                "average_resolution_time": "4.0 min",
-                "human_escalation_rate": "12.0%",
-                "approval_compliance": "100.0%",
-                "cost_per_completed_task": "₹3.00",
-                "campaign_engagement": "18.0%"
-            },
+            "period_comparison": {},
             "calculated_at": now_utc,
             "is_demo": True
         }
-

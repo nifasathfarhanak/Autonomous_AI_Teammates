@@ -290,6 +290,12 @@ class TestPhase8BusinessInnovation(unittest.TestCase):
         # Verify required permission tags
         perms = [o["required_permission"] for o in opps]
         self.assertTrue(any(p in ["CATEGORY_A", "CATEGORY_B"] for p in perms))
+        summary = OpportunityDiscoveryService.get_opportunity_summary("MERCH-001")
+        self.assertEqual(summary["total_opportunities_discovered"], len(opps))
+        self.assertEqual(
+            summary["total_unlocked_value_inr"],
+            round(sum(opportunity["financial_impact_inr"] for opportunity in opps), 2)
+        )
 
     # -------------------------------------------------------------
     # 9. Business Value Metrics & Provenance

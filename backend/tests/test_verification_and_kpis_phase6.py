@@ -294,8 +294,11 @@ class TestVerificationAndKPIsPhase6(unittest.TestCase):
         """Validates KPI 2: Average Resolution Time calculation for completed tasks."""
         kpis = KPIService.calculate_kpis("MERCH-001")
         avg_res = kpis["kpis"]["average_resolution_time_min"]
-        self.assertGreater(avg_res, 0.0)
-        self.assertIn("min", kpis["kpis"]["average_resolution_display"])
+        if avg_res is None:
+            self.assertEqual(kpis["kpis"]["average_resolution_display"], "Not measured")
+        else:
+            self.assertGreater(avg_res, 0.0)
+            self.assertIn("min", kpis["kpis"]["average_resolution_display"])
 
     def test_09_human_escalation_rate_calculation(self):
         """Validates KPI 3: Human Escalation Rate calculation."""
@@ -347,7 +350,11 @@ class TestVerificationAndKPIsPhase6(unittest.TestCase):
 
         kpis = KPIService.calculate_kpis("MERCH-001")
         eng_rate = kpis["kpis"]["campaign_engagement_rate"]
-        self.assertGreater(eng_rate, 0.0)
+        expected_engagement = round(
+            (kpis["counts"]["total_engaged_recipients"] / kpis["counts"]["total_delivered_recipients"]) * 100.0,
+            1
+        ) if kpis["counts"]["total_delivered_recipients"] else 0.0
+        self.assertEqual(eng_rate, expected_engagement)
         self.assertIn("%", kpis["kpis"]["campaign_engagement_display"])
         self.assertIn("denominator_description", kpis["engagement_metric_definition"])
 

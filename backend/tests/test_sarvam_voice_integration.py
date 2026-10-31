@@ -1,8 +1,12 @@
+import socket
+import urllib.error
 import unittest
 from unittest.mock import Mock, patch
 
+from backend.app.integrations.sarvam import client as sarvam_client_module
 from backend.app.integrations.sarvam.client import SarvamClient
 from backend.app.integrations.sarvam.config import ENDPOINTS, MODEL_STT
+from backend.app.integrations.sarvam.exceptions import SarvamConnectionError
 from backend.app.integrations.sarvam.speech_to_text import SaarasSTT
 from backend.app.integrations.sarvam.text_to_speech import BulbulTTS
 from backend.app.services.voice_copilot_service import VoiceCopilotService
@@ -11,6 +15,65 @@ from backend.tests.test_hackathon_demo_readiness import DummyHandler
 
 
 class TestSarvamVoiceIntegration(unittest.TestCase):
+    def test_sarvam_json_requests_retry_transient_dns_failures(self):
+        client = SarvamClient(api_key="test-key-for-voice")
+        response = Mock()
+        response.__enter__ = Mock(return_value=response)
+        response.__exit__ = Mock(return_value=False)
+        response.getcode.return_value = 200
+        response.read.return_value = '{"translated_text":"नमस्ते"}'.encode("utf-8")
+        dns_error = urllib.error.URLError(socket.gaierror(-2, "Name or service not known"))
+
+        with patch.object(
+            sarvam_client_module.urllib.request,
+            "urlopen",
+            side_effect=[dns_error, response]
+        ) as urlopen, patch.object(sarvam_client_module.time, "sleep") as sleep:
+            result = client.post(ENDPOINTS["translate"], {"input": "Hello"})
+
+        self.assertEqual(result["translated_text"], "नमस्ते")
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once_with(1)
+
+    def test_sarvam_reports_actionable_error_after_persistent_dns_failure(self):
+        client = SarvamClient(api_key="test-key-for-voice")
+        dns_error = urllib.error.URLError(socket.gaierror(-2, "Name or service not known"))
+
+        with patch.object(
+            sarvam_client_module.urllib.request,
+            "urlopen",
+            side_effect=dns_error
+        ) as urlopen, patch.object(sarvam_client_module.time, "sleep"):
+            with self.assertRaisesRegex(SarvamConnectionError, "Check your internet, DNS, or VPN"):
+                client.post(ENDPOINTS["translate"], {"input": "Hello"})
+
+        self.assertEqual(urlopen.call_count, 3)
+
+    def test_sarvam_audio_upload_retries_transient_dns_failure(self):
+        client = SarvamClient(api_key="test-key-for-voice")
+        response = Mock()
+        response.__enter__ = Mock(return_value=response)
+        response.__exit__ = Mock(return_value=False)
+        response.read.return_value = '{"transcript":"नमस्ते"}'.encode("utf-8")
+        dns_error = urllib.error.URLError(socket.gaierror(-2, "Name or service not known"))
+
+        with patch.object(
+            sarvam_client_module.urllib.request,
+            "urlopen",
+            side_effect=[dns_error, response]
+        ) as urlopen, patch.object(sarvam_client_module.time, "sleep"):
+            result = client.post_multipart(
+                ENDPOINTS["speech_to_text"],
+                {"model": MODEL_STT},
+                "file",
+                "merchant-question.wav",
+                b"audio",
+                "audio/wav"
+            )
+
+        self.assertEqual(result["transcript"], "नमस्ते")
+        self.assertEqual(urlopen.call_count, 2)
+
     def test_saaras_uploads_recording_and_returns_recognized_text(self):
         client = SarvamClient(api_key="test-key-for-voice")
         stt = SaarasSTT(client)
