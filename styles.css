@@ -1725,27 +1725,31 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 9px 12px;
+  padding: 10px 14px;
   border-radius: 8px;
   font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-body);
   text-decoration: none;
   cursor: pointer;
-  margin-bottom: 3px;
-  transition: all 0.18s ease;
+  margin-bottom: 2px;
+  transition: all 0.16s ease;
+  border-left: 3px solid transparent;
 }
 
 .sidebar-nav-item:hover {
   background: var(--paytm-blue-soft);
-  color: var(--paytm-blue);
+  color: var(--paytm-navy);
+  border-left-color: var(--paytm-cyan);
 }
 
 .sidebar-nav-item.active {
   background: var(--paytm-navy);
   color: #FFFFFF;
-  box-shadow: 0 4px 10px rgba(0, 46, 110, 0.2);
+  border-left-color: var(--paytm-cyan);
+  box-shadow: 0 2px 8px rgba(0, 41, 112, 0.18);
+  font-weight: 700;
 }
 
 .sidebar-nav-item.active .nav-icon {
@@ -1755,14 +1759,13 @@ body {
 .nav-item-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
+  font-size: 13.5px;
+  letter-spacing: 0.01em;
 }
 
 .nav-icon {
-  font-size: 15px;
-  width: 20px;
-  display: inline-flex;
-  justify-content: center;
+  display: none; /* Icons removed — merchant-friendly text-only nav */
 }
 
 .nav-badge-pill {

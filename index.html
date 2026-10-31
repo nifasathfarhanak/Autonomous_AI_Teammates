@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paytm AI ActionMate | Autonomous Merchant Growth &amp; Profit Intelligence</title>
-  <meta name="description" content="Paytm AI ActionMate — Commercial SaaS AI Teammate for Indian Merchants. Integrates Soundbox POS telemetry, Sarvam AI Indic voice copilot, and privacy-preserving Bazaar Intelligence for verified profit growth.">
+  <title>Paytm AI ActionMate | Your Business Growth Assistant</title>
+  <meta name="description" content="Paytm AI ActionMate — Commercial SaaS AI Teammate for Indian Merchants. Integrates Soundbox POS data, Sarvam AI Indic voice copilot, and privacy-preserving Bazaar Intelligence for verified profit growth.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://actionmate.paytm.com/">
   <meta property="og:title" content="Paytm AI ActionMate | Autonomous Merchant Growth &amp; Profit Intelligence">
@@ -35,34 +35,34 @@
           <div class="brand-title">
             <h1>Paytm AI ActionMate<span>.</span></h1>
             <div class="brand-subtitle">
-              <span>Autonomous Business Growth &amp; Profit Intelligence</span>
+              <span>Your Business Growth Assistant</span>
               <span>•</span>
-              <span class="store-badge">🏢 Sharma Commercial &amp; Industrial Supplies</span>
+              <span class="store-badge">Sharma Commercial &amp; Industrial Supplies</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="header-actions">
-        <!-- Live Soundbox Telemetry Pill -->
-        <div class="soundbox-pill" id="systemStatusPill" title="Paytm Soundbox 4G Active: SB-4G-DEL-9842">
+        <!-- Live Soundbox Data Pill -->
+        <div class="soundbox-pill" id="systemStatusPill" title="System Status">
           <span class="pulse-dot" aria-hidden="true"></span>
-          <span id="backendStatusLabel">Soundbox 4G Active (SB-4G-DEL-9842)</span>
+          <span id="backendStatusLabel">System Active</span>
         </div>
 
         <!-- Environment Mode Pill -->
         <div class="env-mode-pill demo" id="envModePill" onclick="openEnvModal()" title="Click to view environment &amp; integration readiness">
-          <span>🧪</span> <span id="envModePillLabel">Sandbox Mode</span>
+          <span id="envModePillLabel">Demo Mode</span>
         </div>
 
         <!-- Merchant Session Identity -->
         <div class="store-badge" style="background: #EAF8FF; color: #002970; border: 1px solid #DCE8F1;">
-          <span>👤 Ramesh Sharma (Connaught Place)</span>
+          <span>Ramesh Sharma · Connaught Place</span>
         </div>
 
         <!-- Quick Ask ActionMate Button -->
         <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('assistant')" title="Open AI ActionMate Assistant">
-          <span>⚡</span> Ask ActionMate
+          Ask AI Assistant
         </button>
 
         <!-- Hidden backward-compatible demo reset trigger -->
@@ -80,128 +80,128 @@
     <aside class="app-sidebar" id="appSidebar" role="navigation" aria-label="Main Navigation">
       <!-- GROUP 1: MAIN -->
       <div class="nav-group">
-        <div class="nav-group-title">Main</div>
+        <div class="nav-group-title">My Business</div>
 
         <!-- 1. Overview -->
         <a class="sidebar-nav-item active" id="navItemOverview" onclick="navigateToRoute('overview')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📊</span> Overview</span>
-          <span class="nav-badge-pill" id="badgeNavOverview">Live</span>
+          <span class="nav-item-left">My Store Overview</span>
+          <span class="nav-badge-pill" id="badgeNavOverview" style="color:var(--green-dark);">Live</span>
         </a>
 
-        <!-- 2. Sales Intelligence -->
+        <!-- 2. Sales Analysis -->
         <a class="sidebar-nav-item" id="navItemSales" onclick="navigateToRoute('sales')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📉</span> Sales Intelligence</span>
-          <span class="nav-badge-pill nav-badge-alert" id="badgeNavSales">-18.4%</span>
+          <span class="nav-item-left">Sales Analysis</span>
+          <span class="nav-badge-pill nav-badge-alert" id="badgeNavSales">Down This Week</span>
         </a>
 
         <!-- 3. Profit Intelligence -->
         <a class="sidebar-nav-item" id="navItemProfit" onclick="navigateToRoute('profit')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💰</span> Profit Intelligence</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">Margins</span>
+          <span class="nav-item-left">Profit &amp; Margins</span>
+          
         </a>
 
         <!-- 4. Inventory Intelligence -->
         <a class="sidebar-nav-item" id="navItemInventory" onclick="navigateToRoute('inventory')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📦</span> Inventory Intelligence</span>
-          <span class="nav-badge-pill" style="color: var(--amber-dark);">Stockout Alerts</span>
+          <span class="nav-item-left">Stock Management</span>
+          <span class="nav-badge-pill" style="color: var(--amber-dark);">Low Stock</span>
         </a>
 
         <!-- 5. Customer Intelligence -->
         <a class="sidebar-nav-item" id="navItemCustomers" onclick="navigateToRoute('customers')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">👥</span> Customer Intelligence</span>
+          <span class="nav-item-left">My Customers</span>
           <span class="nav-badge-pill" id="badgeNavCustomers">100</span>
         </a>
 
         <!-- 6. Cash Flow -->
         <a class="sidebar-nav-item" id="navItemCashflow" onclick="navigateToRoute('cashflow')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💳</span> Cash Flow</span>
-          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Day 4 Pinch</span>
+          <span class="nav-item-left">Cash &amp; Payments</span>
+          
         </a>
       </div>
 
       <!-- GROUP 2: AI INTELLIGENCE -->
       <div class="nav-group">
-        <div class="nav-group-title">AI Intelligence</div>
+        <div class="nav-group-title">AI Tools</div>
 
         <!-- 7. Voice Copilot -->
         <a class="sidebar-nav-item" id="navItemVoiceCopilot" onclick="navigateToRoute('voice-copilot')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎙️</span> Voice Copilot</span>
-          <span class="nav-badge-pill" style="background: rgba(0, 186, 242, 0.15); color: #007799;">Sarvam Indic</span>
+          <span class="nav-item-left">Voice Assistant</span>
+          
         </a>
 
         <!-- 8. Bazaar Intelligence -->
         <a class="sidebar-nav-item" id="navItemBazaarIntelligence" onclick="navigateToRoute('bazaar-intelligence')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🌐</span> Bazaar Intelligence</span>
-          <span class="nav-badge-pill" style="background: rgba(22, 163, 106, 0.15); color: #16A36A;">k&ge;5 Cluster</span>
+          <span class="nav-item-left">Nearby Market Trends</span>
+          
         </a>
 
         <!-- 9. Decision Twin -->
         <a class="sidebar-nav-item" id="navItemDecisionTwin" onclick="navigateToRoute('decision-twin')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🧪</span> Decision Twin</span>
-          <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Simulations</span>
+          <span class="nav-item-left">Compare Strategies</span>
+          
         </a>
 
         <!-- 10. Business Opportunities -->
         <a class="sidebar-nav-item" id="navItemOpportunities" onclick="navigateToRoute('opportunities')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💡</span> Business Opportunities</span>
-          <span class="nav-badge-pill nav-badge-alert">6 Found</span>
+          <span class="nav-item-left">Growth Opportunities</span>
+          <span class="nav-badge-pill nav-badge-alert" id="badgeNavOpportunities">6 Found</span>
         </a>
 
         <!-- 11. AI ActionMate Console -->
         <a class="sidebar-nav-item" id="navItemAssistant" onclick="navigateToRoute('assistant')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🤖</span> AI ActionMate</span>
-          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Task #1042</span>
+          <span class="nav-item-left">AI Assistant</span>
+          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Ask Me</span>
         </a>
       </div>
 
       <!-- GROUP 3: MARKETING & ACTIONS -->
       <div class="nav-group">
-        <div class="nav-group-title">Marketing &amp; Actions</div>
+        <div class="nav-group-title">Offers &amp; Actions</div>
 
         <!-- 12. Campaigns -->
         <a class="sidebar-nav-item" id="navItemCampaigns" onclick="navigateToRoute('campaigns')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎯</span> Campaigns</span>
-          <span class="nav-badge-pill" id="badgeNavCampaigns">RET50</span>
+          <span class="nav-item-left">Offers &amp; Campaigns</span>
+          <span class="nav-badge-pill" id="badgeNavCampaigns">Active</span>
         </a>
 
         <!-- 13. Approvals -->
         <a class="sidebar-nav-item" id="navItemApprovals" onclick="navigateToRoute('approvals')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛡️</span> Approvals</span>
+          <span class="nav-item-left">Pending Approvals</span>
           <span class="nav-badge-pill nav-badge-alert" id="badgeNavApprovals">1 Pending</span>
         </a>
 
         <!-- 14. Execution History -->
         <a class="sidebar-nav-item" id="navItemActivity" onclick="navigateToRoute('activity')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📜</span> Execution History</span>
-          <span class="nav-badge-pill">SHA-256</span>
+          <span class="nav-item-left">Campaign History</span>
+          
         </a>
 
         <!-- 15. Performance & Outcomes -->
         <a class="sidebar-nav-item" id="navItemAnalytics" onclick="navigateToRoute('analytics')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📈</span> Performance &amp; Outcomes</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">6.38x ROI</span>
+          <span class="nav-item-left">Results &amp; ROI</span>
+          
         </a>
       </div>
 
       <!-- GROUP 4: MANAGEMENT -->
       <div class="nav-group">
-        <div class="nav-group-title">Management</div>
+        <div class="nav-group-title">Records &amp; Settings</div>
 
         <!-- 16. Audit Trail -->
         <a class="sidebar-nav-item" id="navItemBusinessValue" onclick="navigateToRoute('business-value')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🏆</span> Audit Trail</span>
-          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Verified Lift</span>
+          <span class="nav-item-left">Activity Records</span>
+          
         </a>
 
         <!-- 17. Business Rules -->
         <a class="sidebar-nav-item" id="navItemGuardrails" onclick="navigateToRoute('guardrails')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛑</span> Business Rules</span>
+          <span class="nav-item-left">My Business Limits</span>
           <span class="nav-badge-pill" style="color: var(--green-dark);">Active</span>
         </a>
 
         <!-- 18. Settings -->
         <a class="sidebar-nav-item" id="navItemSettings" onclick="navigateToRoute('settings')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">⚙️</span> Settings</span>
+          <span class="nav-item-left">Settings</span>
         </a>
       </div>
 
@@ -233,9 +233,9 @@
             </div>
           </div>
           <div class="auth-title">Merchant Sign In</div>
-          <div class="auth-subtitle">Sign in to manage store telemetry, autonomous actions, and campaigns.</div>
+          <div class="auth-subtitle">Sign in to manage store data, autonomous actions, and campaigns.</div>
           <div class="auth-demo-banner">
-            <span style="font-size: 16px;">💡</span>
+            
             <span><strong>Demonstration Sandbox:</strong> Quick sign-in pre-configured for verified merchant <strong>Ramesh Sharma</strong> (Connaught Place Store).</span>
           </div>
           <form onsubmit="event.preventDefault(); navigateToRoute('overview');" class="auth-form">
@@ -248,7 +248,7 @@
               <input type="password" id="loginPass" class="form-input" value="••••••••••••" readonly style="width: 100%;">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
-              Enter as Ramesh Sharma (Store Owner) →
+              Enter as Ramesh Sharma (Store Owner)
             </button>
             <div style="display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px;">
               <a href="javascript:void(0)" onclick="navigateToRoute('forgot-password')" style="color: var(--paytm-blue);">Forgot Security PIN?</a>
@@ -271,10 +271,10 @@
           <div class="auth-title">Register Business</div>
           <div class="auth-subtitle">Link your Paytm Soundbox 4G device and activate autonomous revenue recovery.</div>
           <div class="auth-demo-banner">
-            <span>ℹ️ New merchant accounts auto-provision with pre-configured telemetry for <strong>Sharma Commercial &amp; Industrial Supplies</strong>.</span>
+            <span>New merchant accounts auto-provision with pre-configured data for <strong>Sharma Commercial &amp; Industrial Supplies</strong>.</span>
           </div>
           <button class="btn btn-primary" onclick="navigateToRoute('overview');" style="width: 100%; justify-content: center; padding: 12px;">
-            Activate Merchant Profile →
+            Activate Merchant Profile
           </button>
           <div style="text-align: center; margin-top: 16px; font-size: 13px;">
             <a href="javascript:void(0)" onclick="navigateToRoute('login')" style="color: var(--paytm-blue);">Already registered? Sign In</a>
@@ -317,14 +317,14 @@
           <div>
             <div class="view-eyebrow">Operational Intelligence &amp; Performance</div>
             <h2 class="view-title" id="headingOverview">Merchant Command Center</h2>
-            <p class="view-description">Real-time business performance, POS volume telemetry, and autonomous ActionMate task orchestration.</p>
+            <p class="view-description">Real-time business performance, POS volume data, and autonomous ActionMate task orchestration.</p>
           </div>
           <div class="view-actions-row">
-            <button class="btn btn-secondary btn-sm" onclick="fetchDashboardData()" title="Refresh telemetry">
-              ↻ Refresh
+            <button class="btn btn-secondary btn-sm" onclick="fetchDashboardData()" title="Refresh data">
+              Refresh
             </button>
             <button class="btn btn-primary btn-sm" onclick="navigateToRoute('assistant')">
-              ⚡ Open ActionMate Assistant
+              Ask AI Assistant
             </button>
           </div>
         </div>
@@ -333,7 +333,7 @@
         <div class="actionmate-prompt-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 18px;">💬</span>
+              
               <span style="font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--paytm-navy);">Ask ActionMate Anything</span>
               <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Autonomous Teammate</span>
             </div>
@@ -343,19 +343,19 @@
             <input type="text" id="overviewPromptInput" class="form-input" style="flex: 1; padding: 12px 16px; font-size: 14px;"
                    value="My sales have dropped this week. Help me bring customers back." placeholder="e.g. My sales have dropped this week. Help me bring customers back.">
             <button class="prompt-btn-send" onclick="submitPromptFromOverview()">
-              <span>Execute with ActionMate</span> ➔
+              <span>Get AI Help</span>
             </button>
           </div>
           <div class="suggestion-chips">
             <span class="chips-label">Try Prompt:</span>
             <span class="suggestion-chip" onclick="setOverviewPrompt('My sales have dropped this week. Help me bring customers back.')">
-              📉 "My sales have dropped this week. Help me bring customers back."
+              "My sales have dropped this week. Help me bring customers back."
             </span>
             <span class="suggestion-chip" onclick="setOverviewPrompt('Investigate repeat purchase drop-off this month')">
-              🔍 "Investigate repeat purchase drop-off this month"
+              "Investigate repeat purchase drop-off this month"
             </span>
             <span class="suggestion-chip" onclick="setOverviewPrompt('Draft a re-engagement offer for inactive diners')">
-              🎁 "Draft a re-engagement offer for inactive diners"
+              "Draft a re-engagement offer for customers who haven't returned"
             </span>
           </div>
         </div>
@@ -364,7 +364,7 @@
         <div class="card" style="margin-bottom: 24px; background: #FFFFFF; border-left: 4px solid var(--paytm-navy);">
           <div class="card-header" style="padding-bottom: 8px;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 16px;">🏢</span>
+              
               <div class="card-title" style="font-size: 14.5px;">Merchant Business Context Summary</div>
             </div>
             <span class="traceable-badge">Source: <strong>dealpilot.db:merchants</strong></span>
@@ -373,7 +373,7 @@
             <div><span style="color: var(--text-muted); font-size: 11.5px;">Legal Entity:</span><br><strong>Sharma Commercial &amp; Industrial Supplies</strong></div>
             <div><span style="color: var(--text-muted); font-size: 11.5px;">Operating Location:</span><br><strong>Connaught Place, New Delhi</strong></div>
             <div><span style="color: var(--text-muted); font-size: 11.5px;">GSTIN Identification:</span><br><strong>07AABCS1429B1Z8</strong></div>
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">Telemetry Device:</span><br><strong style="color: var(--paytm-navy);">SB-4G-DEL-9842 (Online)</strong></div>
+            <div><span style="color: var(--text-muted); font-size: 11.5px;">Data Device:</span><br><strong style="color: var(--paytm-navy);">SB-4G-DEL-9842 (Online)</strong></div>
           </div>
         </div>
 
@@ -389,7 +389,7 @@
             <div class="kpi-subtext">vs ₹4,12,000 previous week (-27.2%)</div>
           </div>
 
-          <!-- Card 2: Soundbox Telemetry -->
+          <!-- Card 2: Soundbox Data -->
           <div class="kpi-card">
             <div class="kpi-label-row">
               <span class="kpi-title">Soundbox Transactions</span>
@@ -430,7 +430,7 @@
                   Weekly Sales Comparison: Last Week vs This Week
                 </div>
                 <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
-                  Telemetry sourced from Soundbox POS (DEL-9842) · Real-time data sync
+                  Data sourced from Soundbox POS (DEL-9842) · Real-time data sync
                 </div>
               </div>
               <div class="chart-legend-row">
@@ -460,18 +460,18 @@
             <div class="card" style="border-left: 4px solid var(--amber);">
               <div class="card-header" style="padding-bottom: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 16px;">🔍</span>
+                  
                   <div class="card-title" style="font-size: 14.5px;">What AI ActionMate Discovered</div>
                 </div>
                 <span class="nav-badge-pill" style="background: var(--amber-bg); color: var(--amber-dark);">Anomaly Flagged</span>
               </div>
               <div style="font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 12px;">
-                AI ActionMate telemetry analysis detected an <strong>18.4% drop in lunchtime repeat orders</strong> starting Thursday afternoon. 
+                AI ActionMate data analysis detected an <strong>18.4% drop in lunchtime repeat orders</strong> starting Thursday afternoon. 
                 <strong>46 regular patrons</strong> did not make their customary weekly purchases, creating an estimated <strong>₹20,900 gross revenue leakage</strong>.
               </div>
               <div style="background: var(--bg-subtle); border-radius: 6px; padding: 10px 12px; font-size: 12.5px; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Impacted Cohort: <strong>Thursday &amp; Friday Lunch Diners</strong></span>
-                <span>Telemetry: <strong>Soundbox POS Feed</strong></span>
+                <span>Data: <strong>Soundbox POS Feed</strong></span>
               </div>
             </div>
 
@@ -479,7 +479,7 @@
             <div class="card" style="border-left: 4px solid var(--paytm-cyan);">
               <div class="card-header" style="padding-bottom: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 16px;">💡</span>
+                  
                   <div class="card-title" style="font-size: 14.5px;">Recommended Recovery Action</div>
                 </div>
                 <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Margin-Safe</span>
@@ -503,7 +503,7 @@
           <div class="card" id="overviewApprovalCard" style="border-top: 3px solid var(--amber);">
             <div class="card-header">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 18px;">🛡️</span>
+                
                 <div>
                   <div class="card-title">Pending Merchant Authorization</div>
                   <div class="card-subtitle">Human-in-the-loop authorization gate required before dispatch</div>
@@ -529,7 +529,7 @@
                 Inspect Details &amp; Copy
               </button>
               <button class="btn btn-primary btn-sm" id="btnOverviewQuickApprove" onclick="quickApproveFromOverview()">
-                Authorize &amp; Dispatch (HMAC Sign-off)
+                Authorize &amp; Dispatch (Approval)
               </button>
             </div>
           </div>
@@ -541,7 +541,7 @@
                 <div class="card-title">Current Workflow Execution Status</div>
                 <div class="card-subtitle">Task #1042 — “Help me bring customers back”</div>
               </div>
-              <span class="nav-badge-pill" id="overviewWorkflowStatePill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Live FSM State</span>
+              <span class="nav-badge-pill" id="overviewWorkflowStatePill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Live Status</span>
             </div>
 
             <!-- Mini 7-Step Progress Stepper -->
@@ -551,7 +551,7 @@
 
             <div style="text-align: right; margin-top: 12px;">
               <a href="javascript:void(0)" onclick="navigateToRoute('assistant')" style="font-size: 13px; font-weight: 700; color: var(--paytm-blue);">
-                View Full Interactive Task Stream in AI ActionMate →
+                View Full AI Assistant History
               </a>
             </div>
           </div>
@@ -574,7 +574,7 @@
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchTaskDetails('WF-REC-1042')" title="Refresh task state">
-              ↻ Refresh Task
+              Refresh
             </button>
           </div>
         </div>
@@ -588,7 +588,7 @@
             <textarea id="assistantPromptInput" class="prompt-textarea" rows="2"
                       placeholder="e.g. My sales have dropped this week. Help me bring customers back.">My sales have dropped this week. Help me bring customers back.</textarea>
             <button class="prompt-btn-send" id="btnAssistantSubmitPrompt" onclick="submitAssistantPrompt()">
-              <span>Send Request</span> ➔
+              <span>Send Request</span>
             </button>
           </div>
           <div class="suggestion-chips">
@@ -635,10 +635,10 @@
               <div class="backend-state-step" id="stateStepApproval"><span class="state-dot"></span> 6. Approval Required</div>
             </div>
 
-            <!-- Telemetry Findings Box -->
+            <!-- Business Findings Box -->
             <div style="background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
               <div style="font-family: var(--font-heading); font-size: 13.5px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 10px;">
-                📊 ActionMate Diagnostic Telemetry Findings:
+                AI Diagnostic Findings:
               </div>
               <div class="kpi-grid-4" style="margin-bottom: 0;">
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
@@ -664,39 +664,39 @@
             <div style="margin-bottom: 24px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div style="font-family: var(--font-heading); font-size: 14px; font-weight: 800; color: var(--paytm-navy);">
-                  🧠 Epistemic Evidence &amp; Grounded Reasoning:
+                  Evidence &amp; Reasoning:
                 </div>
                 <span class="traceable-badge" style="font-size: 11px;">Deterministic Reasoner (No Hallucinations)</span>
               </div>
-              <div class="epistemic-grid" id="epistemicGridContainer">
-                <div class="epistemic-box confirmed">
-                  <div class="epistemic-box-title">✓ Confirmed Data (SQLite &amp; Soundbox)</div>
-                  <ul class="epistemic-list" id="epistemicConfirmedList">
+              <div class="insight-grid" id="insightGridContainer">
+                <div class="insight-box confirmed">
+                  <div class="insight-box-title">Confirmed Data</div>
+                  <ul class="insight-list" id="insightConfirmedList">
                     <li>Gross sales dropped from ₹412,000 to ₹300,000 (-27.2% net loss).</li>
                     <li>Repeat order share plummeted from 37% to 24% (-13.0 percentage points).</li>
                     <li>46 loyal regular patrons missing from Thursday-Sunday lunch rush.</li>
                     <li>Direct estimated revenue leakage: ₹20,900.</li>
                   </ul>
                 </div>
-                <div class="epistemic-box interpretation">
-                  <div class="epistemic-box-title">💡 AI Interpretation (Behavioral Insights)</div>
-                  <ul class="epistemic-list" id="epistemicInterpretationList">
+                <div class="insight-box interpretation">
+                  <div class="insight-box-title">AI Interpretation</div>
+                  <ul class="insight-list" id="insightInterpretationList">
                     <li>Steep volume loss concentrated in Thursday-Sunday lunch hour window.</li>
                     <li>Pattern indicates localized habit disruption rather than permanent account attrition.</li>
                     <li>High probability of re-engagement recovery with immediate coupon incentive.</li>
                   </ul>
                 </div>
-                <div class="epistemic-box recommendation">
-                  <div class="epistemic-box-title">🎯 ActionMate Recommendations</div>
-                  <ul class="epistemic-list" id="epistemicRecommendationsList">
+                <div class="insight-box recommendation">
+                  <div class="insight-box-title">Recommended Actions</div>
+                  <ul class="insight-list" id="insightRecommendationsList">
                     <li>Launch Lunch Rush Patron Recovery targeting 240 patrons.</li>
                     <li>Offer ₹50 discount on orders above ₹249 with code RET50 on Soundbox QR.</li>
-                    <li>Enforce strict merchant budget liability cap of ₹3,600 with HMAC signature.</li>
+                    <li>Enforce strict merchant budget liability cap of ₹3,600 with Secure Approval signature.</li>
                   </ul>
                 </div>
-                <div class="epistemic-box unknowns">
-                  <div class="epistemic-box-title">❓ Unknown Information (Boundaries)</div>
-                  <ul class="epistemic-list" id="epistemicUnknownsList">
+                <div class="insight-box unknowns">
+                  <div class="insight-box-title">What We Do Not Know</div>
+                  <ul class="insight-list" id="insightUnknownsList">
                     <li>Competitor promotional discounts nearby in Connaught Place are unverified.</li>
                     <li>Localized weather or traffic footfall impacts during Friday-Saturday are unconfirmed.</li>
                   </ul>
@@ -744,10 +744,10 @@
                   Reject / Archive
                 </button>
                 <button class="btn btn-primary btn-sm" id="btnAssistantApprove" onclick="approveTaskFromAssistant()">
-                  🛡️ Authorize &amp; Sign Off (HMAC)
+                  Approve &amp; Send
                 </button>
                 <button class="btn btn-primary btn-sm" id="btnAssistantSimulateExec" onclick="simulateExecutionFromAssistant()" style="background: var(--green); border-color: var(--green);">
-                  ⚡ Simulate Execution &amp; Verify ROI
+                  Preview Campaign Result
                 </button>
               </div>
             </div>
@@ -756,7 +756,7 @@
             <div id="verifiedRoiOutcomeBox" style="display: none; margin-top: 20px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 18px;">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 20px;">✅</span>
+                  <span style="display:inline-block;width:20px;height:20px;background:var(--green);border-radius:50%;"></span>
                   <div>
                     <div style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: #065F46;">
                       Outcome Verified by Revenue Attribution Engine
@@ -781,7 +781,7 @@
                 </div>
                 <div style="background: #FFF; padding: 10px; border-radius: 6px; border: 1px solid #A7F3D0;">
                   <div style="font-size: 11px; color: var(--text-muted);">Audit Chaining</div>
-                  <div style="font-size: 16px; font-weight: 800; color: var(--paytm-blue);">SHA-256 Block</div>
+                  <div style="font-size: 16px; font-weight: 800; color: var(--paytm-blue);"> Block</div>
                 </div>
               </div>
             </div>
@@ -797,13 +797,13 @@
       <section class="route-view" id="view-sales" aria-labelledby="headingSales">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">POS Telemetry &amp; Volume Analytics</div>
+            <div class="view-eyebrow">POS Data &amp; Volume Analytics</div>
             <h2 class="view-title" id="headingSales">Sales Insights &amp; Repeat Purchase Trends</h2>
-            <p class="view-description">Daily sales breakdown, repeat order retention drop metrics, and Soundbox 4G transaction telemetry.</p>
+            <p class="view-description">Daily sales breakdown, repeat order retention drop metrics, and Soundbox 4G transaction data.</p>
           </div>
           <div class="view-actions-row">
             <span class="traceable-badge">Source: <strong>dealpilot.db:orders</strong></span>
-            <button class="btn btn-secondary btn-sm" onclick="fetchSalesInsights()">↻ Refresh Sales Data</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchSalesInsights()">Refresh Sales</button>
           </div>
         </div>
 
@@ -836,7 +836,7 @@
           <div class="card-header">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 18px;">⚠️</span>
+                <span style="display:inline-block;width:18px;height:18px;background:var(--amber);border-radius:4px;"></span>
                 <div class="card-title" id="dropDetectionTitle">Deterministic Sales Anomaly Detected</div>
               </div>
               <div class="card-subtitle" id="dropDetectionPeriod">Comparison: Week 4 (This Week) vs Week 3 (Last Week)</div>
@@ -849,7 +849,7 @@
           </div>
 
           <div style="background: var(--bg-subtle); border-radius: 8px; padding: 14px; font-size: 13px;">
-            <div style="font-weight: 700; color: var(--paytm-navy); margin-bottom: 8px;">Supporting Telemetry Evidence Grounded in Database Records:</div>
+            <div style="font-weight: 700; color: var(--paytm-navy); margin-bottom: 8px;">Supporting Data Evidence Grounded in Database Records:</div>
             <ul id="dropEvidenceList" style="margin-left: 18px; line-height: 1.6; color: var(--text-body);">
               <li>Overall gross sales fell from ₹412,000 to ₹300,000 (-27.2% deficit).</li>
               <li>Repeat customer orders dropped sharply from 37% to 24% (-13.0 percentage points).</li>
@@ -899,7 +899,7 @@
           <div class="card-header">
             <div>
               <div class="card-title">Day-by-Day Volume Comparison (Mon–Sun)</div>
-              <div class="card-subtitle">Telemetry sourced from Soundbox POS (DEL-9842) · Real-time data sync</div>
+              <div class="card-subtitle">Data sourced from Soundbox POS (DEL-9842) · Real-time data sync</div>
             </div>
             <span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">Soundbox POS Log</span>
           </div>
@@ -966,7 +966,7 @@
             <p class="view-description">Complete database of 100 enterprise accounts segmented by purchase frequency, recency, and order volume.</p>
           </div>
           <div class="view-actions-row">
-            <button class="btn btn-secondary btn-sm" onclick="fetchCustomerDirectory()">↻ Refresh Directory</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchCustomerDirectory()">Refresh</button>
           </div>
         </div>
 
@@ -1028,7 +1028,7 @@
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="recalculateCampaignAudience()">
-              🔄 Recalculate Audience
+              Update Audience
             </button>
             <button class="btn btn-primary btn-sm" onclick="navigateToRoute('assistant')">
               + New Campaign via ActionMate
@@ -1039,7 +1039,7 @@
         <!-- Sandbox Mode Notice Callout -->
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--paytm-blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 18px;">🛡️</span>
+            
             <div>
               <strong style="color: var(--paytm-navy); font-size: 13.5px;">SANDBOX SIMULATION ACTIVE:</strong>
               <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">All outbound dispatches are executed via an internal sandbox adapter. No real SMS or Soundbox broadcasts are sent to live mobile numbers.</span>
@@ -1056,7 +1056,7 @@
                 <span class="badge" id="campaignStatusBadge" style="background: var(--amber-bg); color: var(--amber-dark);">PENDING_APPROVAL</span>
                 <div class="card-title" id="campaignTitle">Task #1042: Recover 240 Dormant Repeat Diners</div>
               </div>
-              <div class="card-subtitle" id="campaignSubtitle">Channel: Paytm Soundbox Audio Script &amp; QR Telemetry SMS &bull; Campaign ID: <span id="campaignIdSpan" style="font-family: var(--font-mono); font-weight: 700;">CAMP-REC-1042</span></div>
+              <div class="card-subtitle" id="campaignSubtitle">Channel: Paytm Soundbox Audio Script &amp; QR Data SMS &bull; Campaign ID: <span id="campaignIdSpan" style="font-family: var(--font-mono); font-weight: 700;">CAMP-REC-1042</span></div>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="nav-badge-pill" id="campaignCodeBadge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Code: RET50</span>
@@ -1064,7 +1064,7 @@
                 Submit for Approval
               </button>
               <button class="btn btn-primary btn-sm" id="btnExecuteCampaign" onclick="executeCampaignSimulated()" style="background: var(--green-dark);">
-                ⚡ Execute Authorized Campaign Dispatch
+                Send Offer Now
               </button>
             </div>
           </div>
@@ -1218,7 +1218,7 @@
               <tbody id="campaignRecipientTableBody">
                 <tr>
                   <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">
-                    No dispatches recorded yet for this campaign. Click <strong>"⚡ Execute Authorized Campaign Dispatch"</strong> to begin execution.
+                    No dispatches recorded yet for this campaign. Click <strong>"Send Offer Now"</strong> to begin execution.
                   </td>
                 </tr>
               </tbody>
@@ -1258,7 +1258,7 @@
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchApprovalDetails()">
-              ↻ Refresh Approval State
+              Refresh
             </button>
           </div>
         </div>
@@ -1266,7 +1266,7 @@
         <!-- 3-Category Policy Callout Banner -->
         <div style="background: #f8fafc; border: 1px solid var(--border-color); border-left: 4px solid var(--paytm-blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 18px;">⚖️</span>
+            
             <div>
               <strong style="color: var(--paytm-navy); font-size: 13.5px;">ACTION RISK POLICY ENFORCED:</strong>
               <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">
@@ -1343,7 +1343,7 @@
               <div style="display: flex; gap: 4px;">
                 <button class="btn btn-secondary btn-sm active" id="btnApprLangEn" onclick="switchApprLang('en')">English</button>
                 <button class="btn btn-secondary btn-sm" id="btnApprLangHi" onclick="switchApprLang('hi')">Hindi</button>
-                <button class="btn btn-secondary btn-sm" id="btnApprLangSoundbox" onclick="switchApprLang('soundbox_voice')">🔊 Soundbox Voice</button>
+                <button class="btn btn-secondary btn-sm" id="btnApprLangSoundbox" onclick="switchApprLang('soundbox_voice')">Soundbox Voice</button>
               </div>
             </div>
             <div id="apprMessageDisplayBox" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: var(--text-body); line-height: 1.5; min-height: 60px; white-space: pre-wrap;">
@@ -1358,7 +1358,7 @@
           <!-- Edit Campaign Inline Panel (Hidden by default) -->
           <div id="apprEditSection" style="display: none; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #92400e; font-size: 13px;">✏️ Edit Message &amp; Offer (Invalidates Prior Approval):</strong>
+              <strong style="color: #92400e; font-size: 13px;">Edit Message &amp; Offer (Requires New Approval):</strong>
               <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(false)">Cancel Edit</button>
             </div>
             <div class="form-group" style="margin-bottom: 10px;">
@@ -1379,14 +1379,14 @@
             <div style="display: flex; align-items: center; gap: 10px;">
               <label for="approvalBudgetCapInput" style="font-size: 12.5px; font-weight: 600; color: var(--text-body);">Max Budget Ceiling (INR):</label>
               <input type="number" id="approvalBudgetCapInput" class="form-input" value="3600" style="width: 110px; padding: 4px 8px; font-size: 13px;">
-              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(true)">✏️ Edit Message</button>
-              <button class="btn btn-secondary btn-sm" onclick="requestChangesGovernance()">💬 Request Changes</button>
-              <button class="btn btn-secondary btn-sm" id="btnPauseResume" onclick="togglePauseGovernance()">⏸️ Pause</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(true)">Edit Message</button>
+              <button class="btn btn-secondary btn-sm" onclick="requestChangesGovernance()">Request Changes</button>
+              <button class="btn btn-secondary btn-sm" id="btnPauseResume" onclick="togglePauseGovernance()">Pause</button>
             </div>
             <div style="display: flex; gap: 10px;">
-              <button class="btn btn-secondary btn-sm" style="color: #be123c;" onclick="rejectCampaignGovernance()">❌ Decline &amp; Reject</button>
+              <button class="btn btn-secondary btn-sm" style="color: #be123c;" onclick="rejectCampaignGovernance()">Decline &amp; Reject</button>
               <button class="btn btn-primary btn-sm" id="btnApproveCampaign" onclick="approveCampaignGovernance()" style="background: var(--green-dark);">
-                🛡️ Authorize Campaign (Generate HMAC Signature)
+                Approve Campaign
               </button>
             </div>
           </div>
@@ -1397,7 +1397,7 @@
           <div class="card-header">
             <div>
               <div class="card-title">Approval Decision History &amp; Governance Ledger</div>
-              <div class="card-subtitle">Permanent records of human authorization gates, HMAC signatures, and invalidation events</div>
+              <div class="card-subtitle">Permanent records of human authorization gates, Secure Approval signatures, and invalidation events</div>
             </div>
             <span class="badge" id="apprLedgerCountBadge" style="background: var(--bg-subtle);">0 decisions recorded</span>
           </div>
@@ -1411,7 +1411,7 @@
                   <th>Status</th>
                   <th>Budget Cap</th>
                   <th>Content Fingerprint</th>
-                  <th>HMAC Signature</th>
+                  <th>Secure Approval</th>
                   <th>Timestamp</th>
                 </tr>
               </thead>
@@ -1427,21 +1427,21 @@
 
 
       <!-- ==================================================================
-           APPLICATION VIEW 7: /app/activity (ACTIVITY LOG & SHA-256 LEDGER)
+           APPLICATION VIEW 7: /app/activity (ACTIVITY LOG &  LEDGER)
            ================================================================== -->
       <section class="route-view" id="view-activity" aria-labelledby="headingActivity">
         <div class="view-header-row">
           <div>
             <div class="view-eyebrow">Cryptographic Audit Trail &amp; Governance Ledger</div>
             <h2 class="view-title" id="headingActivity">Activity Log &amp; Tamper-Evident Ledger</h2>
-            <p class="view-description">Every merchant request, data lookup, AI plan, approval decision, edit, and simulated execution is cryptographically chained with SHA-256 hashes.</p>
+            <p class="view-description">Every merchant request, data lookup, AI plan, approval decision, edit, and simulated execution is cryptographically chained with  hashes.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="verifyLedgerIntegrityDirect()">
-              🛡️ Verify Cryptographic Chain Integrity
+              Verify Record
             </button>
             <button class="btn btn-primary btn-sm" onclick="refreshAuditTrail()">
-              ↻ Refresh Log
+              Refresh
             </button>
           </div>
         </div>
@@ -1449,7 +1449,7 @@
         <!-- Ledger Integrity Status Callout -->
         <div id="ledgerIntegrityBanner" style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 18px;">🔗</span>
+            
             <div>
               <strong style="color: var(--green-dark); font-size: 13.5px;" id="integrityBannerTitle">CRYPTOGRAPHIC CHAIN VERIFIED:</strong>
               <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;" id="integrityBannerMsg">All blocks chained to GENESIS_BLOCK with zero hash collisions or data tampering.</span>
@@ -1461,10 +1461,10 @@
         <!-- View Mode Selector -->
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
           <button class="btn btn-secondary btn-sm active" id="btnViewModeTimeline" onclick="switchActivityViewMode('timeline')">
-            ⏱️ Formatted Activity Timeline
+            Activity Timeline
           </button>
           <button class="btn btn-secondary btn-sm" id="btnViewModeLedger" onclick="switchActivityViewMode('ledger')">
-            ⛓️ Cryptographic SHA-256 Block Ledger
+            Verified Record Ledger
           </button>
         </div>
 
@@ -1487,7 +1487,7 @@
         <div class="card" id="activityLedgerCard" style="display: none;">
           <div class="card-header">
             <div>
-              <div class="card-title">Immutable SHA-256 Block Ledger</div>
+              <div class="card-title">Immutable  Block Ledger</div>
               <div class="card-subtitle">Cryptographically chained blocks proving complete audit integrity</div>
             </div>
           </div>
@@ -1525,8 +1525,8 @@
             <p class="view-description">The 6 operational KPIs tracked dynamically from persisted SQLite records with live benchmark targets.</p>
           </div>
           <div class="view-actions-row">
-            <button class="btn btn-secondary btn-sm" onclick="fetchAnalyticsData()">↻ Refresh KPIs</button>
-            <button class="btn btn-primary btn-sm" onclick="openTaskReportModal('WF-REC-1042')">📄 View Task Report</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchAnalyticsData()">Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="openTaskReportModal('WF-REC-1042')">View Report</button>
             <button class="btn btn-secondary btn-sm" onclick="downloadTaskReportMarkdown('WF-REC-1042')">⬇ Export (.md)</button>
           </div>
         </div>
@@ -1573,7 +1573,7 @@
         <!-- Presentation Benchmark Target Notice -->
         <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="font-size: 12px; color: #1E40AF;">
-            <strong>🎯 Presentation Targets vs. Live Computed Prototype:</strong> 
+            <strong>Target vs. Actual Results:</strong> 
             Benchmark targets (Completion: 92%, Avg Time: 4.0 min, Escalation: 12%, Compliance: 100%, Cost: ₹3.00, Engagement: 18%) shown alongside actual persisted database metrics.
           </div>
           <span class="badge" style="background: #DBEAFE; color: #1E40AF; font-size: 11px;">LIVE OPERATIONAL TELEMETRY</span>
@@ -1816,7 +1816,7 @@
               </div>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="showSiteToast('Soundbox 4.0 audio test ping transmitted.')">
-              🔊 Transmit Soundbox Audio Test
+              Test Audio
             </button>
           </div>
 
@@ -1840,7 +1840,7 @@
               </div>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="fetchEnvironmentDependencies()">
-              ↻ Refresh Dependency Audit
+              Refresh
             </button>
           </div>
 
@@ -1849,14 +1849,14 @@
             <div class="card-title" style="margin-bottom: 8px;">Demonstration Sandbox Controls</div>
             <div class="card-subtitle" style="margin-bottom: 12px;">Reset sandbox state and inspect synthetic testing cohorts</div>
             <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px; font-size: 12.5px; color: #92400E; margin-bottom: 14px; line-height: 1.4;">
-              <strong>Sandbox Environment:</strong> Actions run against simulated adapters. Resetting returns campaign drafts, approval gates, and telemetry to pristine demo state.
+              <strong>Sandbox Environment:</strong> Actions run against simulated adapters. Resetting returns campaign drafts, approval gates, and data to pristine demo state.
             </div>
             <div style="display: flex; gap: 10px;">
               <button class="btn btn-secondary btn-sm" id="btnResetDemoSettings" onclick="resetActiveDemo()" title="Reset sandbox state">
-                ↻ Reset Sandbox State
+                Reset Demo
               </button>
               <button class="btn btn-primary btn-sm" onclick="openEnvModal()">
-                ⚙️ Environment Modal
+                Environment Info
               </button>
             </div>
           </div>
@@ -1872,17 +1872,17 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">Unit Economics &amp; Margin Defense</span>
-            <h1 class="view-title" id="headingProfit">💰 Profit Intelligence Engine</h1>
+            <h1 class="view-title" id="headingProfit">Profit &amp; Margins</h1>
             <p class="view-subtitle">Product-level unit economics, gross contribution margins, and mathematical discount erosion modeling.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchProfitIntelligence()">🔄 Refresh Catalog</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchProfitIntelligence()">Refresh</button>
           </div>
         </div>
 
         <!-- Epistemic Disclosure Alert -->
         <div style="background: #eff6ff; border-left: 4px solid var(--paytm-blue); padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: var(--text-dark);">
-          <strong>ℹ️ Epistemic Disclosure:</strong> Gross Profit = Product Selling Price minus Cost of Goods Sold (COGS). Store rent, staff payroll, and electricity overheads are itemized separately in Cash-Flow Intelligence and NOT deducted from product gross margin.
+          <strong>Note:</strong> Gross Profit = Product Selling Price minus Cost of Goods Sold (COGS). Store rent, staff payroll, and electricity overheads are itemized separately in Cash-Flow Intelligence and NOT deducted from product gross margin.
         </div>
 
         <!-- Profit Summary Metrics -->
@@ -1939,7 +1939,7 @@
         <!-- Interactive Discount Erosion Simulator -->
         <div class="card">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">🧪 Interactive Discount Erosion Simulator</h3>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy);">Discount Impact Simulator</h3>
             <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">Calculate exact margin sacrifice and required unit volume lift before authorizing any discount.</p>
           </div>
           <div class="card-body">
@@ -1977,11 +1977,11 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Inventory Velocity &amp; Stockout Defense</span>
-            <h1 class="view-title" id="headingInventory">📦 Predictive Inventory Intelligence</h1>
+            <h1 class="view-title" id="headingInventory">Stock Management</h1>
             <p class="view-subtitle">Stockout date predictions, sales velocity tracking, supplier reorder points, and promotional guardrails.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchInventoryIntelligence()">🔄 Refresh Stock</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchInventoryIntelligence()">Refresh Stock</button>
           </div>
         </div>
 
@@ -2012,7 +2012,7 @@
         <!-- Inventory Table -->
         <div class="card">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Live Stock Telemetry &amp; Velocity Radar</h3>
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Live Stock Data &amp; Velocity Radar</h3>
           </div>
           <div class="card-body" style="padding: 0; overflow-x: auto;">
             <table class="data-table" id="tableInventory">
@@ -2041,17 +2041,17 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Working Capital &amp; Liquidity Forecast</span>
-            <h1 class="view-title" id="headingCashflow">💳 Merchant Cash-Flow Early Warning</h1>
+            <h1 class="view-title" id="headingCashflow">Cash &amp; Payment Forecast</h1>
             <p class="view-subtitle">14-day operational working capital timeline matching Paytm Soundbox settlements against committed payables.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchCashFlowForecast()">🔄 Refresh Forecast</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchCashFlowForecast()">Refresh</button>
           </div>
         </div>
 
         <!-- Regulatory Strict Compliance Disclaimer -->
         <div style="background: #fffbeb; border-left: 4px solid var(--amber-dark); padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: #78350f;">
-          <strong>⚖️ OPERATIONAL PLANNING TOOL ONLY:</strong> This cash-flow forecast is calculated strictly from recorded Paytm settlements and user-entered merchant payables. It is NOT a credit score, loan eligibility assessment, or lending underwriting decision.
+          <strong>Planning Tool Only:</strong> This cash-flow forecast is calculated strictly from recorded Paytm settlements and user-entered merchant payables. It is NOT a credit score, loan eligibility assessment, or lending underwriting decision.
         </div>
 
         <!-- Liquidity Alert Banner -->
@@ -2113,18 +2113,18 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); margin-bottom: 6px;">Flagship Innovation · Mathematical Simulation</span>
-            <h1 class="view-title" id="headingDecisionTwin">🧪 ActionMate Decision Twin Lab</h1>
+            <h1 class="view-title" id="headingDecisionTwin">Compare Strategies</h1>
             <p class="view-subtitle">Simulate and compare 4 alternative commercial strategies before committing a single rupee of marketing budget.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-primary btn-sm" onclick="triggerDecisionTwinSimulation()">⚡ Run Multi-Strategy Simulation</button>
+            <button class="btn btn-primary btn-sm" onclick="triggerDecisionTwinSimulation()">Compare Strategies</button>
           </div>
         </div>
 
         <!-- Interactive Simulation Control Panel -->
         <div class="card" style="margin-bottom: 24px; background: #f8fafc; border: 1px solid #cbd5e1;">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">⚙️ Decision Twin Parameter Sliders</h3>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy);">Strategy Parameters</h3>
             <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Adjust your campaign boundaries and watch all 4 strategies recompute in real-time.</p>
           </div>
           <div class="card-body">
@@ -2165,11 +2165,11 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Algorithmic Opportunity Scoring</span>
-            <h1 class="view-title" id="headingOpportunities">💡 Proactive Business Opportunities</h1>
+            <h1 class="view-title" id="headingOpportunities">Growth Opportunities</h1>
             <p class="view-subtitle">Autonomous scanner continuously identifies opportunities across Profit, Inventory, Cash-Flow, and Retention.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchOpportunities()">🔄 Scan Opportunities</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchOpportunities()">Find Opportunities</button>
           </div>
         </div>
 
@@ -2208,11 +2208,11 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--red-soft); color: var(--red-dark); margin-bottom: 6px;">Autonomous Operational Safeguards</span>
-            <h1 class="view-title" id="headingGuardrails">🛑 No-Regret Business Guardrails</h1>
+            <h1 class="view-title" id="headingGuardrails">My Business Limits</h1>
             <p class="view-subtitle">Merchant-configured policy thresholds enforced by the backend to prevent unintended commercial damage.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchGuardrails()">🔄 Reload Rules</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchGuardrails()">Refresh Rules</button>
           </div>
         </div>
 
@@ -2245,11 +2245,11 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); margin-bottom: 6px;">Commercial Growth Platform</span>
-            <h1 class="view-title" id="headingBusinessValue">🏆 Business Value &amp; Incremental Impact</h1>
+            <h1 class="view-title" id="headingBusinessValue">Verified Results</h1>
             <p class="view-subtitle">Measured ROI, causal Holdout lift verification, commercial pricing tiers, and merchant personas.</p>
           </div>
           <div class="view-actions">
-            <button class="btn btn-secondary btn-sm" onclick="fetchBusinessValue()">🔄 Refresh Metrics</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchBusinessValue()">Refresh</button>
           </div>
         </div>
 
@@ -2309,7 +2309,7 @@
                   <li>Automated WhatsApp + Voice Soundbox dispatch</li>
                   <li>Holdout A/B ROI verification</li>
                 </ul>
-                <button class="btn btn-primary btn-sm" style="width: 100%; margin-top: 16px;">Upgrade to Growth →</button>
+                <button class="btn btn-primary btn-sm" style="width: 100%; margin-top: 16px;">Upgrade to Growth Plan</button>
               </div>
 
               <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; background: #fff;">
@@ -2318,7 +2318,7 @@
                 <p style="font-size: 13px; color: var(--text-muted); margin: 8px 0 16px;">Multi-counter &amp; wholesale distributor scale</p>
                 <ul style="font-size: 13px; color: var(--text-dark); padding-left: 20px; line-height: 1.8;">
                   <li><strong>All Growth features plus:</strong></li>
-                  <li>Multi-outlet consolidated telemetry</li>
+                  <li>Multi-outlet consolidated data</li>
                   <li>Custom supplier PO automatic drafting</li>
                   <li>Dynamic multi-language Indic voice AI</li>
                   <li>Dedicated merchant growth advisor</li>
@@ -2345,8 +2345,8 @@
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
             <select id="voiceMerchantSelect" onchange="onVoiceMerchantChange()" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 6px 12px;">
-              <option value="MERCH-002" selected>🛍️ Hussain Fashion Store (Jaipur)</option>
-              <option value="MERCH-001">🔬 Sharma Supplies (Delhi)</option>
+              <option value="MERCH-002" selected>Hussain Fashion Store (Jaipur)</option>
+              <option value="MERCH-001">Sharma Commercial Supplies (Delhi)</option>
             </select>
             <select id="voiceLanguageSelect" onchange="onVoiceLanguageChange()" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 6px 12px;">
               <option value="hi-IN" selected>🇮🇳 Hindi (हिन्दी)</option>
@@ -2368,7 +2368,7 @@
           <!-- Left Column: Audio Visualizer & Voice Console -->
           <div class="card" style="display: flex; flex-direction: column; gap: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">🎙️ Live Voice Visualizer</h3>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Voice Status</h3>
               <span id="voiceStatusBadge" class="badge" style="background: rgba(15, 23, 42, 0.1); color: #0f172a; font-weight: 700;">IDLE</span>
             </div>
 
@@ -2381,11 +2381,11 @@
             <!-- Voice Controls & Record Trigger -->
             <div style="display: flex; align-items: center; justify-content: center; gap: 16px; padding: 10px 0;">
               <button id="btnVoiceRecord" class="btn btn-primary" onclick="toggleVoiceRecording()" style="font-size: 14px; padding: 12px 24px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(0, 186, 242, 0.35);">
-                <span id="recordIcon" style="font-size: 18px;">🎙️</span>
+                <span id="recordIcon" style="font-size: 14px; font-weight: 700;">MIC</span>
                 <span id="recordBtnLabel">Start Speaking</span>
               </button>
               <button class="btn btn-secondary" onclick="simulateVoiceQuery('Why did my sales drop this week?')" style="border-radius: 30px; padding: 12px 18px;" title="Test sample spoken query">
-                💡 Example Query
+                Example Questions
               </button>
             </div>
 
@@ -2393,13 +2393,13 @@
             <div>
               <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Suggested Business Questions</div>
               <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Why did my sales drop this week?')" style="font-size: 12px; border-radius: 16px;">📉 Sales drop analysis</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Which products have highest gross profit?')" style="font-size: 12px; border-radius: 16px;">💰 Highest profit SKUs</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is the local demand trend in Johari Bazaar?')" style="font-size: 12px; border-radius: 16px;">🌐 Bazaar demand pulse</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is my inventory risk?')" style="font-size: 12px; border-radius: 16px;">📦 Trapped dupattas check</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Suggest a profitable campaign')" style="font-size: 12px; border-radius: 16px;">🎯 Suggest bundle campaign</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Compare 5% discount with bundle')" style="font-size: 12px; border-radius: 16px;">🧪 Compare strategies</button>
-                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('How did my campaign perform?')" style="font-size: 12px; border-radius: 16px;">🏆 Campaign performance</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Why did my sales drop this week?')" style="font-size: 12px; border-radius: 16px;">Sales drop analysis</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Which products have highest gross profit?')" style="font-size: 12px; border-radius: 16px;">Highest profit items</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is the local demand trend in Johari Bazaar?')" style="font-size: 12px; border-radius: 16px;">What is selling nearby</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is my inventory risk?')" style="font-size: 12px; border-radius: 16px;">Check slow-moving stock</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Suggest a profitable campaign')" style="font-size: 12px; border-radius: 16px;">Suggest a campaign</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Compare 5% discount with bundle')" style="font-size: 12px; border-radius: 16px;">Compare strategies</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('How did my campaign perform?')" style="font-size: 12px; border-radius: 16px;">Campaign performance</button>
               </div>
             </div>
 
@@ -2412,7 +2412,7 @@
             <!-- Audio Output Player (Bulbul TTS Playback) -->
             <div id="voiceAudioPlayerCard" style="display: none; background: rgba(0, 186, 242, 0.08); border: 1px solid rgba(0, 186, 242, 0.25); border-radius: 8px; padding: 12px; margin-top: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 12px; font-weight: 700; color: #007799;">🔊 Bulbul TTS Voice Playback</span>
+                <span style="font-size: 12px; font-weight: 700; color: #007799;">Voice Playback</span>
                 <span id="audioSpeakerBadge" style="font-size: 11px; color: var(--text-muted);">Voice: Meera (Indic Female)</span>
               </div>
               <audio id="voiceAudioPlayer" controls style="width: 100%; height: 36px;"></audio>
@@ -2422,14 +2422,14 @@
           <!-- Right Column: Conversational Stream & Context Cards -->
           <div class="card" style="display: flex; flex-direction: column; height: 560px;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
-              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">💬 Conversation &amp; Business Intelligence</h3>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Conversation &amp; Business Intelligence</h3>
               <span id="activeStoreIndicator" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Store: Hussain Fashion Store</span>
             </div>
 
             <div id="voiceConversationStream" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 6px;">
               <!-- Default Welcome Message -->
               <div style="display: flex; gap: 10px; align-items: flex-start;">
-                <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0;">AI</div>
                 <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
                   <div style="font-size: 13px; font-weight: 700; color: var(--paytm-navy); margin-bottom: 4px;">Paytm AI ActionMate · Voice Copilot</div>
                   <div style="font-size: 13.5px; color: var(--text-dark); line-height: 1.5;">
@@ -2463,15 +2463,15 @@
             <p class="view-subtitle">Privacy-Preserving Neighbourhood Demand Pulse, Inventory Matching, and Collective Growth for Johari Bazaar, Jaipur.</p>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <button class="btn btn-secondary btn-sm" onclick="fetchBazaarIntelligenceData()">🔄 Refresh Pulse</button>
-            <button class="btn btn-primary btn-sm" onclick="navigateToRoute('voice-copilot')">🎙️ Open Voice Copilot</button>
+            <button class="btn btn-secondary btn-sm" onclick="fetchBazaarIntelligenceData()">Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="navigateToRoute('voice-copilot')">Open Voice Assistant</button>
           </div>
         </div>
 
         <!-- Privacy Assurance Banner -->
         <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(0, 186, 242, 0.08)); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="font-size: 28px;">🛡️</div>
+            <div style="width:28px;height:28px;background:var(--green-bg);border-radius:8px;border:1px solid var(--green-border);"></div>
             <div>
               <div style="font-size: 14px; font-weight: 800; color: #065f46;">Johari Bazaar Merchant Privacy Covenant (k &ge; 5 Small-Cell Suppression)</div>
               <div style="font-size: 12.5px; color: var(--text-dark); margin-top: 2px;">
@@ -2510,7 +2510,7 @@
         <div class="card" style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">📍 Neighbourhood Demand Pulse (Johari Bazaar Cluster)</h3>
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Neighbourhood Demand Pulse (Johari Bazaar Cluster)</h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Aggregated demand momentum across 14 verified merchants over the past 7 days.</p>
             </div>
             <span class="badge" style="background: rgba(0, 186, 242, 0.12); color: #007799; font-weight: 700;">CLUSTER ID: NEIGHBOURHOOD-JP-01</span>
@@ -2626,7 +2626,7 @@
         <div class="card" style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">🧪 Decision Twin Strategy Modeling &amp; Guardrail Check</h3>
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Strategy Comparison &amp; Guardrail Check</h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Compare 3 merchant strategies tested deterministically against configured business guardrails.</p>
             </div>
             <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SIMULATED ESTIMATES</span>
@@ -2680,7 +2680,7 @@
                 <div>Projected Revenue: <strong>₹43,296</strong></div>
                 <div>Gross Profit: <strong>₹14,696</strong> (33.9%)</div>
                 <div>Marketing Cost: <strong>₹900</strong></div>
-                <div style="color: #dc2626; font-weight: 700; margin-top: 6px;">🛑 Guardrail RULE-HFS-02 Breach:</div>
+                <div style="color: #dc2626; font-weight: 700; margin-top: 6px;">Business Limit Exceeded (Rule RULE-HFS-02):</div>
                 <div style="font-size: 11.5px; color: #991b1b;">18.0% discount exceeds maximum permitted ceiling of 10.0%.</div>
               </div>
             </div>
@@ -2691,7 +2691,7 @@
         <div class="card" style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">🛡️ Controlled Execution Gate &amp; Merchant Sign-Off</h3>
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--paytm-navy); margin: 0;">Approval &amp; Send Gate: Merchant Sign-Off</h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Customer-facing outreach requires explicit merchant approval. All dispatches undergo randomized holdout verification.</p>
             </div>
             <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">85% TREATMENT · 15% HOLDOUT</span>
@@ -2704,11 +2704,11 @@
                 Target: 20 past ethnic wear patrons · WhatsApp + Soundbox · 8% bundle price (₹2,299) · Marketing Budget: ₹450
               </div>
               <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
-                Authorized by: Zubair Hussain (Store Owner) · Cryptographic HMAC-SHA256 signature generated upon submission.
+                Authorized by: Zubair Hussain (Store Owner) · Cryptographic Secure Approval-SHA256 signature generated upon submission.
               </div>
             </div>
             <button id="btnExecuteBazaarCampaign" class="btn btn-primary" onclick="executeBazaarCampaign()" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 8px;">
-              🚀 Approve &amp; Execute Campaign
+              Approve &amp; Send Campaign
             </button>
           </div>
 
@@ -2718,7 +2718,7 @@
               <span class="badge" style="background: #10b981; color: #fff; font-weight: 800;">7-POINT VERIFICATION: PASSED (VERIFIED)</span>
               <span id="bazaarExecutionTimestamp" style="font-size: 12px; color: #166534; font-family: monospace;"></span>
             </div>
-            <h4 style="font-size: 16px; font-weight: 800; color: #14532d; margin: 0 0 8px;">Campaign Executed &amp; Holdout Telemetry Verified</h4>
+            <h4 style="font-size: 16px; font-weight: 800; color: #14532d; margin: 0 0 8px;">Campaign Executed &amp; Holdout Data Verified</h4>
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; font-size: 13px;">
               <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
                 <div style="color: var(--text-muted); font-size: 11px;">Treatment Group (85%)</div>
@@ -2740,13 +2740,13 @@
 
             <!-- Soundbox Voice Broadcast Player -->
             <div style="background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px;">
-              <div style="font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 4px;">📢 Paytm Soundbox Voice Announcement</div>
+              <div style="font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 4px;">Paytm Soundbox Announcement</div>
               <div id="soundboxVoiceScriptHi" style="font-size: 13px; color: var(--text-dark); margin-bottom: 8px;">
                 "पेटीएम पर हुसैन फैशन स्टोर को फेस्टिव रॉयल बंडल से ₹32,186 का ऑर्डर प्राप्त हुआ।"
               </div>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <button class="btn btn-secondary btn-sm" onclick="playVoiceTone()">🔊 Test Soundbox Chime</button>
-                <span style="font-size: 11.5px; color: var(--text-muted);">SBOX-JP-8891 · Telemetry Online</span>
+                <button class="btn btn-secondary btn-sm" onclick="playVoiceTone()">Test Soundbox Chime</button>
+                <span style="font-size: 11.5px; color: var(--text-muted);">SBOX-JP-8891 · Data Online</span>
               </div>
             </div>
           </div>
@@ -2784,7 +2784,7 @@
     <div class="card" style="width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-modal); border-radius: 12px; margin: auto;" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="envModalTitle">
       <div class="card-header" style="border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 20px;">⚙️</span>
+          
           <div>
             <div class="card-title" id="envModalTitle" style="font-size: 16px;">Environment &amp; Integration Readiness</div>
             <div class="card-subtitle">Paytm AI ActionMate Commercial Deployment Status</div>
@@ -2799,8 +2799,8 @@
             <div style="font-size: 12px; color: var(--text-muted);">Switch between Sandbox Simulation and Live Production</div>
           </div>
           <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary btn-sm" id="btnSwitchToDemo" onclick="switchEnvironmentMode('demo')">🧪 Sandbox</button>
-            <button class="btn btn-primary btn-sm" id="btnSwitchToProd" onclick="switchEnvironmentMode('production')">🚀 Production</button>
+            <button class="btn btn-secondary btn-sm" id="btnSwitchToDemo" onclick="switchEnvironmentMode('demo')">Demo Mode</button>
+            <button class="btn btn-primary btn-sm" id="btnSwitchToProd" onclick="switchEnvironmentMode('production')">Production Mode</button>
           </div>
         </div>
 
@@ -2815,7 +2815,7 @@
 
         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 14px;">
           <button class="btn btn-secondary btn-sm" onclick="resetActiveDemo()" title="Reset sandbox state">
-            ↻ Reset Sandbox State
+            Reset Demo
           </button>
           <button class="btn btn-primary btn-sm" onclick="closeEnvModal()">
             Done
@@ -3139,7 +3139,7 @@
             <div class="step-title-row">
               <span class="step-title-text">3. Merchant Approval</span>
               <span class="badge" style="${isApproved ? 'background: var(--green-bg); color: var(--green-dark);' : 'background: var(--amber-bg); color: var(--amber-dark);'}">
-                ${isApproved ? 'Authorized (HMAC)' : 'Waiting'}
+                ${isApproved ? 'Authorized (Secure Approval)' : 'Waiting'}
               </span>
             </div>
             <div class="step-desc-text">${isApproved ? 'Signed off by Ramesh Sharma (Store Owner)' : 'Mandatory sign-off required before dispatch'}</div>
@@ -3167,13 +3167,13 @@
           badge.textContent = "Authorized";
           badge.style.background = "var(--green-bg)";
           badge.style.color = "var(--green-dark)";
-          btn.textContent = "✓ Authorized (HMAC Signed)";
+          btn.textContent = "Approved & Ready to Send";
           btn.disabled = true;
         } else {
           badge.textContent = "Awaiting Approval";
           badge.style.background = "var(--amber-bg)";
           badge.style.color = "var(--amber-dark)";
-          btn.textContent = "Authorize & Dispatch (HMAC Sign-off)";
+          btn.textContent = "Authorize & Dispatch (Approval)";
           btn.disabled = false;
         }
       }
@@ -3199,7 +3199,7 @@
           body: JSON.stringify({ approved_by: "Ramesh Sharma (Merchant Owner)", max_budget_authorized: 3600.0 })
         });
         const data = await res.json();
-        showSiteToast("Campaign authorized with HMAC-SHA256 signature!");
+        showSiteToast("Campaign authorized with Secure Approval-SHA256 signature!");
         fetchDashboardData();
       } catch (e) {
         showSiteToast("Approval failed: " + e.message);
@@ -3239,23 +3239,23 @@
       });
 
       // Update Epistemic Findings if present
-      if (task.epistemic_report) {
-        const confList = document.getElementById("epistemicConfirmedList");
-        const intList = document.getElementById("epistemicInterpretationList");
-        const recList = document.getElementById("epistemicRecommendationsList");
-        const unkList = document.getElementById("epistemicUnknownsList");
+      if (task.insight_report) {
+        const confList = document.getElementById("insightConfirmedList");
+        const intList = document.getElementById("insightInterpretationList");
+        const recList = document.getElementById("insightRecommendationsList");
+        const unkList = document.getElementById("insightUnknownsList");
 
-        if (confList && task.epistemic_report.confirmed_data) {
-          confList.innerHTML = task.epistemic_report.confirmed_data.map(item => `<li>${item}</li>`).join("");
+        if (confList && task.insight_report.confirmed_data) {
+          confList.innerHTML = task.insight_report.confirmed_data.map(item => `<li>${item}</li>`).join("");
         }
-        if (intList && task.epistemic_report.ai_interpretation) {
-          intList.innerHTML = task.epistemic_report.ai_interpretation.map(item => `<li>${item}</li>`).join("");
+        if (intList && task.insight_report.ai_interpretation) {
+          intList.innerHTML = task.insight_report.ai_interpretation.map(item => `<li>${item}</li>`).join("");
         }
-        if (recList && task.epistemic_report.recommendations) {
-          recList.innerHTML = task.epistemic_report.recommendations.map(item => `<li>${item}</li>`).join("");
+        if (recList && task.insight_report.recommendations) {
+          recList.innerHTML = task.insight_report.recommendations.map(item => `<li>${item}</li>`).join("");
         }
-        if (unkList && task.epistemic_report.unknown_information) {
-          unkList.innerHTML = task.epistemic_report.unknown_information.map(item => `<li>${item}</li>`).join("");
+        if (unkList && task.insight_report.unknown_information) {
+          unkList.innerHTML = task.insight_report.unknown_information.map(item => `<li>${item}</li>`).join("");
         }
       }
 
@@ -3307,13 +3307,13 @@
         outcomeBox.style.display = "block";
       } else if (task.is_approved) {
         btnApprove.disabled = true;
-        btnApprove.textContent = "✓ Authorized (HMAC Signed)";
+        btnApprove.textContent = "Approved & Ready to Send";
         btnSimulate.style.display = "inline-flex";
         statusText.textContent = "Approved by Ramesh Sharma. Ready to simulate execution.";
         outcomeBox.style.display = "none";
       } else {
         btnApprove.disabled = false;
-        btnApprove.textContent = "🛡️ Authorize & Sign Off (HMAC)";
+        btnApprove.textContent = "Approve Campaign";
         btnSimulate.style.display = "none";
         statusText.textContent = "Awaiting merchant authorization signature.";
         outcomeBox.style.display = "none";
@@ -3341,7 +3341,7 @@
 
     async function submitAssistantPrompt() {
       const prompt = document.getElementById("assistantPromptInput").value;
-      showSiteToast("ActionMate received prompt. Executing orchestrator reasoning pipeline...");
+      showSiteToast("ActionMate received prompt. Executing assistant reasoning pipeline...");
 
       // Update live visual stepper to show UNDERSTANDING
       const stepUnderstanding = document.getElementById("stateStepUnderstanding");
@@ -3377,7 +3377,7 @@
         const data = await res.json();
         appState.activeTask = data.task;
         renderAssistantTaskView(data.task);
-        showSiteToast("HMAC-SHA256 authorization signature recorded!");
+        showSiteToast("Secure Approval-SHA256 authorization signature recorded!");
       } catch (e) {
         showSiteToast("Approval error: " + e.message);
       }
@@ -3641,7 +3641,7 @@
           <!-- Section 1: Historical Sales Transactions -->
           <div class="drawer-section">
             <div class="drawer-section-title">
-              <span>📦 Historical Sales Orders (${orders.length})</span>
+              <span>Past Orders (${orders.length})</span>
               <span class="traceable-badge">Source: <strong>orders</strong></span>
             </div>
             ${orders.length > 0 ? `
@@ -3668,7 +3668,7 @@
           <!-- Section 2: Quotation Records -->
           <div class="drawer-section">
             <div class="drawer-section-title">
-              <span>📄 Quotations Records (${quotes.length})</span>
+              <span>Quotations (${quotes.length})</span>
               <span class="traceable-badge">Source: <strong>quotations</strong></span>
             </div>
             ${quotes.length > 0 ? `
@@ -3696,7 +3696,7 @@
           <!-- Section 3: Customer Interactions -->
           <div class="drawer-section">
             <div class="drawer-section-title">
-              <span>💬 Interaction Logs (${interactions.length})</span>
+              <span>Interaction Logs (${interactions.length})</span>
               <span class="traceable-badge">Source: <strong>customer_interactions</strong></span>
             </div>
             ${interactions.length > 0 ? `
@@ -3746,7 +3746,7 @@
           body: JSON.stringify({ approved_by: "Ramesh Sharma (Merchant Owner)", max_budget_authorized: budget, message_override: override })
         });
         const data = await res.json();
-        showSiteToast("Campaign authorized! HMAC-SHA256 signature recorded.");
+        showSiteToast("Campaign authorized! Secure Approval-SHA256 signature recorded.");
         navigateToRoute("assistant");
       } catch (e) {
         showSiteToast("Approval failed: " + e.message);
@@ -3860,13 +3860,13 @@ function renderCampaignOverview(draft, rec) {
   }
   if (btnExecute) {
     if (status === "COMPLETED") {
-      btnExecute.textContent = "✓ Simulated Execution Completed";
+      btnExecute.textContent = "Offer Sent Successfully";
       btnExecute.disabled = true;
       btnExecute.style.background = "var(--bg-subtle)";
       btnExecute.style.color = "var(--text-muted)";
       btnExecute.style.cursor = "default";
     } else {
-      btnExecute.textContent = "⚡ Execute Authorized Campaign Dispatch";
+      btnExecute.textContent = "Send Offer Now";
       btnExecute.disabled = false;
       btnExecute.style.background = "var(--green-dark)";
       btnExecute.style.color = "#fff";
@@ -4063,11 +4063,11 @@ async function executeCampaignSimulated() {
 
     if (res.status === 200) {
       const data = await res.json();
-      showSiteToast(`✓ Simulated execution complete! ${data.recipients_delivered} delivered, ${data.recipients_suppressed} DND-suppressed.`);
+      showSiteToast(`Offer sent! ${data.recipients_delivered} delivered, ${data.recipients_suppressed} DND-suppressed.`);
       await fetchCampaignData();
     } else if (res.status === 409) {
       const err = await res.json();
-      showSiteToast("⚠️ " + (err.error || "Campaign has already been executed (Idempotency safeguard enforced)."));
+      showSiteToast("Note: " + (err.error || "Campaign has already been sent (Idempotency safeguard enforced)."));
       await fetchCampaignData();
     } else {
       const err = await res.json();
@@ -4094,7 +4094,7 @@ async function fetchCampaignRecipients() {
     if (!tbody) return;
 
     if (!recipients || recipients.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">No dispatches recorded yet for this campaign. Click <strong>"⚡ Execute Authorized Campaign Dispatch"</strong> to begin execution.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">No dispatches recorded yet for this campaign. Click <strong>"Send Offer Now"</strong> to begin execution.</td></tr>`;
       return;
     }
 
@@ -4182,7 +4182,7 @@ async function fetchApprovalDetails() {
     if (purposeEl) purposeEl.textContent = data.campaign_purpose || "";
     if (rationaleEl) rationaleEl.textContent = data.reason_for_recommendation || "";
     if (audCountEl) audCountEl.textContent = `${data.customer_count || 97} Diners`;
-    if (hashSpan) hashSpan.textContent = (data.content_hash ? data.content_hash.substring(0, 24) + "..." : "Deterministic SHA-256 Active");
+    if (hashSpan) hashSpan.textContent = (data.content_hash ? data.content_hash.substring(0, 24) + "..." : "Deterministic  Active");
 
     const st = data.current_status || "PENDING_APPROVAL";
     if (statusBadge) {
@@ -4297,7 +4297,7 @@ async function approveCampaignGovernance() {
 
     if (res.ok) {
       const rec = await res.json();
-      showSiteToast(`✓ Campaign authorized! HMAC Signature: ${rec.auth_signature.substring(0, 16)}...`);
+      showSiteToast(`Campaign approved! Reference: ${rec.auth_signature.substring(0, 16)}...`);
       await fetchApprovalDetails();
     } else {
       const err = await res.json();
@@ -4449,16 +4449,16 @@ async function verifyLedgerIntegrityDirect() {
         badge.style.background = "var(--green-bg)";
         badge.style.color = "var(--green-dark)";
       }
-      showSiteToast(`✓ Cryptographic integrity verified: ${data.blocks_verified} blocks intact.`);
+      showSiteToast(`Record integrity verified: ${data.blocks_verified} blocks checked.`);
     } else {
-      if (bannerTitle) bannerTitle.textContent = "⚠️ TAMPERING DETECTED:";
+      if (bannerTitle) bannerTitle.textContent = "Warning: Record Integrity Issue Detected:";
       if (bannerMsg) bannerMsg.textContent = data.error || "Chain broken.";
       if (badge) {
         badge.textContent = `COMPROMISED AT BLOCK #${data.tampered_block_id}`;
         badge.style.background = "#fee2e2";
         badge.style.color = "#991b1b";
       }
-      showSiteToast(`⚠️ Ledger integrity check failed: ${data.error}`);
+      showSiteToast(`Record check failed: ${data.error}`);
     }
   } catch (e) {
     showSiteToast("Integrity check failed: " + e.message);
@@ -4638,7 +4638,7 @@ async function refreshAuditTrail() {
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
             <div style="background: #F0FDF4; border: 1px solid #BBF7D0; padding: 12px; border-radius: 6px;">
-              <strong style="color: #166534;">3. Human Approval Gate (HMAC-SHA256)</strong>
+              <strong style="color: #166534;">3. Human Approval Gate (Secure Approval-SHA256)</strong>
               <div style="margin-top: 4px; font-size: 12px;"><strong>Decision:</strong> ${approval.status || 'APPROVED'} by ${approval.approved_by || 'Ramesh Sharma'}</div>
               <div style="font-size: 11.5px; color: #166534; margin-top: 4px;"><strong>Authorized Budget Cap:</strong> ₹${(approval.max_budget_authorized_inr || 3600).toFixed(2)}</div>
               <div style="font-family: var(--font-mono); font-size: 11px; color: #15803D; margin-top: 4px;">Sig: ${approval.auth_signature || 'VERIFIED'}</div>
@@ -4670,7 +4670,7 @@ async function refreshAuditTrail() {
                   <th>#</th>
                   <th>Action</th>
                   <th>Actor</th>
-                  <th>Current SHA-256 Hash</th>
+                  <th>Current  Hash</th>
                   <th>Timestamp</th>
                 </tr>
               </thead>
@@ -4845,7 +4845,7 @@ async function refreshAuditTrail() {
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
               <span class="badge" style="background: ${isSafe ? '#dcfce7' : '#fee2e2'}; color: ${isSafe ? '#166534' : '#991b1b'}; font-weight: 800;">
-                ${isSafe ? '✓ GUARDRAIL COMPLIANT' : '⚠️ MARGIN FLOOR BREACH'}
+                ${isSafe ? 'Within Business Limits' : 'Business Limit Exceeded'}
               </span>
               <strong style="margin-left: 8px; font-size: 14px;">${d.product_name}</strong>
             </div>
@@ -4919,7 +4919,7 @@ async function refreshAuditTrail() {
                 <td>${i.recommended_reorder_units > 0 ? `<strong>+${i.recommended_reorder_units} units</strong>` : '<span style="color: var(--text-muted);">Adequate</span>'}</td>
                 <td>
                   <span class="badge" style="background: ${i.promotional_eligibility ? '#dcfce7' : '#fee2e2'}; color: ${i.promotional_eligibility ? '#166534' : '#991b1b'};">
-                    ${i.promotional_eligibility ? '✓ Promo Allowed' : '🛑 Blocked (Low Stock)'}
+                    ${i.promotional_eligibility ? 'Offer Allowed' : 'Blocked - Low Stock'}
                   </span>
                 </td>
                 <td>
@@ -4958,7 +4958,7 @@ async function refreshAuditTrail() {
             banner.style.display = "block";
             banner.innerHTML = `
               <div style="display: flex; gap: 12px; align-items: flex-start;">
-                <span style="font-size: 24px;">🚨</span>
+                <span style="display:inline-block;width:24px;height:24px;background:#dc2626;border-radius:50%;"></span>
                 <div>
                   <h4 style="font-size: 15px; font-weight: 800; color: #991b1b; margin-bottom: 4px;">${a.title}</h4>
                   <p style="font-size: 13px; color: #7f1d1d; margin-bottom: 8px;">${a.message}</p>
@@ -4990,7 +4990,7 @@ async function refreshAuditTrail() {
                   ₹${Number(row.projected_cumulative_balance_inr).toLocaleString("en-IN")}
                 </td>
                 <td>
-                  ${isPinch ? '<span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 800;">⚠️ LIQUIDITY PINCH</span>' : '<span class="badge" style="background: #dcfce7; color: #166534;">Healthy Buffer</span>'}
+                  ${isPinch ? '<span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 800;">LIQUIDITY PINCH</span>' : '<span class="badge" style="background: #dcfce7; color: #166534;">Healthy Buffer</span>'}
                 </td>
               </tr>
             `;
@@ -5093,7 +5093,7 @@ async function refreshAuditTrail() {
 
                 <div style="margin-top: 12px; font-size: 12px;">
                   <span class="badge" style="background: ${s.guardrails_passed ? '#dcfce7' : '#fee2e2'}; color: ${s.guardrails_passed ? '#166534' : '#991b1b'}; width: 100%; justify-content: center;">
-                    ${s.guardrails_passed ? '✓ Guardrails Verified' : '⚠️ Guardrail Breached'}
+                    ${s.guardrails_passed ? 'Within Limits' : 'Limit Exceeded'}
                   </span>
                 </div>
               </div>
@@ -5434,7 +5434,7 @@ async function refreshAuditTrail() {
       if (btn) {
         btn.classList.remove("btn-danger");
         btn.classList.add("btn-primary");
-        document.getElementById("recordIcon").textContent = "🎙️";
+        document.getElementById("recordIcon").textContent = "MIC";
         document.getElementById("recordBtnLabel").textContent = "Start Speaking";
       }
 
@@ -5517,7 +5517,7 @@ async function refreshAuditTrail() {
       msgDiv.style.cssText = "display: flex; gap: 10px; align-items: flex-start; justify-content: flex-end;";
       msgDiv.innerHTML = `
         <div style="background: var(--paytm-blue); color: #fff; border-radius: 12px; padding: 10px 14px; max-width: 80%; box-shadow: 0 2px 6px rgba(0,186,242,0.25);">
-          <div style="font-size: 11px; opacity: 0.85; margin-bottom: 2px;">You (${mode === 'VOICE' ? '🎙️ Spoken' : '💬 Text'})</div>
+          <div style="font-size: 11px; opacity: 0.85; margin-bottom: 2px;">You (${mode === 'VOICE' ? 'Voicen' : '💬 Text'})</div>
           <div style="font-size: 13.5px; font-weight: 500;">${text}</div>
         </div>
         <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;">ZH</div>
@@ -5543,7 +5543,7 @@ async function refreshAuditTrail() {
       const msgDiv = document.createElement("div");
       msgDiv.style.cssText = "display: flex; gap: 10px; align-items: flex-start;";
       msgDiv.innerHTML = `
-        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0;">AI</div>
         <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <span style="font-size: 12px; font-weight: 700; color: var(--paytm-navy);">Paytm AI ActionMate</span>
@@ -5596,7 +5596,7 @@ async function refreshAuditTrail() {
       if (stream) {
         stream.innerHTML = `
           <div style="display: flex; gap: 10px; align-items: flex-start;">
-            <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+            <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0;">AI</div>
             <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
               <div style="font-size: 13px; font-weight: 700; color: var(--paytm-navy); margin-bottom: 4px;">Paytm AI ActionMate · Voice Copilot</div>
               <div style="font-size: 13.5px; color: var(--text-dark); line-height: 1.5;">
@@ -5647,8 +5647,8 @@ async function refreshAuditTrail() {
               : `<span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">PUBLISHED (k=${sig.reporting_merchants_count} &ge; 5)</span>`;
 
             const trendBadge = sig.demand_trend === "SURGE"
-              ? `<span style="color: #16a34a; font-weight: 700;">🔥 SURGE</span>`
-              : `<span style="color: #0284c7; font-weight: 700;">📈 GROWING</span>`;
+              ? `<span style="color: #16a34a; font-weight: 700;">SURGE</span>`
+              : `<span style="color: #0284c7; font-weight: 700;">GROWING</span>`;
 
             const countDisplay = isSuppressed
               ? `<span style="color: var(--text-muted); font-style: italic;">Withheld (k &lt; 5)</span>`
@@ -5678,7 +5678,7 @@ async function refreshAuditTrail() {
       const btn = document.getElementById("btnExecuteBazaarCampaign");
       if (btn) {
         btn.disabled = true;
-        btn.textContent = "⚙️ Executing & Verifying...";
+        btn.textContent = "Sending & Verifying...";
       }
 
       try {
@@ -5712,7 +5712,7 @@ async function refreshAuditTrail() {
           }
 
           if (btn) {
-            btn.textContent = "✅ Executed & Verified";
+            btn.textContent = "Sent & Verified";
             btn.style.background = "#10b981";
             btn.style.borderColor = "#10b981";
           }
@@ -5720,7 +5720,7 @@ async function refreshAuditTrail() {
           showSiteToast("Execution blocked: " + (data.message || "Guardrail violation"));
           if (btn) {
             btn.disabled = false;
-            btn.textContent = "🚀 Approve & Execute Campaign";
+            btn.textContent = "Approve & Send Campaign";
           }
         }
       } catch (e) {
@@ -5728,7 +5728,7 @@ async function refreshAuditTrail() {
         showSiteToast("Campaign execution failed");
         if (btn) {
           btn.disabled = false;
-          btn.textContent = "🚀 Approve & Execute Campaign";
+          btn.textContent = "Approve & Send Campaign";
         }
       }
     }
