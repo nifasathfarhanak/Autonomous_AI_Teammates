@@ -13,7 +13,12 @@ class BulbulTTS:
     def __init__(self, client: Optional[SarvamClient] = None):
         self.client = client or SarvamClient()
 
-    def generate_speech(self, text: str, language_code: str = "hi") -> Dict[str, Any]:
+    def generate_speech(
+        self,
+        text: str,
+        language_code: str = "hi-IN",
+        speaker: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Converts text into audio stream or base64 WAV payload."""
         if not self.client.is_connected():
             return {
@@ -27,7 +32,7 @@ class BulbulTTS:
             }
 
         try:
-            payload = validate_tts_payload(text, language_code)
+            payload = validate_tts_payload(text, language_code, speaker)
             res = self.client.post(ENDPOINTS["text_to_speech"], payload)
             audios = res.get("audios", [])
             speaker = payload.get("speaker", "priya_hi_recovery")
@@ -44,4 +49,3 @@ class BulbulTTS:
                 "audio_url": None,
                 "provider": "BULBUL_TTS_ERROR"
             }
-

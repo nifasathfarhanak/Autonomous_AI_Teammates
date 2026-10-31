@@ -1998,12 +1998,20 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             audio_b64 = data.get("audio_base64", "")
             content_type = data.get("content_type", "audio/webm")
             supported_types = {"audio/webm", "audio/mp4", "audio/wav", "audio/ogg"}
-            if content_type not in supported_types:
+            if not isinstance(content_type, str) or content_type not in supported_types:
                 self._set_headers(400)
                 self.wfile.write(json.dumps({"error": "Unsupported audio format."}).encode('utf-8'))
                 return
+            if not isinstance(audio_b64, str) or not audio_b64:
+                self._set_headers(400)
+                self.wfile.write(json.dumps({"error": "No audio was recorded."}).encode('utf-8'))
+                return
+            if len(audio_b64) > 14 * 1024 * 1024:
+                self._set_headers(413)
+                self.wfile.write(json.dumps({"error": "Recording is too large. Please record a shorter question."}).encode('utf-8'))
+                return
             try:
-                raw_bytes = base64.b64decode(audio_b64.split(",")[-1], validate=True) if audio_b64 else b""
+                raw_bytes = base64.b64decode(audio_b64.split(",")[-1], validate=True)
             except (ValueError, TypeError):
                 self._set_headers(400)
                 self.wfile.write(json.dumps({"error": "Audio payload is not valid base64."}).encode('utf-8'))
@@ -2013,7 +2021,10 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": "Recording is too large. Please record a shorter question."}).encode('utf-8'))
                 return
             res = voice_copilot_service.transcribe_audio_payload(raw_bytes, lang, content_type)
-            self._set_headers(200)
+            status = 200 if not res.get("error") else (
+                503 if "UNAVAILABLE" in res.get("provider", "") else 502
+            )
+            self._set_headers(status)
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return
 

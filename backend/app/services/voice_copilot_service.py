@@ -160,12 +160,17 @@ class VoiceCopilotService:
             "created_at": now_utc
         }
 
-    def synthesize_speech(self, text: str, language_code: str = "hi-IN", speaker: str = "meera") -> Dict[str, Any]:
+    def synthesize_speech(
+        self,
+        text: str,
+        language_code: str = "hi-IN",
+        speaker: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Synthesizes natural speech with Sarvam Bulbul, or reports why it is unavailable."""
         if not self.sarvam_client.is_connected():
             return {
                 "error": "SARVAM_API_KEY is not configured. Spoken replies are unavailable.",
-                "speaker": speaker,
+                "speaker": speaker or "language default",
                 "language": language_code,
                 "provider": "SARVAM_BULBUL_UNAVAILABLE"
             }

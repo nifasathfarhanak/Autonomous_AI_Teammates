@@ -9,6 +9,7 @@ Controlled execution -> Outcome verification.
 import json
 import unittest
 from datetime import datetime, timezone
+from unittest.mock import patch
 
 from backend.app.database import init_db, get_connection
 from backend.app.services.voice_copilot_service import VoiceCopilotService
@@ -70,15 +71,18 @@ class TestPhase9VoiceAndBazaar(unittest.TestCase):
             self.assertGreater(len(res["suggested_actions"]), 0)
 
     def test_03_voice_speech_synthesis_and_playable_audio(self):
-        """Verifies speech synthesis produces a valid, playable base64 WAV payload."""
+        """Verifies a Bulbul audio response is returned without making a live API request."""
         sample_text = "नमस्ते ज़ुबैर जी, आपके स्टोर का ग्रॉस मार्जिन 48.5% है।"
-        synth = self.voice_service.synthesize_speech(sample_text, language_code="hi-IN")
-        
-        self.assertIsNotNone(synth.get("audio_base64"))
-        b64 = synth["audio_base64"]
-        # Must be non-empty and start with valid data URL or base64 WAV RIFF header
-        self.assertTrue(len(b64) > 100)
-        self.assertTrue(b64.startswith("data:audio/wav;base64,") or b64.startswith("UklGR"))
+        audio = "UklGR" + "A" * 120
+        with patch.object(self.voice_service.sarvam_client, "is_connected", return_value=True), \
+             patch.object(self.voice_service.tts, "generate_speech", return_value={
+                 "audio_base64": audio,
+                 "provider": "SARVAM_BULBUL_LIVE"
+             }):
+            synth = self.voice_service.synthesize_speech(sample_text, language_code="hi-IN")
+
+        self.assertEqual(synth.get("audio_base64"), audio)
+        self.assertEqual(synth.get("provider"), "SARVAM_BULBUL_LIVE")
 
     def test_04_bazaar_local_demand_pulse_and_k_anonymity_privacy_suppression(self):
         """Verifies small-cell cohort suppression (k >= 5) on neighbourhood demand signals."""
