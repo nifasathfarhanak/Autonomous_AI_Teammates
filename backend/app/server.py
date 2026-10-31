@@ -44,6 +44,15 @@ from .services.verification_service import VerificationService, VerificationErro
 from .services.failure_recovery_service import FailureRecoveryService, RecoveryError
 from .services.kpi_service import KPIService
 from .services.reporting_service import TaskReportingService
+from .services.profit_intelligence_service import ProfitIntelligenceService
+from .services.inventory_intelligence_service import InventoryIntelligenceService
+from .services.customer_value_service import CustomerValueService
+from .services.cashflow_intelligence_service import CashFlowIntelligenceService
+from .services.guardrails_service import GuardrailsService, GuardrailViolationError
+from .services.decision_twin_service import DecisionTwinService
+from .services.incremental_outcome_service import IncrementalOutcomeService
+from .services.opportunity_discovery_service import OpportunityDiscoveryService
+from .services.business_value_service import BusinessValueService
 from .integrations.sarvam import SarvamClient, SarvamTranslate, BulbulTTS, SaarasSTT, SUPPORTED_LANGUAGES
 from .orchestrator import (
     orchestrator, registry, get_task_state_history, transition_task_state, StateTransitionError,
@@ -333,7 +342,7 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             return
 
         # 4. Single Customer Profile & Deep Context
-        elif path.startswith("/api/customers/") and not path.endswith("/followups") and not path.endswith("/orders") and not path.endswith("/history"):
+        elif path.startswith("/api/customers/") and not path.endswith("/followups") and not path.endswith("/orders") and not path.endswith("/history") and not path.endswith("/rfm") and not path.endswith("/value-summary"):
             cust_id = path.split("/")[3]
             conn = get_connection()
             cur = conn.cursor()
@@ -950,6 +959,103 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             rep = TaskReportingService.generate_task_report(tid)
             self._set_headers(200)
             self.wfile.write(json.dumps(rep.dict()).encode('utf-8'))
+            return
+
+        # 42. Phase 8: Profit Intelligence Summary
+        elif path == "/api/profit/summary":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = ProfitIntelligenceService.calculate_profit_summary(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 43. Phase 8: Profit Catalog
+        elif path == "/api/profit/catalog":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = ProfitIntelligenceService.get_product_profitability_catalog(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 44. Phase 8: Inventory Intelligence Status
+        elif path == "/api/inventory/status":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = InventoryIntelligenceService.get_inventory_status(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 45. Phase 8: Inventory Intelligence Summary
+        elif path == "/api/inventory/summary":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = InventoryIntelligenceService.get_inventory_summary(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 46. Phase 8: Customer Value RFM Directory
+        elif path == "/api/customers/rfm":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = CustomerValueService.get_rfm_customer_directory(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 47. Phase 8: Customer Value Summary
+        elif path == "/api/customers/value-summary":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = CustomerValueService.get_customer_value_summary(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 48. Phase 8: Cash-Flow Forecast
+        elif path == "/api/cashflow/forecast":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = CashFlowIntelligenceService.get_cashflow_forecast(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 49. Phase 8: Business Guardrails
+        elif path == "/api/guardrails":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = GuardrailsService.get_all_guardrails(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 50. Phase 8: Ranked Business Opportunities
+        elif path == "/api/opportunities/ranked":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = OpportunityDiscoveryService.get_ranked_opportunities(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 51. Phase 8: Business Opportunities Summary
+        elif path == "/api/opportunities/summary":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = OpportunityDiscoveryService.get_opportunity_summary(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 52. Phase 8: Incremental Outcomes Experiment
+        elif path == "/api/outcomes/incremental":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            cid = query.get("campaign_id", ["CMP-WINBACK-001"])[0]
+            res = IncrementalOutcomeService.get_campaign_experiment_result(campaign_id=cid, merchant_id=mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 53. Phase 8: Business Value Metrics
+        elif path == "/api/business-value/metrics":
+            mid = query.get("merchant_id", ["MERCH-001"])[0]
+            res = BusinessValueService.get_business_value_metrics(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
             return
 
         # Fallback to SPA and Static Asset Serving
@@ -1645,6 +1751,69 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             reason = data.get("reason", "Task cancelled by merchant.")
             actor = data.get("actor", "Ramesh Sharma")
             res = FailureRecoveryService.cancel_task(task_id=tid, actor=actor, reason=reason)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 36. Phase 8: Model Discount Impact
+        elif path == "/api/profit/model-discount":
+            pid = data.get("product_id", "PROD-001")
+            disc = float(data.get("discount_pct", data.get("discount_percent", 10.0)))
+            lift = float(data.get("expected_volume_lift_pct", 25.0))
+            mid = data.get("merchant_id", "MERCH-001")
+            res = ProfitIntelligenceService.model_discount_impact(
+                product_id=pid,
+                discount_pct=disc,
+                expected_volume_lift_pct=lift,
+                merchant_id=mid
+            )
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 37. Phase 8: Update Guardrail Rule
+        elif path == "/api/guardrails/update":
+            rule_code = data.get("rule_code", data.get("guardrail_id", "MAX_DISCOUNT_PERCENT"))
+            num_val = float(data.get("new_value", data.get("numeric_value", data.get("parameter_value", 15.0))))
+            active = data.get("is_active")
+            mid = data.get("merchant_id", "MERCH-001")
+            res = GuardrailsService.update_guardrail(
+                rule_code=rule_code,
+                new_value=num_val,
+                is_active=active,
+                merchant_id=mid
+            )
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 38. Phase 8: Evaluate Campaign Against Guardrails
+        elif path == "/api/guardrails/evaluate":
+            mid = data.get("merchant_id", "MERCH-001")
+            res = GuardrailsService.evaluate_campaign_guardrails(
+                proposed_action=data,
+                merchant_id=mid
+            )
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 39. Phase 8: Decision Twin Multi-Strategy Simulation
+        elif path == "/api/decision-twin/simulate":
+            mid = data.get("merchant_id", "MERCH-001")
+            tid = data.get("task_id", "WF-REC-1042")
+            budget = float(data.get("budget_limit_inr", data.get("budget_inr", 3600.0)))
+            disc = float(data.get("discount_cap_pct", 10.0))
+            margin = float(data.get("min_margin_floor_pct", data.get("margin_floor_pct", 25.0)))
+            aud = int(data.get("audience_size", 43))
+            res = DecisionTwinService.simulate_strategies(
+                merchant_id=mid,
+                task_id=tid,
+                budget_limit_inr=budget,
+                discount_cap_pct=disc,
+                min_margin_floor_pct=margin,
+                audience_size=aud
+            )
             self._set_headers(200)
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return

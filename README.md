@@ -1,13 +1,15 @@
 # Paytm AI ActionMate: Autonomous AI Teammates for Merchant Operations
 > **"From conversations to completed actions."**  
+> **"Understand your business. Discover opportunities. Simulate decisions. Execute approved actions. Measure real business outcomes."**  
 > **Track 3 — Autonomous AI Teammates | Paytm AI Hackathon**  
 > **Team SingaSpark:** Thanya R G · Nagarajan R · Nifasath Farhana K
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Zero External Pip Dependencies](https://img.shields.io/badge/dependencies-Standard%20Library%20Only-brightgreen.svg)](#zero-external-pip-dependencies)
-[![Test Suite](https://img.shields.io/badge/tests-87%20passed%20%2F%20100%25-success.svg)](#automated-testing--verification)
+[![Test Suite](https://img.shields.io/badge/tests-101%20passed%20%2F%20100%25-success.svg)](#automated-testing--verification)
 [![Verification Engine](https://img.shields.io/badge/verification-7--Point%20Closed--Loop-blueviolet.svg)](#7-point-verification-engine)
 [![Security Policy](https://img.shields.io/badge/governance-3--Tier%20Risk%20Policy-orange.svg)](#action-risk-policy--human-approval)
+[![Phase 8 Innovation](https://img.shields.io/badge/phase%208-Profitability%20%26%20Decision%20Twin-blue.svg)](#phase-8--business-innovation-profitability-intelligence--decision-twin)
 
 ---
 
@@ -172,6 +174,7 @@ python3 -m unittest discover backend/tests -v
 ```
 
 ### Test Coverage Highlights:
+- **`test_phase8_business_innovation.py` (14 tests):** Tests all 8 Phase 8 innovations: profit catalog unit economics, discount erosion modeling, inventory sales velocity and stockout predictions, promotional safety guardrail, customer RFM scoring and CLV, 14-day cash-flow timeline with Day 4 pinch detection, Decision Twin 4-scenario simulation, business guardrails enforcement, 85/15 treatment vs holdout experiment, proactive opportunities ranking, provenanced business value metrics, and HTTP REST endpoints.
 - **`test_phase7_e2e_and_errors.py` (16 tests):** Complete 20-step end-to-end journey and the 15-scenario error/boundary matrix.
 - **`test_verification_and_kpis_phase6.py` (12 tests):** 7-point verification engine, partial verification, retry limits, 6 KPIs, and markdown reporting.
 - **`test_safety_and_governance_phase5.py` (10 tests):** 3-tier risk policy, Category C blocked tools, HMAC authorization, copy drift invalidation, and chained ledger.
@@ -181,7 +184,64 @@ python3 -m unittest discover backend/tests -v
 - **`test_actionmate_phase1.py` (5 tests):** Phase 1 application foundation and UI endpoints.
 - **`test_enterprise_suite.py` & `test_workflow.py` (17 tests):** DealPilot AI agent workflows, CSV ingestion, scoring model, and revenue attribution.
 
-**Result: 87 passed / 0 failed / 100% pass rate.**
+**Result: 101 passed / 0 failed / 100% pass rate.**
+
+---
+
+## 🚀 Phase 8 — Business Innovation, Profitability Intelligence & Decision Twin
+
+Phase 8 elevates ActionMate into a complete **Business Growth & Profitability Platform** for Indian merchants. It introduces 8 core business innovations:
+
+### 1. Profit Intelligence Engine (`/app/profit`)
+- **Unit Economics & Margins:** Calculates product-level selling price, unit COGS, and gross profit margin percentage across all 8 catalog SKUs.
+- **Epistemic Disclosure Rule:** Strictly distinguishes Product Gross Profit from Net Profit. Operating overheads (store lease, staff salaries, electricity) are itemized in Cash-Flow forecast and never subtracted from product gross margin.
+- **Discount Erosion Simulator:** Interactive mathematical simulator computing exact gross margin loss, unit profit sacrifice, and the required breakeven volume lift before authorizing any promotional discount.
+
+### 2. Predictive Inventory Intelligence (`/app/inventory`)
+- **Stockout Date Prediction:** Tracks sales velocity (units/day) to calculate Days of Stock on Hand (DOH) and exact projected stockout dates.
+- **Working Capital Optimization:** Identifies trapped capital in aging stock (>60 days) to recommend clearance bundles.
+- **Promotional Guardrail:** Deterministically blocks promotional campaigns on products with critical stock (< 5 days) to protect merchants from embarrassing stockouts.
+
+### 3. Customer Value Intelligence (`/app/customers/rfm`)
+- **Deterministic RFM Scoring:** Evaluates customers across Recency, Frequency, and Monetary dimensions to classify into `HIGH_VALUE_VIP`, `LOYAL_REPEAT`, `DECLINING_FREQUENCY`, `NEW_CUSTOMER`, and `INACTIVE_DORMANT`.
+- **CLV & Churn Projections:** Estimates Customer Lifetime Value and flags behavioral dormancy risks. Recommends tailored strategies (e.g. VIP personal phone call vs. promo winback vs. post-purchase care).
+
+### 4. Merchant Cash-Flow Early Warning (`/app/cashflow`)
+- **14-Day Working Capital Timeline:** Matches incoming Paytm QR and Soundbox settlements against committed supplier payables, rent, and utility dues.
+- **Day 4 Liquidity Pinch Alert:** Detects impending cash compression where account buffer drops to ₹13,000 against upcoming supplier dues of ₹22,000. Recommends operational mitigations (accelerate weekend Soundbox collections, request supplier PO extensions).
+- **Regulatory Strict Disclaimer:** Operational planning tool only; strictly no credit scoring or lending underwriting.
+
+### 5. ActionMate Decision Twin Lab (`/app/decision-twin`) — *FLAGSHIP INNOVATION*
+- **Multi-Strategy Simulation:** Simulates and compares 4 competing business strategies before spending ₹1 of merchant budget:
+  - **Strategy A: Consultative Reminder (0% Discount):** 100% margin preservation, 12% conversion, lowest spend.
+  - **Strategy B: Targeted Promo Sprint (RET50):** ₹50 discount on orders > ₹249, 23.3% conversion, ₹20,900 revenue.
+  - **Strategy C: VIP Loyalty Voucher:** ₹100 next-order store credit, protects current transaction price.
+  - **Strategy D: Inventory Clearance Bundle:** Fast-moving consumable + aging CNC fittings, releases ₹42,000+ trapped working capital while preserving 31.5% margin.
+- **Interactive Recalculation:** Merchant can adjust Audience Size, Discount Cap, Margin Floor, and Budget sliders to watch the Decision Twin dynamically recompute financial trade-offs in real time.
+
+### 6. No-Regret Business Guardrails (`/app/guardrails`)
+- **Backend Enforced Boundaries:** Merchant-configured rules enforced at the database and service layer:
+  - `MAX_DISCOUNT_PERCENT`: Caps discounts at 10.0%.
+  - `MAX_CAMPAIGN_BUDGET_INR`: Caps campaign expenditure at ₹3,600.
+  - `MIN_GROSS_MARGIN_PERCENT`: Enforces 25.0% post-discount margin floor.
+  - `INVENTORY_SAFETY_STOCK_DAYS`: Blocks campaigns if inventory < 5 days.
+  - `MANDATORY_HUMAN_APPROVAL`: Outbound customer messages require merchant HMAC signature.
+  - `FINANCIAL_MUTATION_CATEGORY_C`: Refunds and account changes strictly locked.
+
+### 7. Reality Check & Incremental Impact Engine (`/app/business-value`)
+- **Causal Lift Verification:** Employs an 85% Treatment vs 15% Holdout A/B testing design to calculate true incremental revenue and incremental gross profit produced exclusively above the uncontacted baseline.
+- **Strict Provenance Badging:** Every metric in the dashboard is categorized as `ACTUAL_MEASURED`, `ESTIMATED_PROJECTION`, `SIMULATED_DEMO`, or `MERCHANT_TARGET`.
+
+### 8. Proactive Opportunity Discovery (`/app/opportunities`)
+- **Continuous Background Radar:** Surfaces 6 prioritized commercial opportunities across Profit, Inventory, Cash-Flow, and Retention without waiting for merchant prompts.
+- **Permission Tagging:** Categorizes opportunities by risk (Category A Automatic vs Category B Human Approval) and priority score.
+
+### Commercial Strategy & Sustainable Monetization:
+- **Freemium SaaS Pricing:**
+  - **Free Tier (₹0):** Basic sales drop detection, basic RFM, 2 drafts/month.
+  - **Growth Tier (₹999/month):** Decision Twin simulator, predictive inventory, cash-flow warning, multi-channel dispatch, holdout verification.
+  - **Enterprise Pro (₹2,499/month):** Multi-counter consolidated analytics, automated supplier PO drafting, custom Indic voice models.
+- **Multi-Persona Validation:** Models business dynamics for Industrial Suppliers (batch orders), Cloud Kitchens (rapid perishability), Kirana Supermarkets (high volume, tight margins), and Apparel Boutiques (seasonal fashion).
 
 ---
 

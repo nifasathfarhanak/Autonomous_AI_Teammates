@@ -639,6 +639,167 @@ def init_db():
     );
     """)
 
+    # 31. Phase 8: Merchant Inventory Intelligence Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS merchant_inventory (
+        inventory_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        product_id TEXT NOT NULL,
+        product_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        current_stock_units INTEGER NOT NULL,
+        min_safety_stock INTEGER NOT NULL,
+        reorder_point INTEGER NOT NULL,
+        lead_time_days INTEGER NOT NULL,
+        unit_cost_inr REAL NOT NULL,
+        unit_selling_price_inr REAL NOT NULL,
+        stock_age_days INTEGER NOT NULL,
+        holding_cost_rate REAL DEFAULT 0.02,
+        last_restocked_date TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id),
+        FOREIGN KEY(product_id) REFERENCES products(product_id)
+    );
+    """)
+
+    # 32. Phase 8: Merchant Operational Expenses Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS merchant_expenses (
+        expense_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        category TEXT NOT NULL,
+        vendor_name TEXT NOT NULL,
+        description TEXT,
+        amount_inr REAL NOT NULL,
+        due_date TEXT NOT NULL,
+        status TEXT DEFAULT 'PENDING',
+        payment_method TEXT DEFAULT 'BANK_TRANSFER',
+        is_recurring BOOLEAN DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 33. Phase 8: Merchant Inflow Settlements Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS merchant_settlements (
+        settlement_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        settlement_date TEXT NOT NULL,
+        expected_amount_inr REAL NOT NULL,
+        channel TEXT NOT NULL,
+        status TEXT DEFAULT 'PENDING',
+        gross_sales_inr REAL NOT NULL,
+        fee_deducted_inr REAL DEFAULT 0.0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 34. Phase 8: No-Regret Merchant Guardrails Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS merchant_guardrails (
+        rule_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        rule_code TEXT NOT NULL UNIQUE,
+        rule_name TEXT NOT NULL,
+        parameter_value REAL NOT NULL,
+        unit TEXT NOT NULL,
+        description TEXT NOT NULL,
+        enforcement_level TEXT DEFAULT 'HARD_BLOCK',
+        is_active BOOLEAN DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 35. Phase 8: Decision Twin Simulations Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS decision_simulations (
+        simulation_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        task_id TEXT,
+        scenario_key TEXT NOT NULL,
+        strategy_name TEXT NOT NULL,
+        strategy_description TEXT NOT NULL,
+        target_segment TEXT NOT NULL,
+        audience_count INTEGER NOT NULL,
+        offer_details_json JSON,
+        estimated_revenue_inr REAL NOT NULL,
+        estimated_gross_profit_inr REAL NOT NULL,
+        estimated_margin_pct REAL NOT NULL,
+        marketing_cost_inr REAL NOT NULL,
+        discount_cost_inr REAL NOT NULL,
+        net_contribution_inr REAL NOT NULL,
+        expected_roi_multiple REAL NOT NULL,
+        inventory_impact_units INTEGER NOT NULL,
+        customer_impact_score REAL NOT NULL,
+        operational_risk_level TEXT NOT NULL,
+        confidence_level REAL NOT NULL,
+        guardrails_passed BOOLEAN DEFAULT 1,
+        guardrail_warnings_json JSON,
+        calculation_assumptions_json JSON,
+        is_recommended BOOLEAN DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 36. Phase 8: Incremental Outcome & Holdout Experiments Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS outcome_experiments (
+        experiment_id TEXT PRIMARY KEY,
+        campaign_id TEXT NOT NULL,
+        merchant_id TEXT NOT NULL,
+        experiment_name TEXT NOT NULL,
+        time_window_days INTEGER DEFAULT 7,
+        treatment_count INTEGER NOT NULL,
+        holdout_count INTEGER NOT NULL,
+        treatment_conversions INTEGER NOT NULL,
+        holdout_conversions INTEGER NOT NULL,
+        treatment_conversion_rate REAL NOT NULL,
+        holdout_conversion_rate REAL NOT NULL,
+        conversion_lift_pts REAL NOT NULL,
+        incremental_orders INTEGER NOT NULL,
+        incremental_revenue_inr REAL NOT NULL,
+        incremental_gross_profit_inr REAL NOT NULL,
+        campaign_expenditure_inr REAL NOT NULL,
+        net_incremental_profit_inr REAL NOT NULL,
+        incremental_roi_multiple REAL NOT NULL,
+        causal_confidence_score REAL NOT NULL,
+        outcome_status TEXT DEFAULT 'SIMULATED_DEMO',
+        disclaimer TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 37. Phase 8: Proactive Business Opportunities Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS business_opportunities (
+        opportunity_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        category TEXT NOT NULL,
+        title TEXT NOT NULL,
+        problem_statement TEXT NOT NULL,
+        evidence_json JSON NOT NULL,
+        financial_impact_inr REAL NOT NULL,
+        recommended_action TEXT NOT NULL,
+        expected_cost_inr REAL NOT NULL,
+        expected_benefit_inr REAL NOT NULL,
+        urgency_level TEXT NOT NULL,
+        confidence_level REAL NOT NULL,
+        required_permission TEXT NOT NULL,
+        verification_method TEXT NOT NULL,
+        status TEXT DEFAULT 'OPEN',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
     # Phase 5 & 6 Safe Column Migrations for Approvals, Audit Trail, Tasks, and Campaigns
     for col, col_def in [
         ("task_id", "TEXT"),
@@ -1044,6 +1205,156 @@ def seed_enterprise_data(conn):
     except Exception as e:
         print(f"Warning: Failed to seed sales transactions: {e}")
 
+    # Seed Phase 8 Business Innovation Data
+    try:
+        _seed_phase8_data(conn)
+    except Exception as e:
+        print(f"Warning: Failed to seed Phase 8 business innovation data: {e}")
+
+def _seed_phase8_data(conn):
+    """Seeds realistic Phase 8 inventory, expenses, settlements, guardrails, and business opportunities."""
+    cur = conn.cursor()
+    now_utc = datetime.now(timezone.utc).isoformat()
+    today = datetime.now(timezone.utc)
+
+    # 1. Seed Inventory (8 SKUs)
+    cur.execute("SELECT COUNT(*) FROM merchant_inventory")
+    if cur.fetchone()[0] == 0:
+        inventory_items = [
+            ("INV-001", "MERCH-001", "PROD-001", "Laboratory reactor accessories & thermal units", "Laboratory Equipment", 14, 5, 8, 4, 55000.0, 85000.0, 18),
+            ("INV-002", "MERCH-001", "PROD-002", "Industrial boiler spare components & valves", "Thermal Equipment", 28, 10, 15, 3, 32000.0, 48000.0, 25),
+            ("INV-003", "MERCH-001", "PROD-003", "Commercial food packaging machines (Grade 304)", "Machinery", 6, 3, 5, 5, 85000.0, 125000.0, 14),
+            ("INV-004", "MERCH-001", "PROD-004", "Cleanroom sterilization packs & filters", "Sterilization", 65, 20, 30, 2, 1800.0, 3200.0, 15),
+            ("INV-005", "MERCH-001", "PROD-005", "Custom CNC precision brass fittings (500 units)", "Precision Hardware", 19, 4, 6, 6, 42000.0, 58000.0, 95),
+            ("INV-006", "MERCH-001", "PROD-006", "High-density polymer drums & chemical valves", "General Supplies", 4, 6, 10, 3, 4200.0, 7500.0, 8),
+            ("INV-007", "MERCH-001", "PROD-007", "Festive gourmet corporate sweet gift hampers", "Corporate Gifts", 45, 15, 25, 2, 650.0, 1200.0, 12),
+            ("INV-008", "MERCH-001", "PROD-008", "Precision automotive gasket sheets & seals", "Automotive Seals", 9, 3, 5, 7, 58000.0, 75000.0, 82)
+        ]
+        for item in inventory_items:
+            cur.execute("""
+            INSERT OR REPLACE INTO merchant_inventory (
+                inventory_id, merchant_id, product_id, product_name, category,
+                current_stock_units, min_safety_stock, reorder_point, lead_time_days,
+                unit_cost_inr, unit_selling_price_inr, stock_age_days, last_restocked_date
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (*item, (today - timedelta(days=item[11])).strftime("%Y-%m-%d")))
+
+    # 2. Seed Operational Expenses
+    cur.execute("SELECT COUNT(*) FROM merchant_expenses")
+    if cur.fetchone()[0] == 0:
+        expenses = [
+            ("EXP-001", "MERCH-001", "SUPPLIER_INVOICE", "Kavita Glassware & Scientific Ltd", "Procurement invoice for borosilicate reactors", 22000.0, (today + timedelta(days=3)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-002", "MERCH-001", "UTILITIES", "Jaipur Vidyut Vitran Nigam", "Warehouse commercial electricity bill", 8000.0, (today + timedelta(days=5)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-003", "MERCH-001", "EQUIPMENT_MAINTENANCE", "Precision Calibration Services", "Scale and sensor calibration retainer", 6500.0, (today + timedelta(days=8)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-004", "MERCH-001", "RENT", "Connaught Commercial Properties", "Showroom and sales office commercial lease", 45000.0, (today + timedelta(days=15)).strftime("%Y-%m-%d"), "SCHEDULED")
+        ]
+        for exp in expenses:
+            cur.execute("""
+            INSERT OR REPLACE INTO merchant_expenses (
+                expense_id, merchant_id, category, vendor_name, description, amount_inr, due_date, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, exp)
+
+    # 3. Seed Inflow Settlements
+    cur.execute("SELECT COUNT(*) FROM merchant_settlements")
+    if cur.fetchone()[0] == 0:
+        settlements = [
+            ("SETTL-001", "MERCH-001", (today + timedelta(days=1)).strftime("%Y-%m-%d"), 18500.0, "PAYTM_SOUNDBOX", "PENDING", 18500.0, 0.0),
+            ("SETTL-002", "MERCH-001", (today + timedelta(days=2)).strftime("%Y-%m-%d"), 12800.0, "PAYTM_QR", "PENDING", 12800.0, 0.0),
+            ("SETTL-003", "MERCH-001", (today + timedelta(days=4)).strftime("%Y-%m-%d"), 24000.0, "CARD", "PENDING", 24300.0, 300.0),
+            ("SETTL-004", "MERCH-001", (today + timedelta(days=6)).strftime("%Y-%m-%d"), 16200.0, "PAYTM_SOUNDBOX", "PENDING", 16200.0, 0.0)
+        ]
+        for st in settlements:
+            cur.execute("""
+            INSERT OR REPLACE INTO merchant_settlements (
+                settlement_id, merchant_id, settlement_date, expected_amount_inr, channel, status, gross_sales_inr, fee_deducted_inr
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, st)
+
+    # 4. Seed No-Regret Merchant Guardrails
+    cur.execute("SELECT COUNT(*) FROM merchant_guardrails")
+    if cur.fetchone()[0] == 0:
+        guardrails = [
+            ("RULE-01", "MERCH-001", "MAX_DISCOUNT_PERCENT", "Maximum Promotional Discount", 10.0, "PERCENT", "Promotional campaigns cannot offer discounts exceeding 10.0%", "HARD_BLOCK"),
+            ("RULE-02", "MERCH-001", "MAX_CAMPAIGN_BUDGET_INR", "Maximum Campaign Budget", 3600.0, "INR", "Autonomous campaign execution cannot commit marketing spend > ₹3,600", "HARD_BLOCK"),
+            ("RULE-03", "MERCH-001", "MIN_GROSS_MARGIN_PERCENT", "Minimum Product Gross Margin Floor", 25.0, "PERCENT", "Discounts cannot reduce gross product margin below 25.0%", "HARD_BLOCK"),
+            ("RULE-04", "MERCH-001", "INVENTORY_SAFETY_STOCK_DAYS", "Minimum Stock Days for Promotion", 5.0, "DAYS", "Cannot promote products with fewer than 5 days of inventory on hand", "HARD_BLOCK"),
+            ("RULE-05", "MERCH-001", "CUSTOMER_FREQUENCY_CAP_PER_MONTH", "Max Customer Contact Frequency", 2.0, "MESSAGES", "No single customer can receive more than 2 promotional messages in a calendar month", "HARD_BLOCK"),
+            ("RULE-06", "MERCH-001", "MANDATORY_HUMAN_APPROVAL", "Human Approval Gate Enforcement", 1.0, "BOOLEAN", "Customer-facing promotional messages strictly require merchant owner sign-off", "HARD_BLOCK")
+        ]
+        for g in guardrails:
+            cur.execute("""
+            INSERT OR REPLACE INTO merchant_guardrails (
+                rule_id, merchant_id, rule_code, rule_name, parameter_value, unit, description, enforcement_level, is_active
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+            """, g)
+
+    # 5. Seed Proactive Business Opportunities
+    cur.execute("SELECT COUNT(*) FROM business_opportunities")
+    if cur.fetchone()[0] == 0:
+        opportunities = [
+            ("OPP-001", "MERCH-001", "PROFITABILITY", "High-Revenue SKU Has Margin Dilution (PROD-008)",
+             "Autoclaves generate ₹75k sales but unit margin is 22.7%, below the 25% merchant floor.",
+             json.dumps({"product_id": "PROD-008", "selling_price": 75000.0, "unit_cost": 58000.0, "margin_pct": 22.7, "floor_pct": 25.0}),
+             34000.0, "Renegotiate supplier procurement PO or bundle with high-margin Reagents (40.9% margin)",
+             0.0, 34000.0, "HIGH", 0.92, "CATEGORY_A", "Supplier contract margin recalculation"),
+            ("OPP-002", "MERCH-001", "INVENTORY", "Imminent Stockout on Top Performer (PROD-006)",
+             "Magnetic Stirrers are down to 4 units with a 3-day lead time. Estimated stockout in 2 days.",
+             json.dumps({"product_id": "PROD-006", "current_stock": 4, "daily_velocity": 2.0, "lead_time_days": 3}),
+             15000.0, "Trigger supplier reorder for 20 units immediately to prevent ₹15k in lost sales.",
+             0.0, 15000.0, "HIGH", 0.95, "CATEGORY_A", "Inventory PO tracking"),
+            ("OPP-003", "MERCH-001", "INVENTORY", "Slow-Moving Capital Trapped in Ovens (PROD-005)",
+             "19 units of Industrial Ovens have been in stock for 95 days. ₹798,000 working capital is trapped.",
+             json.dumps({"product_id": "PROD-005", "stock_units": 19, "age_days": 95, "trapped_capital_inr": 798000.0}),
+             110000.0, "Create a bundled equipment package with high-demand consumables to release liquidity.",
+             1200.0, 110000.0, "MEDIUM", 0.88, "CATEGORY_B", "Inventory clearance velocity measurement"),
+            ("OPP-004", "MERCH-001", "CASH_FLOW", "Upcoming Cash-Flow Pinch Window (Days 3-5)",
+             "Committed supplier payments (₹22,000) and power utility (₹8,000) will absorb 96% of early inflows.",
+             json.dumps({"committed_outflows": 30000.0, "expected_inflows_early": 31300.0, "liquidity_buffer": 1300.0}),
+             30000.0, "Review upcoming supplier payment schedule or prioritize Soundbox cash collections.",
+             0.0, 30000.0, "HIGH", 0.90, "CATEGORY_A", "Settlement and bank statement reconciliation"),
+            ("OPP-005", "MERCH-001", "CUSTOMER_RETENTION", "Repeat Lunch Customer Dormancy (46 Patrons)",
+             "Repeat customer orders dropped from 41% to 24% over 4 weeks, creating ₹20,900 revenue leakage.",
+             json.dumps({"week_1_pct": 41.0, "week_4_pct": 24.0, "unreturned_patrons": 46, "revenue_leakage": 20900.0}),
+             20900.0, "Execute approved WhatsApp, SMS & Soundbox reactivation sprint with code RET50.",
+             133.30, 20900.0, "HIGH", 0.94, "CATEGORY_B", "Closed-loop 7-point execution verification"),
+            ("OPP-006", "MERCH-001", "CUSTOMER_RETENTION", "12 High-Value Accounts Inactive for > 45 Days",
+             "12 enterprise accounts with historical LTV > ₹150k have had zero interaction in the last 45 days.",
+             json.dumps({"inactive_vip_count": 12, "combined_ltv_inr": 1850000.0}),
+             48000.0, "Dispatch personalized relationship-manager check-in without discounting.",
+             0.0, 48000.0, "MEDIUM", 0.85, "CATEGORY_B", "Customer re-order tracking")
+        ]
+        for opp in opportunities:
+            cur.execute("""
+            INSERT OR REPLACE INTO business_opportunities (
+                opportunity_id, merchant_id, category, title, problem_statement, evidence_json,
+                financial_impact_inr, recommended_action, expected_cost_inr, expected_benefit_inr,
+                urgency_level, confidence_level, required_permission, verification_method, status,
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'OPEN', ?, ?)
+            """, (*opp, now_utc, now_utc))
+
+    # 6. Seed Initial Outcome Experiment (Treatment vs Holdout)
+    cur.execute("SELECT COUNT(*) FROM outcome_experiments")
+    if cur.fetchone()[0] == 0:
+        cur.execute("""
+        INSERT OR REPLACE INTO outcome_experiments (
+            experiment_id, campaign_id, merchant_id, experiment_name, time_window_days,
+            treatment_count, holdout_count, treatment_conversions, holdout_conversions,
+            treatment_conversion_rate, holdout_conversion_rate, conversion_lift_pts,
+            incremental_orders, incremental_revenue_inr, incremental_gross_profit_inr,
+            campaign_expenditure_inr, net_incremental_profit_inr, incremental_roi_multiple,
+            causal_confidence_score, outcome_status, disclaimer
+        ) VALUES (
+            'EXP-DEMO-001', 'CAMP-REC-1042', 'MERCH-001', 'Weekend Lunch Rush Recovery: Treatment vs Holdout',
+            7, 43, 7, 10, 0, 23.3, 0.0, 23.3, 8, 20900.0, 8420.0, 133.30, 8286.70, 62.16, 0.88,
+            'SIMULATED_DEMO',
+            'SIMULATED OUTCOME: Randomized holdout comparison simulates 85% treatment / 15% holdout. True causal impact requires merchant-wide field experimentation.'
+        )
+        """)
+
+    conn.commit()
+
 def reset_database():
     """Drops and re-initializes clean database with fresh seed records."""
     conn = get_connection()
@@ -1058,7 +1369,9 @@ def reset_database():
         "integration_connections", "audit_trail", "organization_policies", "workflows", "roi_metrics",
         "tasks", "task_state_history",
         "campaign_drafts", "campaign_recipient_statuses", "campaign_activity_timeline",
-        "verifications", "task_escalations"
+        "verifications", "task_escalations",
+        "merchant_inventory", "merchant_expenses", "merchant_settlements", "merchant_guardrails",
+        "decision_simulations", "outcome_experiments", "business_opportunities"
     ]
     for t in tables:
         cur.execute(f"DROP TABLE IF EXISTS {t}")
