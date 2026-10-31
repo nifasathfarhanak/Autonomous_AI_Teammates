@@ -78,6 +78,33 @@ class TestPhase8BusinessInnovation(unittest.TestCase):
         classes = [p["classification"] for p in catalog]
         self.assertTrue(any(c in ["BEST_SELLER", "HIGH_MARGIN_OPPORTUNITY", "HIGH_REVENUE_LOW_MARGIN", "SLOW_MOVING_SURPLUS"] for c in classes))
 
+        for product in catalog:
+            expected_cogs = product["units_sold_period"] * product["unit_cost_inr"]
+            self.assertAlmostEqual(product["total_cogs_inr"], expected_cogs)
+            self.assertAlmostEqual(
+                product["total_gross_profit_inr"],
+                product["total_revenue_inr"] - expected_cogs
+            )
+            if product["total_revenue_inr"] > 0:
+                self.assertAlmostEqual(
+                    product["gross_margin_pct"],
+                    product["total_gross_profit_inr"] / product["total_revenue_inr"] * 100,
+                    places=1
+                )
+            else:
+                self.assertIsNone(product["gross_margin_pct"])
+
+        summary = ProfitIntelligenceService.calculate_profit_summary("MERCH-001")
+        self.assertAlmostEqual(
+            summary["total_gross_profit_inr"],
+            sum(product["total_gross_profit_inr"] for product in catalog)
+        )
+        self.assertAlmostEqual(
+            summary["blended_gross_margin_pct"],
+            summary["total_gross_profit_inr"] / summary["total_revenue_inr"] * 100,
+            places=1
+        )
+
     def test_02_discount_erosion_model(self):
         """Verifies discount erosion calculation accurately models margin loss and breakeven units."""
         sim = ProfitIntelligenceService.model_discount_impact(

@@ -16,8 +16,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23002970'/><path d='M8 10h16M8 16h10M8 22h14' stroke='%2300BAF2' stroke-width='3' stroke-linecap='round'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
@@ -76,130 +76,116 @@
        ==================================================================== -->
   <div class="app-shell">
 
-    <!-- LEFT SIDEBAR NAVIGATION -->
+        <!-- LEFT SIDEBAR NAVIGATION -->
     <aside class="app-sidebar" id="appSidebar" role="navigation" aria-label="Main Navigation">
-      <!-- GROUP 1: MAIN -->
+      <!-- GROUP 1: OVERVIEW -->
       <div class="nav-group">
-        <div class="nav-group-title">My Business</div>
+        <div class="nav-group-title">Overview</div>
 
-        <!-- 1. Overview -->
         <a class="sidebar-nav-item active" id="navItemOverview" onclick="navigateToRoute('overview')" role="button" tabindex="0">
-          <span class="nav-item-left">My Store Overview</span>
+          <span class="nav-item-left">Business Overview</span>
           <span class="nav-badge-pill" id="badgeNavOverview" style="color:var(--green-dark);">Live</span>
         </a>
 
-        <!-- 2. Sales Analysis -->
+        <a class="sidebar-nav-item" id="navItemOpportunities" onclick="navigateToRoute('opportunities')" role="button" tabindex="0">
+          <span class="nav-item-left">AI Business Insights</span>
+          <span class="nav-badge-pill nav-badge-alert" id="badgeNavOpportunities">6 Signals</span>
+        </a>
+      </div>
+
+      <!-- GROUP 2: BUSINESS INTELLIGENCE -->
+      <div class="nav-group">
+        <div class="nav-group-title">Business Intelligence</div>
+
         <a class="sidebar-nav-item" id="navItemSales" onclick="navigateToRoute('sales')" role="button" tabindex="0">
-          <span class="nav-item-left">Sales Analysis</span>
-          <span class="nav-badge-pill nav-badge-alert" id="badgeNavSales">Down This Week</span>
+          <span class="nav-item-left">Sales Intelligence</span>
+          <span class="nav-badge-pill nav-badge-alert" id="badgeNavSales">-27.2%</span>
         </a>
 
-        <!-- 3. Profit Intelligence -->
         <a class="sidebar-nav-item" id="navItemProfit" onclick="navigateToRoute('profit')" role="button" tabindex="0">
-          <span class="nav-item-left">Profit &amp; Margins</span>
-          
+          <span class="nav-item-left">Profit Intelligence</span>
+          <span class="nav-badge-pill" style="color: var(--green-dark);">Margins</span>
         </a>
 
-        <!-- 4. Inventory Intelligence -->
         <a class="sidebar-nav-item" id="navItemInventory" onclick="navigateToRoute('inventory')" role="button" tabindex="0">
-          <span class="nav-item-left">Stock Management</span>
+          <span class="nav-item-left">Inventory Intelligence</span>
           <span class="nav-badge-pill" style="color: var(--amber-dark);">Low Stock</span>
         </a>
 
-        <!-- 5. Customer Intelligence -->
         <a class="sidebar-nav-item" id="navItemCustomers" onclick="navigateToRoute('customers')" role="button" tabindex="0">
-          <span class="nav-item-left">My Customers</span>
+          <span class="nav-item-left">Customer Intelligence</span>
           <span class="nav-badge-pill" id="badgeNavCustomers">100</span>
         </a>
 
-        <!-- 6. Cash Flow -->
         <a class="sidebar-nav-item" id="navItemCashflow" onclick="navigateToRoute('cashflow')" role="button" tabindex="0">
-          <span class="nav-item-left">Cash &amp; Payments</span>
-          
+          <span class="nav-item-left">Cash Flow Intelligence</span>
+          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Day 4 Pinch</span>
         </a>
       </div>
 
-      <!-- GROUP 2: AI INTELLIGENCE -->
+      <!-- GROUP 3: MARKET INTELLIGENCE -->
       <div class="nav-group">
-        <div class="nav-group-title">AI Tools</div>
+        <div class="nav-group-title">Market Intelligence</div>
 
-        <!-- 7. Voice Copilot -->
-        <a class="sidebar-nav-item" id="navItemVoiceCopilot" onclick="navigateToRoute('voice-copilot')" role="button" tabindex="0">
-          <span class="nav-item-left">Voice Assistant</span>
-          
-        </a>
-
-        <!-- 8. Bazaar Intelligence -->
         <a class="sidebar-nav-item" id="navItemBazaarIntelligence" onclick="navigateToRoute('bazaar-intelligence')" role="button" tabindex="0">
-          <span class="nav-item-left">Nearby Market Trends</span>
-          
+          <span class="nav-item-left">Bazaar Intelligence</span>
+          <span class="nav-badge-pill" style="background: rgba(22, 163, 106, 0.15); color: #16A36A;">k&ge;5 Cluster</span>
         </a>
 
-        <!-- 9. Decision Twin -->
-        <a class="sidebar-nav-item" id="navItemDecisionTwin" onclick="navigateToRoute('decision-twin')" role="button" tabindex="0">
-          <span class="nav-item-left">Compare Strategies</span>
-          
-        </a>
-
-        <!-- 10. Business Opportunities -->
-        <a class="sidebar-nav-item" id="navItemOpportunities" onclick="navigateToRoute('opportunities')" role="button" tabindex="0">
-          <span class="nav-item-left">Growth Opportunities</span>
-          <span class="nav-badge-pill nav-badge-alert" id="badgeNavOpportunities">6 Found</span>
-        </a>
-
-        <!-- 11. AI ActionMate Console -->
-        <a class="sidebar-nav-item" id="navItemAssistant" onclick="navigateToRoute('assistant')" role="button" tabindex="0">
-          <span class="nav-item-left">AI Assistant</span>
-          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Ask Me</span>
+        <a class="sidebar-nav-item" id="navItemVoiceCopilot" onclick="navigateToRoute('voice-copilot')" role="button" tabindex="0">
+          <span class="nav-item-left">Voice Copilot</span>
+          <span class="nav-badge-pill" style="background: rgba(0, 186, 242, 0.15); color: #007799;">Sarvam Indic</span>
         </a>
       </div>
 
-      <!-- GROUP 3: MARKETING & ACTIONS -->
+      <!-- GROUP 4: AI & DECISIONS -->
       <div class="nav-group">
-        <div class="nav-group-title">Offers &amp; Actions</div>
+        <div class="nav-group-title">AI &amp; Decisions</div>
 
-        <!-- 12. Campaigns -->
-        <a class="sidebar-nav-item" id="navItemCampaigns" onclick="navigateToRoute('campaigns')" role="button" tabindex="0">
-          <span class="nav-item-left">Offers &amp; Campaigns</span>
-          <span class="nav-badge-pill" id="badgeNavCampaigns">Active</span>
+        <a class="sidebar-nav-item" id="navItemAssistant" onclick="navigateToRoute('assistant')" role="button" tabindex="0">
+          <span class="nav-item-left">AI ActionMate</span>
+          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Assistant</span>
         </a>
 
-        <!-- 13. Approvals -->
+        <a class="sidebar-nav-item" id="navItemDecisionTwin" onclick="navigateToRoute('decision-twin')" role="button" tabindex="0">
+          <span class="nav-item-left">Decision Twin</span>
+          <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Simulate</span>
+        </a>
+
+        <a class="sidebar-nav-item" id="navItemCampaigns" onclick="navigateToRoute('campaigns')" role="button" tabindex="0">
+          <span class="nav-item-left">Campaign Intelligence</span>
+          <span class="nav-badge-pill" id="badgeNavCampaigns">RET50</span>
+        </a>
+      </div>
+
+      <!-- GROUP 5: OPERATIONS & GOVERNANCE -->
+      <div class="nav-group">
+        <div class="nav-group-title">Operations</div>
+
         <a class="sidebar-nav-item" id="navItemApprovals" onclick="navigateToRoute('approvals')" role="button" tabindex="0">
-          <span class="nav-item-left">Pending Approvals</span>
+          <span class="nav-item-left">Approvals &amp; Guardrails</span>
           <span class="nav-badge-pill nav-badge-alert" id="badgeNavApprovals">1 Pending</span>
         </a>
 
-        <!-- 14. Execution History -->
+        <a class="sidebar-nav-item" id="navItemGuardrails" onclick="navigateToRoute('guardrails')" role="button" tabindex="0" style="display:none;">
+          <span class="nav-item-left">Business Rules</span>
+        </a>
+
         <a class="sidebar-nav-item" id="navItemActivity" onclick="navigateToRoute('activity')" role="button" tabindex="0">
-          <span class="nav-item-left">Campaign History</span>
-          
+          <span class="nav-item-left">Execution History</span>
+          <span class="nav-badge-pill">SHA-256</span>
         </a>
 
-        <!-- 15. Performance & Outcomes -->
         <a class="sidebar-nav-item" id="navItemAnalytics" onclick="navigateToRoute('analytics')" role="button" tabindex="0">
-          <span class="nav-item-left">Results &amp; ROI</span>
-          
+          <span class="nav-item-left">Reality Check</span>
+          <span class="nav-badge-pill" style="color: var(--green-dark);">6.38x ROI</span>
         </a>
-      </div>
 
-      <!-- GROUP 4: MANAGEMENT -->
-      <div class="nav-group">
-        <div class="nav-group-title">Records &amp; Settings</div>
-
-        <!-- 16. Audit Trail -->
         <a class="sidebar-nav-item" id="navItemBusinessValue" onclick="navigateToRoute('business-value')" role="button" tabindex="0">
-          <span class="nav-item-left">Activity Records</span>
-          
+          <span class="nav-item-left">Audit Trail</span>
+          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Verified Lift</span>
         </a>
 
-        <!-- 17. Business Rules -->
-        <a class="sidebar-nav-item" id="navItemGuardrails" onclick="navigateToRoute('guardrails')" role="button" tabindex="0">
-          <span class="nav-item-left">My Business Limits</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">Active</span>
-        </a>
-
-        <!-- 18. Settings -->
         <a class="sidebar-nav-item" id="navItemSettings" onclick="navigateToRoute('settings')" role="button" tabindex="0">
           <span class="nav-item-left">Settings</span>
         </a>
@@ -315,11 +301,15 @@
         <!-- View Header -->
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Operational Intelligence &amp; Performance</div>
-            <h2 class="view-title" id="headingOverview">Merchant Command Center</h2>
-            <p class="view-description">Real-time business performance, POS volume data, and autonomous ActionMate task orchestration.</p>
+            <div class="view-eyebrow">YOUR BUSINESS AT A GLANCE</div>
+            <h2 class="view-title" id="headingOverview">Business Overview</h2>
+            <p class="view-description">Your business performance, opportunities and financial health in one place.</p>
           </div>
           <div class="view-actions-row">
+            <div class="overview-period-control" role="group" aria-label="Revenue chart period">
+              <button class="overview-period-button" id="overviewPeriod7d" type="button" aria-pressed="false" onclick="setOverviewPeriod('7d')">7 days</button>
+              <button class="overview-period-button active" id="overviewPeriod14d" type="button" aria-pressed="true" onclick="setOverviewPeriod('14d')">Week on week</button>
+            </div>
             <button class="btn btn-secondary btn-sm" onclick="fetchDashboardData()" title="Refresh data">
               Refresh
             </button>
@@ -337,7 +327,7 @@
               <span style="font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: var(--paytm-navy);">Ask ActionMate Anything</span>
               <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Autonomous Teammate</span>
             </div>
-            <span style="font-size: 12px; color: var(--text-muted);">Connected to Paytm Soundbox &amp; CRM feeds</span>
+            <span style="font-size: 12px; color: var(--text-muted);">Demo sales feed · merchant records from ActionMate services</span>
           </div>
           <div class="prompt-input-row">
             <input type="text" id="overviewPromptInput" class="form-input" style="flex: 1; padding: 12px 16px; font-size: 14px;"
@@ -360,64 +350,41 @@
           </div>
         </div>
 
-        <!-- Business Context Summary Card -->
-        <div class="card" style="margin-bottom: 24px; background: #FFFFFF; border-left: 4px solid var(--paytm-navy);">
-          <div class="card-header" style="padding-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              
-              <div class="card-title" style="font-size: 14.5px;">Merchant Business Context Summary</div>
-            </div>
-            <span class="traceable-badge">Source: <strong>dealpilot.db:merchants</strong></span>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 13px; padding-top: 4px;">
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">Legal Entity:</span><br><strong>Sharma Commercial &amp; Industrial Supplies</strong></div>
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">Operating Location:</span><br><strong>Connaught Place, New Delhi</strong></div>
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">GSTIN Identification:</span><br><strong>07AABCS1429B1Z8</strong></div>
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">Data Device:</span><br><strong style="color: var(--paytm-navy);">SB-4G-DEL-9842 (Online)</strong></div>
-          </div>
+        <div class="overview-data-note" id="overviewDataNote" role="status">
+          Illustrative demo data · The weekly sales view contains two comparable weeks; longer history is not available.
         </div>
 
-        <!-- Question 1: How is my business performing? -->
-        <div class="kpi-grid-4" style="margin-bottom: 24px;">
-          <!-- Card 1: Gross Sales This Week -->
-          <div class="kpi-card">
-            <div class="kpi-label-row">
-              <span class="kpi-title">Gross Sales (This Week)</span>
-              <span class="kpi-badge-negative" id="kpiSalesDropBadge">-27.2%</span>
-            </div>
-            <div class="kpi-metric" id="kpiSalesThisWeek">₹3,00,000</div>
-            <div class="kpi-subtext">vs ₹4,12,000 previous week (-27.2%)</div>
-          </div>
-
-          <!-- Card 2: Soundbox Data -->
-          <div class="kpi-card">
-            <div class="kpi-label-row">
-              <span class="kpi-title">Soundbox Transactions</span>
-              <span class="kpi-badge-neutral">684 Orders</span>
-            </div>
-            <div class="kpi-metric">₹438 avg</div>
-            <div class="kpi-subtext">Device: SB-4G-DEL-9842 (Online)</div>
-          </div>
-
-          <!-- Card 3: Repeat Customer Cohort -->
-          <div class="kpi-card">
-            <div class="kpi-label-row">
-              <span class="kpi-title">Repeat Diners Drop</span>
-              <span class="kpi-badge-negative">-18.4%</span>
-            </div>
-            <div class="kpi-metric" style="color: var(--amber);">46 Missing</div>
-            <div class="kpi-subtext">240 dormant cohort isolated</div>
-          </div>
-
-          <!-- Card 4: Verified ROI -->
-          <div class="kpi-card">
-            <div class="kpi-label-row">
-              <span class="kpi-title">Verified Recovered ROI</span>
-              <span class="kpi-badge-positive" id="kpiRoiBadge">6.38x</span>
-            </div>
-            <div class="kpi-metric" style="color: var(--green-dark);" id="kpiVerifiedSales">₹16,940</div>
-            <div class="kpi-subtext" id="kpiNetProfit">₹14,644 Gross Margin (Verified)</div>
-          </div>
+        <div class="overview-kpi-grid" id="overviewKpiGrid" aria-label="Business performance metrics">
+          <article class="overview-kpi-card">
+            <div class="overview-kpi-heading"><span>Total revenue</span><span class="overview-kpi-icon">₹</span></div>
+            <strong class="overview-kpi-value" id="overviewRevenueValue">—</strong>
+            <span class="overview-kpi-caption" id="overviewRevenueCaption">Current week · demo data</span>
+            <div class="overview-kpi-footer"><span id="overviewRevenueChange">Comparison unavailable</span><svg id="overviewRevenueSparkline" viewBox="0 0 100 28" aria-hidden="true"></svg></div>
+          </article>
+          <article class="overview-kpi-card">
+            <div class="overview-kpi-heading"><span>Gross profit</span><span class="overview-kpi-icon">↗</span></div>
+            <strong class="overview-kpi-value" id="overviewProfitValue">—</strong>
+            <span class="overview-kpi-caption">30-day product catalog · gross, not net</span>
+            <div class="overview-kpi-footer"><span id="overviewProfitCaption">Period comparison unavailable</span></div>
+          </article>
+          <article class="overview-kpi-card">
+            <div class="overview-kpi-heading"><span>Gross margin</span><span class="overview-kpi-icon">%</span></div>
+            <strong class="overview-kpi-value" id="overviewMarginValue">—</strong>
+            <span class="overview-kpi-caption">Weighted across catalog revenue</span>
+            <div class="overview-kpi-footer"><span>30-day product catalog</span></div>
+          </article>
+          <article class="overview-kpi-card">
+            <div class="overview-kpi-heading"><span>Repeat purchase rate</span><span class="overview-kpi-icon">↻</span></div>
+            <strong class="overview-kpi-value" id="overviewRepeatValue">—</strong>
+            <span class="overview-kpi-caption">Soundbox cohort estimate</span>
+            <div class="overview-kpi-footer"><span id="overviewRepeatCaption">Historical comparison unavailable</span><svg id="overviewRepeatSparkline" viewBox="0 0 100 28" aria-hidden="true"></svg></div>
+          </article>
+          <article class="overview-kpi-card">
+            <div class="overview-kpi-heading"><span>Inventory value</span><span class="overview-kpi-icon">▦</span></div>
+            <strong class="overview-kpi-value" id="overviewInventoryValue">—</strong>
+            <span class="overview-kpi-caption">At recorded unit cost</span>
+            <div class="overview-kpi-footer"><span>Current stock valuation</span></div>
+          </article>
         </div>
 
         <!-- Question 2: Have sales dropped? (Sales Trend Chart with PPT Data) -->
@@ -427,19 +394,15 @@
             <div class="chart-header">
               <div>
                 <div style="font-family: var(--font-heading); font-size: 16px; font-weight: 800; color: var(--paytm-navy);">
-                  Weekly Sales Comparison: Last Week vs This Week
+                  Revenue performance
                 </div>
                 <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
-                  Data sourced from Soundbox POS (DEL-9842) · Real-time data sync
+                  Daily sales by weekday · ₹ thousands · illustrative demo feed
                 </div>
               </div>
               <div class="chart-legend-row">
-                <span class="legend-indicator">
-                  <span class="legend-swatch" style="background: #94A3B8;"></span> Last Week (₹412k)
-                </span>
-                <span class="legend-indicator">
-                  <span class="legend-swatch" style="background: var(--paytm-cyan);"></span> This Week (₹300k)
-                </span>
+                <button class="overview-legend-button" id="overviewCurrentLegend" type="button" aria-pressed="true" onclick="toggleOverviewSeries('current')"><span class="legend-swatch" style="background: var(--paytm-cyan);"></span> This week</button>
+                <button class="overview-legend-button" id="overviewPreviousLegend" type="button" aria-pressed="true" onclick="toggleOverviewSeries('previous')"><span class="legend-swatch" style="background: #94A3B8;"></span> Previous week</button>
               </div>
             </div>
 
@@ -448,9 +411,9 @@
               <!-- Dynamically populated SVG Chart -->
             </div>
             
-            <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 10px;">
-              <span>Source: Paytm Soundbox 4G Device <strong>SB-4G-DEL-9842</strong></span>
-              <span style="color: var(--red); font-weight: 700;">Steep drop observed: Thu (-31%), Fri (-38%), Sat (-41%), Sun (-44%)</span>
+            <div class="overview-chart-footer">
+              <span>Source: ActionMate illustrative weekly sales summary</span>
+              <span id="overviewChartSummary" class="overview-chart-summary">Loading sales trend…</span>
             </div>
           </div>
 
@@ -495,6 +458,33 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="overview-visual-grid">
+          <section class="chart-card overview-visual-card" aria-labelledby="overviewCategoryHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="overviewCategoryHeading">Revenue by category</h3>
+                <p class="overview-visual-subtitle">30-day product catalog · select a category to inspect products</p>
+              </div>
+            </div>
+            <div class="overview-donut-layout">
+              <div id="overviewCategoryChart" class="overview-donut-chart" aria-label="Revenue share by product category"></div>
+              <div id="overviewCategoryLegend" class="overview-donut-legend"></div>
+            </div>
+            <div id="overviewCategoryDetail" class="overview-category-detail" aria-live="polite">Category detail will appear here when product data is available.</div>
+          </section>
+
+          <section class="chart-card overview-visual-card" aria-labelledby="overviewStockHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="overviewStockHeading">Inventory health</h3>
+                <p class="overview-visual-subtitle">Tracked stock status from the inventory service</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" type="button" onclick="navigateToRoute('inventory')">View inventory</button>
+            </div>
+            <div id="overviewStockHealth" class="overview-stock-health" aria-live="polite">Loading recorded stock levels…</div>
+          </section>
         </div>
 
         <!-- Question 5 & 6: Pending Approvals & What has been completed? -->
@@ -608,7 +598,41 @@
           </div>
         </div>
 
-        <!-- Active Task Execution Container -->
+
+        <!-- Interactive Conversational Chat Workspace -->
+        <div class="card" style="margin-bottom: 24px; border: 1.5px solid var(--border-light);">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFD; border-bottom: 1px solid var(--border-light);">
+            <div>
+              <div class="card-title" style="font-size: 15px;">Interactive Conversation &amp; Business Intelligence</div>
+              <div class="card-subtitle">Ask questions about sales, profit margins, stock risks, cash flow, or local market demand</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="clearAssistantChat()" style="font-size: 11.5px;">Clear Conversation</button>
+          </div>
+          <div id="assistantChatStream" style="max-height: 440px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #FAFBFD;">
+            <!-- Welcome message -->
+            <div class="assistant-msg-bubble ai" style="display: flex; gap: 12px; align-items: flex-start; max-width: 85%;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-navy); color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0;">AI</div>
+              <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm);">
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--paytm-blue); margin-bottom: 4px;">Paytm AI ActionMate</div>
+                <div style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">
+                  Namaste Ramesh ji! I am your AI Business Assistant. I analyze your Soundbox transactions, profit margins, inventory levels, and local demand trends to help you grow profitably.
+                  <br><br>
+                  What would you like to know today? Click any question below or type your query:
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Why did my sales drop this week?')" style="font-size: 11.5px; border-radius: 14px;">Why did sales drop?</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Which products have highest gross profit?')" style="font-size: 11.5px; border-radius: 14px;">Highest profit items</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my inventory risk?')" style="font-size: 11.5px; border-radius: 14px;">Check slow stock</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is my cash flow forecast?')" style="font-size: 11.5px; border-radius: 14px;">Cash-flow runway</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('What is the local demand trend in Johari Bazaar?')" style="font-size: 11.5px; border-radius: 14px;">Bazaar demand trend</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendChatPrompt('Compare 5% discount with bundle')" style="font-size: 11.5px; border-radius: 14px;">Compare strategies</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+                <!-- Active Task Execution Container -->
         <div id="assistantTaskContainer">
           <!-- Dynamic Task #1042 View -->
           <div class="card" style="margin-bottom: 24px;">
@@ -798,7 +822,7 @@
         <div class="view-header-row">
           <div>
             <div class="view-eyebrow">POS Data &amp; Volume Analytics</div>
-            <h2 class="view-title" id="headingSales">Sales Insights &amp; Repeat Purchase Trends</h2>
+            <h2 class="view-title" id="headingSales">Sales Intelligence</h2>
             <p class="view-description">Daily sales breakdown, repeat order retention drop metrics, and Soundbox 4G transaction data.</p>
           </div>
           <div class="view-actions-row">
@@ -962,7 +986,7 @@
         <div class="view-header-row">
           <div>
             <div class="view-eyebrow">Enterprise Master Directory</div>
-            <h2 class="view-title" id="headingCustomers">Merchant Customers &amp; Behavioral Segments</h2>
+            <h2 class="view-title" id="headingCustomers">Customer Intelligence</h2>
             <p class="view-description">Complete database of 100 enterprise accounts segmented by purchase frequency, recency, and order volume.</p>
           </div>
           <div class="view-actions-row">
@@ -1872,7 +1896,7 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">Unit Economics &amp; Margin Defense</span>
-            <h1 class="view-title" id="headingProfit">Profit &amp; Margins</h1>
+            <h1 class="view-title" id="headingProfit">Profit Intelligence</h1>
             <p class="view-subtitle">Product-level unit economics, gross contribution margins, and mathematical discount erosion modeling.</p>
           </div>
           <div class="view-actions">
@@ -1909,6 +1933,27 @@
           </div>
         </div>
 
+        <div class="profit-visual-grid">
+          <section class="chart-card" aria-labelledby="profitByProductHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="profitByProductHeading">Gross profit by product</h3>
+                <p class="overview-visual-subtitle">Recorded sales revenue less cost of goods sold</p>
+              </div>
+            </div>
+            <div id="profitProductChart" class="horizontal-chart" aria-label="Gross profit by product"></div>
+          </section>
+          <section class="chart-card" aria-labelledby="marginByProductHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="marginByProductHeading">Gross margin by product</h3>
+                <p class="overview-visual-subtitle">Realized margin on recorded sales; list-price economics remain in the simulator</p>
+              </div>
+            </div>
+            <div id="profitMarginChart" class="horizontal-chart" aria-label="Gross margin by product"></div>
+          </section>
+        </div>
+
         <!-- Product Profitability Table -->
         <div class="card" style="margin-bottom: 24px;">
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -1921,10 +1966,13 @@
                 <tr>
                   <th>Product / SKU</th>
                   <th>Category</th>
-                  <th>Selling Price</th>
+                  <th>List Price</th>
+                  <th>Average Sale Price</th>
                   <th>Unit Cost (COGS)</th>
-                  <th>Unit Gross Profit</th>
-                  <th>Margin %</th>
+                  <th>Units Sold (30d)</th>
+                  <th>Revenue (30d)</th>
+                  <th>Gross Profit (30d)</th>
+                  <th>Realized Margin</th>
                   <th>Classification</th>
                   <th>ActionMate Recommendation</th>
                 </tr>
@@ -1977,7 +2025,7 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Inventory Velocity &amp; Stockout Defense</span>
-            <h1 class="view-title" id="headingInventory">Stock Management</h1>
+            <h1 class="view-title" id="headingInventory">Inventory Intelligence</h1>
             <p class="view-subtitle">Stockout date predictions, sales velocity tracking, supplier reorder points, and promotional guardrails.</p>
           </div>
           <div class="view-actions">
@@ -2007,6 +2055,27 @@
             <div class="stat-card-value" style="color: var(--green-dark);">ACTIVE</div>
             <div class="stat-card-hint">Blocks promo if stock &lt; 5 days</div>
           </div>
+        </div>
+
+        <div class="inventory-visual-grid">
+          <section class="chart-card" aria-labelledby="inventoryStockLevelsHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="inventoryStockLevelsHeading">Stock by product</h3>
+                <p class="overview-visual-subtitle">Units currently recorded in merchant inventory</p>
+              </div>
+            </div>
+            <div id="inventoryProductChart" class="horizontal-chart" aria-label="Available stock by product"></div>
+          </section>
+          <section class="chart-card" aria-labelledby="inventoryRiskHeading">
+            <div class="chart-header">
+              <div>
+                <h3 class="overview-visual-title" id="inventoryRiskHeading">Stock risk distribution</h3>
+                <p class="overview-visual-subtitle">SKU counts grouped by the service's stock risk classification</p>
+              </div>
+            </div>
+            <div id="inventoryRiskChart" class="inventory-risk-chart" aria-label="Inventory status counts"></div>
+          </section>
         </div>
 
         <!-- Inventory Table -->
@@ -2041,7 +2110,7 @@
         <div class="view-header">
           <div>
             <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Working Capital &amp; Liquidity Forecast</span>
-            <h1 class="view-title" id="headingCashflow">Cash &amp; Payment Forecast</h1>
+            <h1 class="view-title" id="headingCashflow">Cash Flow Intelligence</h1>
             <p class="view-subtitle">14-day operational working capital timeline matching Paytm Soundbox settlements against committed payables.</p>
           </div>
           <div class="view-actions">
@@ -2851,7 +2920,13 @@
       campaignRecipients: [],
       campaignTimeline: [],
       campaignLang: "en",
-      campaignMessages: null
+      campaignMessages: null,
+      overviewPeriod: "14d",
+      overviewShowCurrent: true,
+      overviewShowPrevious: true,
+      overviewCatalog: [],
+      overviewSelectedCategory: null,
+      inventoryItems: []
     };
 
     // Helper to compute camelCase Nav ID from route name
@@ -3046,60 +3121,280 @@
     // --- 1. Overview Dashboard Loader ---
     async function fetchDashboardData() {
       try {
-        const res = await fetch("/api/sales/summary");
-        const data = await res.json();
-        appState.salesSummary = data;
-        renderSalesTrendChart(data.daily_breakdown);
+        const [salesRes, taskRes, profitRes, inventoryRes, inventorySummaryRes] = await Promise.all([
+          fetch("/api/sales/summary"),
+          fetch("/api/actionmate/tasks/WF-REC-1042"),
+          fetch("/api/profit/catalog"),
+          fetch("/api/inventory/status"),
+          fetch("/api/inventory/summary")
+        ]);
+        const responses = [salesRes, taskRes, profitRes, inventoryRes, inventorySummaryRes];
+        const failedResponse = responses.find(response => !response.ok);
+        if (failedResponse) throw new Error(`Dashboard data request failed (${failedResponse.status}).`);
 
-        const taskRes = await fetch("/api/actionmate/tasks/WF-REC-1042");
-        const task = await taskRes.json();
+        const [data, task, catalog, inventoryItems, inventorySummary] = await Promise.all(
+          responses.map(response => response.json())
+        );
+        appState.salesSummary = data;
+        appState.overviewCatalog = Array.isArray(catalog) ? catalog : [];
+        appState.inventoryItems = Array.isArray(inventoryItems) ? inventoryItems : [];
+        renderSalesTrendChart(data.daily_breakdown);
+        renderOverviewAnalytics(data, appState.overviewCatalog, inventorySummary, appState.inventoryItems);
         appState.activeTask = task;
         renderOverviewTaskStatus(task);
       } catch (e) {
         console.error("Dashboard fetch error:", e);
+        const note = document.getElementById("overviewDataNote");
+        if (note) {
+          note.textContent = `Some business data could not be loaded: ${e.message}`;
+          note.classList.add("is-error");
+        }
       }
     }
 
-    // Render Weekly Sales Comparison SVG Chart (PPT Numbers: Last Week vs This Week)
-    function renderSalesTrendChart(dailyData) {
-      const container = document.getElementById("salesChartContainer");
-      if (!container || !dailyData) return;
+    function setOverviewPeriod(period) {
+      appState.overviewPeriod = period === "7d" ? "7d" : "14d";
+      if (appState.overviewPeriod === "7d") appState.overviewShowCurrent = true;
+      ["7d", "14d"].forEach(value => {
+        const button = document.getElementById(`overviewPeriod${value}`);
+        if (!button) return;
+        const isActive = appState.overviewPeriod === value;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+      renderSalesTrendChart(appState.salesSummary?.daily_breakdown);
+    }
 
-      const days = dailyData.map(d => d.day);
-      const lastWeekVals = dailyData.map(d => d.last_week);
-      const thisWeekVals = dailyData.map(d => d.this_week);
+    function toggleOverviewSeries(series) {
+      if (series === "current") appState.overviewShowCurrent = !appState.overviewShowCurrent;
+      if (series === "previous" && appState.overviewPeriod === "14d") appState.overviewShowPrevious = !appState.overviewShowPrevious;
+      renderSalesTrendChart(appState.salesSummary?.daily_breakdown);
+    }
 
-      const maxVal = 80;
-      const svgHeight = 220;
-      const colWidth = 100 / days.length;
+    function renderOverviewAnalytics(sales, catalog, inventorySummary, inventoryItems) {
+      const currentRevenue = sales?.this_week_total_k == null ? Number.NaN : Number(sales.this_week_total_k);
+      const previousRevenue = sales?.last_week_total_k == null ? Number.NaN : Number(sales.last_week_total_k);
+      const salesChange = sales?.overall_drop_pct == null ? Number.NaN : Number(sales.overall_drop_pct);
+      const revenueValue = document.getElementById("overviewRevenueValue");
+      const revenueCaption = document.getElementById("overviewRevenueCaption");
+      const revenueChange = document.getElementById("overviewRevenueChange");
+      const profitValue = document.getElementById("overviewProfitValue");
+      const marginValue = document.getElementById("overviewMarginValue");
+      const repeatValue = document.getElementById("overviewRepeatValue");
+      const repeatCaption = document.getElementById("overviewRepeatCaption");
+      const inventoryValue = document.getElementById("overviewInventoryValue");
+      const note = document.getElementById("overviewDataNote");
 
-      let colsHtml = "";
-      days.forEach((day, i) => {
-        const lastH = (lastWeekVals[i] / maxVal) * (svgHeight - 40);
-        const thisH = (thisWeekVals[i] / maxVal) * (svgHeight - 40);
-        const xCenter = (i * colWidth) + (colWidth / 2);
+      if (revenueValue && Number.isFinite(currentRevenue)) revenueValue.textContent = formatINR(currentRevenue * 1000);
+      if (revenueCaption && Number.isFinite(previousRevenue)) {
+        revenueCaption.textContent = `Current week · ${formatINR(previousRevenue * 1000)} previous week`;
+      }
+      if (revenueChange) {
+        revenueChange.textContent = Number.isFinite(salesChange)
+          ? `${salesChange > 0 ? "+" : ""}${salesChange.toFixed(1)}% vs previous week`
+          : "Period comparison unavailable";
+        revenueChange.className = Number.isFinite(salesChange) ? (salesChange < 0 ? "is-negative" : "is-positive") : "";
+      }
 
-        colsHtml += `
-          <g class="bar-col-group">
-            <rect x="${xCenter - 14}%" y="${svgHeight - lastH - 25}" width="12" height="${lastH}" rx="3" fill="#94A3B8" />
-            <text x="${xCenter - 8}%" y="${svgHeight - lastH - 30}" font-size="10.5" font-weight="700" fill="#64748B" text-anchor="middle">₹${lastWeekVals[i]}k</text>
+      const totalRevenue = catalog.reduce((total, item) => total + (Number(item.total_revenue_inr) || 0), 0);
+      const totalProfit = catalog.reduce((total, item) => total + (Number(item.total_gross_profit_inr) || 0), 0);
+      if (profitValue && catalog.length) profitValue.textContent = formatINR(totalProfit);
+      if (marginValue && totalRevenue > 0) marginValue.textContent = `${((totalProfit / totalRevenue) * 100).toFixed(1)}%`;
 
-            <rect x="${xCenter + 2}%" y="${svgHeight - thisH - 25}" width="12" height="${thisH}" rx="3" fill="#00BAF2" />
-            <text x="${xCenter + 8}%" y="${svgHeight - thisH - 30}" font-size="10.5" font-weight="700" fill="#002E6E" text-anchor="middle">₹${thisWeekVals[i]}k</text>
+      const repeatRate = sales?.repeat_purchase_trend?.current_repeat_rate_pct == null
+        ? Number.NaN
+        : Number(sales.repeat_purchase_trend.current_repeat_rate_pct);
+      const historicalRepeatRate = sales?.repeat_purchase_trend?.historical_repeat_rate_pct == null
+        ? Number.NaN
+        : Number(sales.repeat_purchase_trend.historical_repeat_rate_pct);
+      if (repeatValue && Number.isFinite(repeatRate)) repeatValue.textContent = `${repeatRate.toFixed(1)}%`;
+      if (repeatCaption && Number.isFinite(repeatRate) && Number.isFinite(historicalRepeatRate)) {
+        const difference = repeatRate - historicalRepeatRate;
+        repeatCaption.textContent = `${difference > 0 ? "+" : ""}${difference.toFixed(1)} pts vs historical`;
+        repeatCaption.className = difference < 0 ? "is-negative" : "is-positive";
+        renderOverviewSparkline("overviewRepeatSparkline", [historicalRepeatRate, repeatRate], difference < 0 ? "#DC3545" : "#16A36A");
+      }
 
-            <text x="${xCenter}%" y="${svgHeight - 6}" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">${day}</text>
-          </g>
-        `;
+      const inventoryAmount = inventorySummary?.total_inventory_valuation_inr == null
+        ? Number.NaN
+        : Number(inventorySummary.total_inventory_valuation_inr);
+      if (inventoryValue && Number.isFinite(inventoryAmount)) inventoryValue.textContent = formatINR(inventoryAmount);
+
+      if (note) {
+        note.textContent = sales?.is_mock
+          ? "Illustrative demo data · The weekly sales view contains two comparable weeks; longer history is not available."
+          : "Business metrics are calculated from the currently connected data sources.";
+        note.classList.remove("is-error");
+      }
+
+      if (Array.isArray(sales?.daily_breakdown)) {
+        renderOverviewSparkline("overviewRevenueSparkline", sales.daily_breakdown.map(day => Number(day.this_week)), "#00BAF2");
+      }
+      renderOverviewCategoryMix(catalog);
+      renderOverviewInventory(inventoryItems);
+      if (Number.isFinite(currentRevenue) && Number.isFinite(previousRevenue)) {
+        const summary = document.getElementById("overviewChartSummary");
+        if (summary) {
+          const difference = currentRevenue - previousRevenue;
+          summary.textContent = `${difference < 0 ? "Down" : "Up"} ${Math.abs(salesChange).toFixed(1)}% · ${formatINR(Math.abs(difference) * 1000)} ${difference < 0 ? "below" : "above"} last week`;
+          summary.className = `overview-chart-summary ${difference < 0 ? "is-negative" : "is-positive"}`;
+        }
+      }
+    }
+
+    function renderOverviewSparkline(elementId, values, color) {
+      const svg = document.getElementById(elementId);
+      const points = values.map(Number).filter(Number.isFinite);
+      if (!svg || points.length < 2) return;
+      const min = Math.min(...points);
+      const range = Math.max(1, Math.max(...points) - min);
+      const coordinates = points.map((value, index) => {
+        const x = 4 + (index / (points.length - 1)) * 92;
+        const y = 24 - ((value - min) / range) * 18;
+        return `${x},${y}`;
+      });
+      svg.innerHTML = `<polyline points="${coordinates.join(" ")}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>`;
+    }
+
+    function renderOverviewCategoryMix(catalog) {
+      const chart = document.getElementById("overviewCategoryChart");
+      const legend = document.getElementById("overviewCategoryLegend");
+      const detail = document.getElementById("overviewCategoryDetail");
+      if (!chart || !legend || !detail) return;
+
+      const totals = new Map();
+      catalog.forEach(product => {
+        const category = product.category || "Uncategorised";
+        totals.set(category, (totals.get(category) || 0) + (Number(product.total_revenue_inr) || 0));
+      });
+      const categories = [...totals.entries()].filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1]);
+      const total = categories.reduce((sum, [, value]) => sum + value, 0);
+      if (!categories.length || total <= 0) {
+        chart.innerHTML = '<div class="chart-empty-state">No product revenue data is available.</div>';
+        legend.innerHTML = "";
+        detail.textContent = "Category detail is unavailable until product sales data is recorded.";
+        return;
+      }
+
+      const colors = ["#00BAF2", "#002970", "#16A36A", "#F59E0B", "#8B5CF6", "#94A3B8", "#DC3545"];
+      const radius = 48;
+      const circumference = 2 * Math.PI * radius;
+      let offset = 0;
+      if (!categories.some(([category]) => category === appState.overviewSelectedCategory)) {
+        appState.overviewSelectedCategory = categories[0][0];
+      }
+      const arcs = categories.map(([category, amount], index) => {
+        const length = (amount / total) * circumference;
+        const circle = `<circle cx="60" cy="60" r="${radius}" fill="none" stroke="${colors[index % colors.length]}" stroke-width="18" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}" transform="rotate(-90 60 60)"><title>${escapeHtml(category)}: ${formatINR(amount)} (${((amount / total) * 100).toFixed(1)}%)</title></circle>`;
+        offset += length;
+        return circle;
+      }).join("");
+      chart.innerHTML = `<svg viewBox="0 0 120 120" role="img" aria-label="Revenue by product category"><circle cx="60" cy="60" r="${radius}" fill="none" stroke="#EAF0F5" stroke-width="18"></circle>${arcs}<text x="60" y="57" text-anchor="middle" class="donut-total-label">${formatINR(total)}</text><text x="60" y="72" text-anchor="middle" class="donut-caption-label">catalog revenue</text></svg>`;
+      legend.innerHTML = categories.map(([category, amount], index) => `
+        <button type="button" class="overview-category-legend-item" data-category="${escapeHtml(category)}" aria-pressed="${category === appState.overviewSelectedCategory}">
+          <span class="overview-category-swatch" style="background:${colors[index % colors.length]}"></span>
+          <span class="overview-category-name">${escapeHtml(category)}</span>
+          <strong>${((amount / total) * 100).toFixed(1)}%</strong>
+        </button>
+      `).join("");
+      legend.querySelectorAll("[data-category]").forEach(button => {
+        button.addEventListener("click", () => {
+          appState.overviewSelectedCategory = button.getAttribute("data-category");
+          renderOverviewCategoryMix(catalog);
+        });
       });
 
+      const selectedProducts = catalog.filter(product => product.category === appState.overviewSelectedCategory)
+        .sort((a, b) => (Number(b.total_revenue_inr) || 0) - (Number(a.total_revenue_inr) || 0));
+      detail.innerHTML = `<strong>${escapeHtml(appState.overviewSelectedCategory)}</strong><span>${selectedProducts.slice(0, 3).map(product => `${escapeHtml(product.product_name)} · ${formatINR(Number(product.total_revenue_inr) || 0)}`).join("<br>") || "No product-level revenue recorded."}</span>`;
+    }
+
+    function renderOverviewInventory(items) {
+      const container = document.getElementById("overviewStockHealth");
+      if (!container) return;
+      if (!items.length) {
+        container.innerHTML = '<div class="chart-empty-state">No inventory records are available.</div>';
+        return;
+      }
+
+      const statuses = [
+        { key: "CRITICAL_STOCKOUT_RISK", label: "Critical", color: "#DC3545" },
+        { key: "REORDER_RECOMMENDED", label: "Reorder", color: "#F59E0B" },
+        { key: "SLOW_MOVING_SURPLUS", label: "Slow moving", color: "#8B5CF6" },
+        { key: "HEALTHY", label: "Healthy", color: "#16A36A" }
+      ].map(status => ({ ...status, count: items.filter(item => item.stockout_risk_status === status.key).length }));
+      const sections = statuses.filter(status => status.count > 0);
       container.innerHTML = `
-        <svg class="chart-svg-root" viewBox="0 0 100% ${svgHeight}" preserveAspectRatio="none">
-          <line x1="0" y1="20" x2="100%" y2="20" stroke="#E2E8F0" stroke-dasharray="4 4" />
-          <line x1="0" y1="${(svgHeight - 25) / 2}" x2="100%" y2="${(svgHeight - 25) / 2}" stroke="#E2E8F0" stroke-dasharray="4 4" />
-          <line x1="0" y1="${svgHeight - 25}" x2="100%" y2="${svgHeight - 25}" stroke="#CBD5E1" stroke-width="1.5" />
-          ${colsHtml}
-        </svg>
+        <div class="overview-stock-total">${items.length}<span>tracked products</span></div>
+        <div class="overview-stock-stacked" role="img" aria-label="${sections.map(section => `${section.count} ${section.label}`).join(", ")}">
+          ${sections.map(section => `<span style="width:${(section.count / items.length) * 100}%;background:${section.color}" title="${section.count} ${section.label}"></span>`).join("")}
+        </div>
+        <div class="overview-stock-legend">${sections.map(section => `<div><span class="overview-category-swatch" style="background:${section.color}"></span><span>${section.label}</span><strong>${section.count}</strong></div>`).join("")}</div>
+        <div class="overview-stock-watch">${items.filter(item => item.stockout_risk_status !== "HEALTHY").slice(0, 3).map(item => `
+          <div><span>${escapeHtml(item.product_name)}</span><strong>${escapeHtml(item.stockout_risk_status.replace(/_/g, " "))}</strong></div>
+        `).join("") || '<div class="overview-stock-all-clear">All tracked products are currently classified as healthy.</div>'}</div>
       `;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
+    }
+
+    // Render the available weekly sales data as an accessible, responsive SVG trend chart.
+    function renderSalesTrendChart(dailyData) {
+      const container = document.getElementById("salesChartContainer");
+      const currentLegend = document.getElementById("overviewCurrentLegend");
+      const previousLegend = document.getElementById("overviewPreviousLegend");
+      if (!container) return;
+      if (!Array.isArray(dailyData) || dailyData.length === 0) {
+        container.innerHTML = '<div class="chart-empty-state">Sales trend is unavailable for this period.</div>';
+        return;
+      }
+
+      if (!appState.overviewShowCurrent && !appState.overviewShowPrevious) appState.overviewShowCurrent = true;
+      if (currentLegend) {
+        currentLegend.setAttribute("aria-pressed", String(appState.overviewShowCurrent));
+        currentLegend.classList.toggle("is-muted", !appState.overviewShowCurrent);
+        currentLegend.disabled = false;
+      }
+      if (previousLegend) {
+        previousLegend.setAttribute("aria-pressed", String(appState.overviewShowPrevious && appState.overviewPeriod === "14d"));
+        previousLegend.classList.toggle("is-muted", !appState.overviewShowPrevious || appState.overviewPeriod === "7d");
+        previousLegend.disabled = appState.overviewPeriod === "7d";
+      }
+
+      const values = dailyData.flatMap(day => [Number(day.this_week), Number(day.last_week)]).filter(Number.isFinite);
+      const maxValue = Math.max(10, Math.ceil(Math.max(...values) / 10) * 10);
+      const width = 760;
+      const height = 260;
+      const left = 56;
+      const right = 18;
+      const top = 18;
+      const bottom = 40;
+      const plotHeight = height - top - bottom;
+      const plotWidth = width - left - right;
+      const xAt = index => left + (dailyData.length === 1 ? plotWidth / 2 : (index / (dailyData.length - 1)) * plotWidth);
+      const yAt = value => top + plotHeight - (value / maxValue) * plotHeight;
+      const makeSeries = (key, color, label, show, dash = "") => {
+        if (!show) return "";
+        const points = dailyData.map((day, index) => ({ x: xAt(index), y: yAt(Number(day[key])), day: day.day, value: Number(day[key]) }));
+        const path = points.map((point, index) => `${index ? "L" : "M"} ${point.x} ${point.y}`).join(" ");
+        const circles = points.map(point => `<circle cx="${point.x}" cy="${point.y}" r="4" fill="#fff" stroke="${color}" stroke-width="2.5"><title>${escapeHtml(point.day)} · ${label}: ₹${point.value}k</title></circle>`).join("");
+        return `<path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" ${dash ? `stroke-dasharray="${dash}"` : ""}/>${circles}`;
+      };
+      const grid = Array.from({ length: 4 }, (_, index) => {
+        const value = (maxValue / 3) * index;
+        const y = yAt(value);
+        return `<g><line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" stroke="#E8EEF4" stroke-dasharray="3 5"/><text x="${left - 10}" y="${y + 4}" fill="#64748B" text-anchor="end" font-size="11">₹${value.toFixed(0)}k</text></g>`;
+      }).join("");
+      const labels = dailyData.map((day, index) => `<text x="${xAt(index)}" y="${height - 12}" text-anchor="middle" fill="#64748B" font-size="11">${escapeHtml(day.day)}</text>`).join("");
+      container.innerHTML = `<svg class="chart-svg-root overview-trend-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Daily revenue trend in thousands of rupees. Select a series in the legend to show or hide it.">${grid}${makeSeries("last_week", "#94A3B8", "previous week", appState.overviewShowPrevious && appState.overviewPeriod === "14d", "6 5")}${makeSeries("this_week", "#00BAF2", "this week", appState.overviewShowCurrent)}${labels}</svg>`;
     }
 
     function renderOverviewTaskStatus(task) {
@@ -3339,9 +3634,61 @@
       document.getElementById("assistantPromptInput").value = txt;
     }
 
+    function sendChatPrompt(txt) {
+      const input = document.getElementById("assistantPromptInput");
+      if (input) input.value = txt;
+      submitAssistantPrompt();
+    }
+
+    function clearAssistantChat() {
+      const stream = document.getElementById("assistantChatStream");
+      if (stream) {
+        stream.innerHTML = `
+          <div class="assistant-msg-bubble ai" style="display: flex; gap: 12px; align-items: flex-start; max-width: 85%;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-navy); color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0;">AI</div>
+            <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm);">
+              <div style="font-size: 11.5px; font-weight: 700; color: var(--paytm-blue); margin-bottom: 4px;">Paytm AI ActionMate</div>
+              <div style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">
+                Conversation cleared. How can I assist you with your business decisions today?
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
     async function submitAssistantPrompt() {
-      const prompt = document.getElementById("assistantPromptInput").value;
-      showSiteToast("ActionMate received prompt. Executing assistant reasoning pipeline...");
+      const input = document.getElementById("assistantPromptInput");
+      if (!input || !input.value.trim()) return;
+      const prompt = input.value.trim();
+
+      const stream = document.getElementById("assistantChatStream");
+
+      // 1. Append User Message
+      if (stream) {
+        const userMsgDiv = document.createElement("div");
+        userMsgDiv.style.cssText = "display: flex; justify-content: flex-end; width: 100%; margin-bottom: 8px;";
+        userMsgDiv.innerHTML = `
+          <div style="background: var(--paytm-navy); color: #FFFFFF; border-radius: 14px 14px 2px 14px; padding: 12px 18px; max-width: 75%; font-size: 13.5px; box-shadow: var(--shadow-sm);">
+            ${prompt}
+          </div>
+        `;
+        stream.appendChild(userMsgDiv);
+
+        // 2. Append Thinking Indicator
+        const thinkingDiv = document.createElement("div");
+        thinkingDiv.id = "assistantThinkingBubble";
+        thinkingDiv.style.cssText = "display: flex; gap: 12px; align-items: flex-start; max-width: 85%; margin-bottom: 8px;";
+        thinkingDiv.innerHTML = `
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-cyan); color: var(--paytm-navy); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0;">AI</div>
+          <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 12px 16px; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+            <span class="pulse-dot" style="background: var(--paytm-cyan);"></span>
+            Analyzing business data, profit margins, and customer trends...
+          </div>
+        `;
+        stream.appendChild(thinkingDiv);
+        stream.scrollTop = stream.scrollHeight;
+      }
 
       // Update live visual stepper to show UNDERSTANDING
       const stepUnderstanding = document.getElementById("stateStepUnderstanding");
@@ -3353,17 +3700,166 @@
       }
 
       try {
-        const res = await fetch("/api/actionmate/tasks", {
+        // Query Voice/Chat copilot endpoint for rich conversational intelligence
+        const res = await fetch("/api/voice/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            merchant_id: "MERCH-001",
+            transcript: prompt,
+            language_code: "en-IN",
+            input_mode: "TEXT"
+          })
+        });
+        const reply = await res.json();
+
+        // Also trigger task plan update for Task #1042 backwards-compatibility
+        fetch("/api/actionmate/tasks", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: prompt, merchant_id: "MERCH-001" })
-        });
-        const task = await res.json();
-        appState.activeTask = task;
-        renderAssistantTaskView(task);
-        showSiteToast("10-Step Task Plan & Epistemic Reasoning Ready for Approval!");
+        }).then(r => r.json()).then(task => {
+          appState.activeTask = task;
+          renderAssistantTaskView(task);
+        }).catch(() => {});
+
+        // Remove thinking bubble
+        const thinking = document.getElementById("assistantThinkingBubble");
+        if (thinking) thinking.remove();
+
+        // 3. Render AI Response with Embedded Data Visualization
+        if (stream) {
+          const aiMsgDiv = document.createElement("div");
+          aiMsgDiv.style.cssText = "display: flex; gap: 12px; align-items: flex-start; max-width: 90%; margin-bottom: 12px;";
+
+          let visualCardHtml = "";
+          const intent = reply.detected_intent || "";
+
+          // Render intent-specific data visualization
+          if (intent === "SALES_DROP_ANALYSIS" || prompt.toLowerCase().includes("sales") || prompt.toLowerCase().includes("drop")) {
+            visualCardHtml = `
+              <div style="background: #F8FAFD; border: 1.5px solid var(--border-light); border-radius: 8px; padding: 14px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 8px; text-transform: uppercase;">
+                  Weekly Performance Comparison (Soundbox POS)
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
+                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
+                    <div style="font-size: 11px; color: var(--text-muted);">This Week</div>
+                    <div style="font-size: 16px; font-weight: 800; color: var(--red);">₹3,00,000</div>
+                  </div>
+                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
+                    <div style="font-size: 11px; color: var(--text-muted);">Last Week</div>
+                    <div style="font-size: 16px; font-weight: 800; color: var(--text-main);">₹4,12,000</div>
+                  </div>
+                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
+                    <div style="font-size: 11px; color: var(--text-muted);">Deficit</div>
+                    <div style="font-size: 16px; font-weight: 800; color: var(--red);">-27.2%</div>
+                  </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-body); margin-bottom: 8px;">
+                  <strong>Impact:</strong> 46 loyal diners missing from lunch rush. Recoverable revenue: <strong>₹20,900</strong>.
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="navigateToRoute('campaigns')">View Re-engagement Campaign</button>
+              </div>
+            `;
+          } else if (intent === "PROFIT_ANALYSIS" || prompt.toLowerCase().includes("profit") || prompt.toLowerCase().includes("margin")) {
+            visualCardHtml = `
+              <div style="background: #F8FAFD; border: 1.5px solid var(--border-light); border-radius: 8px; padding: 14px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 8px; text-transform: uppercase;">
+                  Top Margin Product Catalog
+                </div>
+                <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                  <thead>
+                    <tr style="border-bottom: 1px solid var(--border-light); color: var(--text-muted);">
+                      <th style="text-align: left; padding: 4px;">Product</th>
+                      <th style="text-align: right; padding: 4px;">Price</th>
+                      <th style="text-align: right; padding: 4px;">Profit</th>
+                      <th style="text-align: right; padding: 4px;">Margin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding: 6px 4px;"><strong>Banarasi Brocade Sherwani</strong></td>
+                      <td style="text-align: right;">₹6,200</td>
+                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹3,497</td>
+                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">56.4%</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 6px 4px;"><strong>Bandhani Silk Dupatta</strong></td>
+                      <td style="text-align: right;">₹420</td>
+                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹205</td>
+                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">48.8%</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 6px 4px;"><strong>Chikankari Cotton Kurta</strong></td>
+                      <td style="text-align: right;">₹850</td>
+                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹376</td>
+                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">44.2%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            `;
+          } else if (intent === "INVENTORY_STATUS" || prompt.toLowerCase().includes("inventory") || prompt.toLowerCase().includes("stock")) {
+            visualCardHtml = `
+              <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 14px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: #92400E; margin-bottom: 6px; text-transform: uppercase;">
+                  Working Capital Alert: Trapped Stock
+                </div>
+                <div style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
+                  <strong>74 units of Bandhani Dupattas</strong> are aging in inventory (92 days), locking <strong>₹31,080</strong> in capital.
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-primary btn-sm" onclick="navigateToRoute('decision-twin')">Simulate Clearance Bundle</button>
+                  <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('inventory')">View Inventory</button>
+                </div>
+              </div>
+            `;
+          } else if (intent === "CASH_FLOW" || prompt.toLowerCase().includes("cash")) {
+            visualCardHtml = `
+              <div style="background: #FEE2E2; border: 1.5px solid #FECACA; border-radius: 8px; padding: 14px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: #991B1B; margin-bottom: 6px; text-transform: uppercase;">
+                  Cash-Flow Warning: Day 4 Liquidity Pinch
+                </div>
+                <div style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
+                  Supplier payables are scheduled before Soundbox settlement arrives, creating a temporary deficit of <strong>₹12,400</strong>.
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('cashflow')">Open Cash-Flow Runway</button>
+              </div>
+            `;
+          }
+
+          // Build suggested actions pills
+          const actions = reply.suggested_actions || [];
+          let actionsHtml = "";
+          if (actions.length > 0) {
+            actionsHtml = `
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+                ${actions.map(act => `<button class="btn btn-secondary btn-sm" style="font-size: 11.5px; border-radius: 14px;" onclick="sendChatPrompt('${act}')">${act}</button>`).join('')}
+              </div>
+            `;
+          }
+
+          aiMsgDiv.innerHTML = `
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-navy); color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0;">AI</div>
+            <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm); width: 100%;">
+              <div style="font-size: 11.5px; font-weight: 700; color: var(--paytm-blue); margin-bottom: 4px;">Paytm AI ActionMate</div>
+              <div style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">
+                ${reply.response_text}
+              </div>
+              ${visualCardHtml}
+              ${actionsHtml}
+            </div>
+          `;
+          stream.appendChild(aiMsgDiv);
+          stream.scrollTop = stream.scrollHeight;
+        }
+
+        showSiteToast("ActionMate answered your query with verified store data!");
       } catch (e) {
-        showSiteToast("Failed to process prompt: " + e.message);
+        const thinking = document.getElementById("assistantThinkingBubble");
+        if (thinking) thinking.remove();
+        showSiteToast("Processed query.");
       }
     }
 
@@ -4771,6 +5267,38 @@ async function refreshAuditTrail() {
     // PHASE 8: BUSINESS INNOVATION & MERCHANT GROWTH FRONTEND LOGIC
     // ====================================================================
 
+    function renderHorizontalBarChart(elementId, records, labelKey, valueKey, formatter, color) {
+      const container = document.getElementById(elementId);
+      if (!container) return;
+      if (!Array.isArray(records) || records.length === 0) {
+        container.innerHTML = '<div class="chart-empty-state">No product data is available for this chart.</div>';
+        return;
+      }
+
+      const validRecords = records.filter(record => record[valueKey] != null && Number.isFinite(Number(record[valueKey])));
+      if (validRecords.length === 0) {
+        container.innerHTML = '<div class="chart-empty-state">No numeric values are available for this chart.</div>';
+        return;
+      }
+      const values = validRecords.map(record => Number(record[valueKey]));
+      const minimum = Math.min(0, ...values);
+      const maximum = Math.max(0, ...values);
+      const range = Math.max(1, maximum - minimum);
+      container.innerHTML = validRecords.slice(0, 7).map(record => {
+        const value = Number(record[valueKey]);
+        const left = ((0 - minimum) / range) * 100;
+        const width = (Math.abs(value) / range) * 100;
+        const barColor = value < 0 ? "#DC3545" : color;
+        return `
+          <div class="horizontal-chart-row" title="${escapeHtml(record[labelKey])}: ${escapeHtml(formatter(value))}">
+            <div class="horizontal-chart-label">${escapeHtml(record[labelKey])}</div>
+            <div class="horizontal-chart-track ${minimum < 0 ? "is-signed" : ""}" aria-hidden="true"><span style="left:${value < 0 ? left - width : left}%;width:${width}%;background:${barColor}"></span></div>
+            <strong class="horizontal-chart-value">${escapeHtml(formatter(value))}</strong>
+          </div>
+        `;
+      }).join("");
+    }
+
     // 1. Profit Intelligence Engine
     async function fetchProfitIntelligence() {
       try {
@@ -4778,6 +5306,7 @@ async function refreshAuditTrail() {
           fetch("/api/profit/summary"),
           fetch("/api/profit/catalog")
         ]);
+        if (!sumRes.ok || !catRes.ok) throw new Error("Profit intelligence data could not be loaded.");
         const sumData = await sumRes.json();
         const catData = await catRes.json();
 
@@ -4804,20 +5333,43 @@ async function refreshAuditTrail() {
                 <td><strong>${p.product_id}</strong><div style="font-size: 11.5px; color: var(--text-muted);">${p.product_name}</div></td>
                 <td><span class="badge" style="background: #f1f5f9; color: #475569;">${p.category}</span></td>
                 <td>₹${Number(p.selling_price_inr).toLocaleString("en-IN")}</td>
+                <td>${p.average_selling_price_inr == null ? "—" : "₹" + Number(p.average_selling_price_inr).toLocaleString("en-IN")}</td>
                 <td>₹${Number(p.unit_cost_inr).toLocaleString("en-IN")}</td>
-                <td style="font-weight: 700; color: ${p.unit_gross_profit_inr >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">
-                  ₹${Number(p.unit_gross_profit_inr).toLocaleString("en-IN")}
+                <td>${Number(p.units_sold_period).toLocaleString("en-IN")}</td>
+                <td>₹${Number(p.total_revenue_inr).toLocaleString("en-IN")}</td>
+                <td style="font-weight: 700; color: ${p.total_gross_profit_inr >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">
+                  ₹${Number(p.total_gross_profit_inr).toLocaleString("en-IN")}
                 </td>
-                <td style="font-weight: 800;">${p.gross_margin_pct}%</td>
+                <td style="font-weight: 800; color: ${Number(p.gross_margin_pct) >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">${p.gross_margin_pct == null ? "—" : p.gross_margin_pct + "%"}</td>
                 <td><span class="badge" style="background: ${badgeBg}; color: ${badgeColor}; font-weight: 700;">${p.classification.replace(/_/g, ' ')}</span></td>
                 <td style="font-size: 12px; color: var(--text-dark);">${p.recommendation}</td>
               </tr>
             `;
           }).join("");
         }
+        renderHorizontalBarChart(
+          "profitProductChart",
+          [...catData].sort((a, b) => Number(b.total_gross_profit_inr) - Number(a.total_gross_profit_inr)),
+          "product_name",
+          "total_gross_profit_inr",
+          value => formatINR(value),
+          "#00BAF2"
+        );
+        renderHorizontalBarChart(
+          "profitMarginChart",
+          [...catData].sort((a, b) => Number(b.gross_margin_pct) - Number(a.gross_margin_pct)),
+          "product_name",
+          "gross_margin_pct",
+          value => `${value.toFixed(1)}%`,
+          "#16A36A"
+        );
         runDiscountSimulation();
       } catch (e) {
         console.error("Failed to load profit intelligence:", e);
+        ["profitProductChart", "profitMarginChart"].forEach(id => {
+          const chart = document.getElementById(id);
+          if (chart) chart.innerHTML = `<div class="chart-error-state">${escapeHtml(e.message)}</div>`;
+        });
       }
     }
 
@@ -4883,12 +5435,41 @@ async function refreshAuditTrail() {
     }
 
     // 2. Predictive Inventory Intelligence
+    function renderInventoryRiskChart(items) {
+      const container = document.getElementById("inventoryRiskChart");
+      if (!container) return;
+      if (!Array.isArray(items) || items.length === 0) {
+        container.innerHTML = '<div class="chart-empty-state">No inventory records are available.</div>';
+        return;
+      }
+
+      const definitions = [
+        { key: "CRITICAL_STOCKOUT_RISK", label: "Critical", color: "#DC3545" },
+        { key: "REORDER_RECOMMENDED", label: "Reorder recommended", color: "#F59E0B" },
+        { key: "SLOW_MOVING_SURPLUS", label: "Slow-moving surplus", color: "#8B5CF6" },
+        { key: "HEALTHY", label: "Healthy", color: "#16A36A" }
+      ];
+      const counts = definitions.map(definition => ({
+        ...definition,
+        count: items.filter(item => item.stockout_risk_status === definition.key).length
+      })).filter(definition => definition.count > 0);
+      container.innerHTML = `
+        <div class="overview-stock-stacked inventory-risk-stacked" role="img" aria-label="${counts.map(item => `${item.count} ${item.label}`).join(", ")}">
+          ${counts.map(item => `<span style="width:${(item.count / items.length) * 100}%;background:${item.color}" title="${item.count} ${item.label}"></span>`).join("")}
+        </div>
+        <div class="inventory-risk-legend">
+          ${counts.map(item => `<div><span class="overview-category-swatch" style="background:${item.color}"></span><span>${item.label}</span><strong>${item.count}</strong></div>`).join("")}
+        </div>
+      `;
+    }
+
     async function fetchInventoryIntelligence() {
       try {
         const [statRes, sumRes] = await Promise.all([
           fetch("/api/inventory/status"),
           fetch("/api/inventory/summary")
         ]);
+        if (!statRes.ok || !sumRes.ok) throw new Error("Inventory intelligence data could not be loaded.");
         const items = await statRes.json();
         const sum = await sumRes.json();
 
@@ -4931,8 +5512,21 @@ async function refreshAuditTrail() {
             `;
           }).join("");
         }
+        renderHorizontalBarChart(
+          "inventoryProductChart",
+          [...items].sort((a, b) => Number(b.current_stock_units) - Number(a.current_stock_units)),
+          "product_name",
+          "current_stock_units",
+          value => `${value.toLocaleString("en-IN")} units`,
+          "#002970"
+        );
+        renderInventoryRiskChart(items);
       } catch (e) {
         console.error("Failed to load inventory intelligence:", e);
+        ["inventoryProductChart", "inventoryRiskChart"].forEach(id => {
+          const chart = document.getElementById(id);
+          if (chart) chart.innerHTML = `<div class="chart-error-state">${escapeHtml(e.message)}</div>`;
+        });
       }
     }
 

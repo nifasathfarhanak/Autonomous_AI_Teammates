@@ -35,9 +35,11 @@ class ProfitIntelligenceService:
 
         # Get units sold per product from order_items
         cur.execute("""
-        SELECT product_id, SUM(quantity) as total_units_sold, SUM(total_price) as total_revenue
-        FROM order_items
-        GROUP BY product_id
+        SELECT oi.product_id, SUM(oi.quantity) as total_units_sold, SUM(oi.total_price) as total_revenue
+        FROM order_items oi
+        JOIN orders o ON o.order_id = oi.order_id
+        WHERE o.status = 'COMPLETED' AND date(o.order_date) >= date('now', '-30 days')
+        GROUP BY oi.product_id
         """)
         sales_map = {r["product_id"]: {"units": r["total_units_sold"], "revenue": r["total_revenue"]} for r in cur.fetchall()}
         conn.close()
@@ -48,18 +50,22 @@ class ProfitIntelligenceService:
             price = float(r["selling_price_inr"])
             cost = float(r["unit_cost_inr"])
             unit_gp = round(price - cost, 2)
-            margin_pct = round((unit_gp / price) * 100.0, 1) if price > 0 else 0.0
+            listed_margin_pct = round((unit_gp / price) * 100.0, 1) if price > 0 else 0.0
 
-            s_info = sales_map.get(pid, {"units": 5, "revenue": price * 5})
-            units_sold = s_info["units"]
-            total_rev = round(s_info["revenue"], 2)
-            total_gp = round(units_sold * unit_gp, 2)
+            s_info = sales_map.get(pid, {"units": 0, "revenue": 0.0})
+            units_sold = int(s_info["units"] or 0)
+            total_rev = round(float(s_info["revenue"] or 0.0), 2)
+            total_cogs = round(units_sold * cost, 2)
+            total_gp = round(total_rev - total_cogs, 2)
+            realized_margin_pct = round((total_gp / total_rev) * 100.0, 1) if total_rev > 0 else None
+            realized_unit_gp = round(total_gp / units_sold, 2) if units_sold > 0 else None
 
             # Classify product profitability tier
-            if margin_pct < 25.0 and total_rev >= 50000.0:
+            classification_margin = realized_margin_pct if realized_margin_pct is not None else listed_margin_pct
+            if classification_margin < 25.0 and total_rev >= 50000.0:
                 classification = "HIGH_REVENUE_LOW_MARGIN"
                 recommendation = "Renegotiate supplier PO or bundle with high-margin accessory to restore gross margin."
-            elif margin_pct >= 40.0:
+            elif classification_margin >= 40.0:
                 classification = "HIGH_MARGIN_OPPORTUNITY"
                 recommendation = "Prioritize for promotional exposure; generates high cash contribution per unit."
             elif r["stock_age_days"] >= 60 and units_sold <= 6:
@@ -77,11 +83,15 @@ class ProfitIntelligenceService:
                 "product_name": r["product_name"],
                 "category": r["category"],
                 "selling_price_inr": price,
+                "average_selling_price_inr": round(total_rev / units_sold, 2) if units_sold > 0 else None,
                 "unit_cost_inr": cost,
                 "unit_gross_profit_inr": unit_gp,
-                "gross_margin_pct": margin_pct,
+                "realized_unit_gross_profit_inr": realized_unit_gp,
+                "listed_gross_margin_pct": listed_margin_pct,
+                "gross_margin_pct": realized_margin_pct,
                 "units_sold_period": units_sold,
                 "total_revenue_inr": total_rev,
+                "total_cogs_inr": total_cogs,
                 "total_gross_profit_inr": total_gp,
                 "stock_units": r["stock_units"],
                 "stock_age_days": r["stock_age_days"],
@@ -97,13 +107,18 @@ class ProfitIntelligenceService:
         catalog = ProfitIntelligenceService.get_product_profitability_catalog(merchant_id)
 
         total_rev = sum(p["total_revenue_inr"] for p in catalog)
+        total_cogs = sum(p["total_cogs_inr"] for p in catalog)
         total_gp = sum(p["total_gross_profit_inr"] for p in catalog)
         blended_margin = round((total_gp / total_rev) * 100.0, 1) if total_rev > 0 else 0.0
 
         # Rankings
         best_sellers = sorted(catalog, key=lambda x: x["units_sold_period"], reverse=True)[:3]
         high_rev_low_margin = [p for p in catalog if p["classification"] == "HIGH_REVENUE_LOW_MARGIN"]
-        high_margin_opps = sorted([p for p in catalog if p["gross_margin_pct"] >= 35.0], key=lambda x: x["gross_margin_pct"], reverse=True)[:3]
+        high_margin_opps = sorted(
+            [p for p in catalog if p["gross_margin_pct"] is not None and p["gross_margin_pct"] >= 35.0],
+            key=lambda x: x["gross_margin_pct"],
+            reverse=True
+        )[:3]
         slow_moving = [p for p in catalog if p["stock_age_days"] >= 60]
 
         # Estimated profit opportunity calculation
@@ -114,7 +129,7 @@ class ProfitIntelligenceService:
             "merchant_id": merchant_id,
             "period": "Last 30 Days (Demo Period)",
             "total_revenue_inr": round(total_rev, 2),
-            "total_cogs_inr": round(total_rev - total_gp, 2),
+            "total_cogs_inr": round(total_cogs, 2),
             "total_gross_profit_inr": round(total_gp, 2),
             "blended_gross_margin_pct": blended_margin,
             "best_selling_products": best_sellers,
@@ -146,7 +161,7 @@ class ProfitIntelligenceService:
         orig_price = prod["selling_price_inr"]
         unit_cost = prod["unit_cost_inr"]
         orig_gp = orig_price - unit_cost
-        orig_margin_pct = prod["gross_margin_pct"]
+        orig_margin_pct = prod["listed_gross_margin_pct"]
 
         discount_amount = round(orig_price * (discount_pct / 100.0), 2)
         discounted_price = orig_price - discount_amount
@@ -183,4 +198,3 @@ class ProfitIntelligenceService:
                 f"Warning: Discount erodes margin to {discounted_margin_pct}%. Requires {breakeven_volume_lift_pct}% volume lift to break even."
             )
         }
-

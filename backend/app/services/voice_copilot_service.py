@@ -218,35 +218,43 @@ class VoiceCopilotService:
     def _detect_intent(self, text: str) -> str:
         """Determines the business intent behind the merchant's query with proper prioritization."""
         # 1. Campaign Performance & Results
-        if any(w in text for w in ["perform", "result", "outcome", "kaisa raha", "roi", "lift", "conversion"]):
+        if any(w in text for w in ["perform", "result", "outcome", "kaisa raha", "roi", "lift", "conversion", "how did my"]):
             return "CAMPAIGN_PERFORMANCE"
 
         # 2. Strategy Comparison
-        elif any(w in text for w in ["compare", "conservative", "aggressive", "balanced", "tulna", "farq"]):
+        elif any(w in text for w in ["compare", "strategy", "strategies", "conservative", "aggressive", "balanced", "tulna", "farq", "which offer", "different offer"]):
             return "STRATEGY_COMPARISON"
 
         # 3. Campaign Recommendation & Re-engagement
-        elif any(w in text for w in ["campaign", "customer wapas", "re-engagement", "bundle", "suggest a"]):
+        elif any(w in text for w in ["campaign", "customer wapas", "re-engagement", "bundle", "suggest a", "offer", "bring customer", "discount offer", "promotion", "run a campaign", "send offer"]):
             return "CAMPAIGN_RECOMMENDATION"
 
         # 4. Local Bazaar Demand Pulse
-        elif any(w in text for w in ["bazaar", "trend", "demand", "neighbourhood", "surge", "local", "as-pas"]):
+        elif any(w in text for w in ["bazaar", "trend", "demand", "neighbourhood", "surge", "local", "as-pas", "market", "johari", "what is selling nearby", "nearby"]):
             return "LOCAL_DEMAND_TREND"
 
         # 5. Inventory Risk & Trapped Capital
-        elif any(w in text for w in ["inventory", "stock", "maal", "stuck", "fasa", "aging", "clearance"]):
+        elif any(w in text for w in ["inventory", "stock", "maal", "stuck", "fasa", "aging", "clearance", "dupatta", "kurta", "out of stock", "reorder", "surplus"]):
             return "INVENTORY_STATUS"
 
-        # 6. Sales Decline & Drop Analysis
-        elif any(w in text for w in ["drop", "decline", "gira", "kam hua", "sales kyu", "biki kam"]):
+        # 6. Cash Flow & Liquidity
+        elif any(w in text for w in ["cash", "paisa", "cashflow", "runway", "pinch", "day 4", "balance", "bank", "vendor payout", "payout", "liquidity", "working capital"]):
+            return "CASH_FLOW"
+
+        # 7. Customer Retention & RFM Segments
+        elif any(w in text for w in ["customer", "patron", "diner", "grahak", "inactive", "dormant", "repeat", "regular", "churn", "who are my customers", "diners", "audience", "client"]):
+            return "CUSTOMER_INTELLIGENCE"
+
+        # 8. Sales Analysis & Decline
+        elif any(w in text for w in ["sale", "sales", "revenue", "biki", "drop", "decline", "gira", "kam hua", "sales kyu", "biki kam", "turnover", "how is my business", "how much did i make", "weekly sales", "today sales", "performance"]):
             return "SALES_DROP_ANALYSIS"
 
-        # 7. Profit & Margin Intelligence
-        elif any(w in text for w in ["profit", "margin", "munafa", "gross profit", "faida", "kamai"]):
+        # 9. Profit & Margin Intelligence
+        elif any(w in text for w in ["profit", "margin", "munafa", "gross profit", "faida", "kamai", "sku", "cost", "cogs", "most profitable", "highest profit"]):
             return "PROFIT_ANALYSIS"
 
-        # 8. Guardrails & Rules
-        elif any(w in text for w in ["guardrail", "rule", "limit", "ceiling", "approval", "permission"]):
+        # 10. Guardrails & Rules
+        elif any(w in text for w in ["guardrail", "rule", "limit", "ceiling", "approval", "permission", "safe"]):
             return "GUARDRAIL_STATUS"
 
         else:
@@ -377,6 +385,38 @@ class VoiceCopilotService:
             )
             payload = {"active_guardrails_count": len(rules), "rules": rules}
             actions = ["View Guardrails", "Edit Thresholds"]
+            return {"text": text, "payload": payload, "actions": actions}
+
+        elif intent == "CASH_FLOW":
+            from .cashflow_intelligence_service import CashFlowIntelligenceService
+            cf = CashFlowIntelligenceService.get_cashflow_forecast(merchant_id)
+            pinch_day = cf.get("timing_pinch_day", 4)
+            min_bal = cf.get("minimum_projected_balance_inr", -12400.0)
+            text = (
+                f"कैश-फ्लो अलर्ट: अगले 7 दिनों में डे {pinch_day} पर ₹{abs(min_bal):,.0f} का अस्थायी डेफिसिट आने की संभावना है, क्योंकि वेंडर पेमेंट्स सेटलमेंट से पहले देय हैं। सेटलमेंट साइकिल को री-शेड्यूल करना सुरक्षित रहेगा।"
+                if is_hindi else
+                f"Cash-Flow Alert: Projected Day {pinch_day} liquidity pinch with a temporary ₹{abs(min_bal):,.0f} deficit due to committed supplier payouts preceding Soundbox settlements. Rescheduling payouts or drawing on working capital is recommended."
+            )
+            payload = cf
+            actions = ["View Cash Flow Runway", "Adjust Vendor Payables", "Review Inflow Projections"]
+            return {"text": text, "payload": payload, "actions": actions}
+
+        elif intent == "CUSTOMER_INTELLIGENCE":
+            from .customer_value_service import CustomerValueService
+            custs = CustomerValueService.get_rfm_customer_directory(merchant_id)
+            total = len(custs)
+            at_risk = sum(1 for c in custs if c.get("rfm_segment") in ("AT_RISK_HIGH_VALUE", "HIBERNATING_DORMANT"))
+            text = (
+                f"कस्टमर इनसाइट: आपके पास कुल {total} पंजीकृत ग्राहक हैं, जिनमें से {at_risk} ग्राहक डॉरमेंट या रिस्क पर हैं। इन्हें टारगेट करके तुरंत री-एंगेजमेंट ऑफर भेजा जा सकता है।"
+                if is_hindi else
+                f"Customer Insights: You have {total} tracked customer profiles, of which {at_risk} are flagged as Dormant or At-Risk. Re-engaging this cohort with a personalized ₹50 incentive can recover estimated ₹20,900 in gross revenue."
+            )
+            payload = {
+                "total_customers": total,
+                "at_risk_count": at_risk,
+                "top_customers": custs[:5] if custs else []
+            }
+            actions = ["View Customer Directory", "Launch Re-engagement Campaign", "Export Audience"]
             return {"text": text, "payload": payload, "actions": actions}
 
         else:  # GENERAL_BUSINESS_HELP
