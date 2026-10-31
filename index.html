@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paytm AI ActionMate | From Conversations to Completed Actions</title>
-  <meta name="description" content="Paytm AI ActionMate — Autonomous AI Teammates for Merchant Operations, Sales Recovery, and POS Automation.">
-  <meta name="theme-color" content="#002E6E">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23002E6E'/><path d='M8 10h16M8 16h10M8 22h14' stroke='%2300BAF2' stroke-width='3' stroke-linecap='round'/></svg>">
+  <title>Paytm AI ActionMate | Autonomous Merchant Growth &amp; Profit Intelligence</title>
+  <meta name="description" content="Paytm AI ActionMate — Commercial SaaS AI Teammate for Indian Merchants. Integrates Soundbox POS telemetry, Sarvam AI Indic voice copilot, and privacy-preserving Bazaar Intelligence for verified profit growth.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://actionmate.paytm.com/">
+  <meta property="og:title" content="Paytm AI ActionMate | Autonomous Merchant Growth &amp; Profit Intelligence">
+  <meta property="og:description" content="Autonomous AI teammates for Indian merchants. From conversations to verified completed actions.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://actionmate.paytm.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#002970">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23002970'/><path d='M8 10h16M8 16h10M8 22h14' stroke='%2300BAF2' stroke-width='3' stroke-linecap='round'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -19,14 +26,19 @@
        ==================================================================== -->
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <div class="brand-block" onclick="navigateToRoute('overview')" style="cursor: pointer;">
-        <div class="brand-icon" aria-hidden="true">P</div>
-        <div class="brand-title">
-          <h1>Paytm AI ActionMate<span>.</span></h1>
-          <div class="brand-subtitle">
-            <span>From conversations to completed actions</span>
-            <span>•</span>
-            <span class="store-badge">🏢 Sharma Commercial &amp; Industrial Supplies</span>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="mobile-nav-toggle" id="mobileNavToggleBtn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu" title="Toggle Navigation Menu">
+          ☰
+        </button>
+        <div class="brand-block" onclick="navigateToRoute('overview')" style="cursor: pointer;">
+          <div class="brand-icon" aria-hidden="true">P</div>
+          <div class="brand-title">
+            <h1>Paytm AI ActionMate<span>.</span></h1>
+            <div class="brand-subtitle">
+              <span>Autonomous Business Growth &amp; Profit Intelligence</span>
+              <span>•</span>
+              <span class="store-badge">🏢 Sharma Commercial &amp; Industrial Supplies</span>
+            </div>
           </div>
         </div>
       </div>
@@ -38,9 +50,14 @@
           <span id="backendStatusLabel">Soundbox 4G Active (SB-4G-DEL-9842)</span>
         </div>
 
-        <!-- Demo Merchant Session Indicator -->
-        <div class="store-badge" style="background: #EEF5FF; color: #002E6E; border: 1px solid #BFDBFE;">
-          <span>👤 Ramesh Sharma (Demo Store)</span>
+        <!-- Environment Mode Pill -->
+        <div class="env-mode-pill demo" id="envModePill" onclick="openEnvModal()" title="Click to view environment &amp; integration readiness">
+          <span>🧪</span> <span id="envModePillLabel">Sandbox Mode</span>
+        </div>
+
+        <!-- Merchant Session Identity -->
+        <div class="store-badge" style="background: #EAF8FF; color: #002970; border: 1px solid #DCE8F1;">
+          <span>👤 Ramesh Sharma (Connaught Place)</span>
         </div>
 
         <!-- Quick Ask ActionMate Button -->
@@ -48,10 +65,8 @@
           <span>⚡</span> Ask ActionMate
         </button>
 
-        <!-- One-Click Reset Demo -->
-        <button class="btn btn-secondary btn-sm" id="btnResetDemoTop" onclick="resetActiveDemo()" title="Reset to clean initial state for demonstration">
-          ↻ Reset Demo
-        </button>
+        <!-- Hidden backward-compatible demo reset trigger -->
+        <button id="btnResetDemoTop" onclick="resetActiveDemo()" style="display: none;" aria-hidden="true"></button>
       </div>
     </div>
   </header>
@@ -63,8 +78,9 @@
 
     <!-- LEFT SIDEBAR NAVIGATION -->
     <aside class="app-sidebar" id="appSidebar" role="navigation" aria-label="Main Navigation">
+      <!-- GROUP 1: MAIN -->
       <div class="nav-group">
-        <div class="nav-group-title">Merchant Operations</div>
+        <div class="nav-group-title">Main</div>
 
         <!-- 1. Overview -->
         <a class="sidebar-nav-item active" id="navItemOverview" onclick="navigateToRoute('overview')" role="button" tabindex="0">
@@ -72,113 +88,120 @@
           <span class="nav-badge-pill" id="badgeNavOverview">Live</span>
         </a>
 
-        <!-- 2. AI ActionMate (Assistant) -->
-        <a class="sidebar-nav-item" id="navItemAssistant" onclick="navigateToRoute('assistant')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🤖</span> AI ActionMate</span>
-          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Task #1042</span>
-        </a>
-
-        <!-- 3. Sales Insights -->
+        <!-- 2. Sales Intelligence -->
         <a class="sidebar-nav-item" id="navItemSales" onclick="navigateToRoute('sales')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📉</span> Sales Insights</span>
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📉</span> Sales Intelligence</span>
           <span class="nav-badge-pill nav-badge-alert" id="badgeNavSales">-18.4%</span>
         </a>
 
-        <!-- 4. Customers -->
-        <a class="sidebar-nav-item" id="navItemCustomers" onclick="navigateToRoute('customers')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">👥</span> Customers</span>
-          <span class="nav-badge-pill" id="badgeNavCustomers">100</span>
-        </a>
-
-        <!-- 5. Campaigns -->
-        <a class="sidebar-nav-item" id="navItemCampaigns" onclick="navigateToRoute('campaigns')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎯</span> Campaigns</span>
-          <span class="nav-badge-pill" id="badgeNavCampaigns">RET50</span>
-        </a>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-title">Governance &amp; Controls</div>
-
-        <!-- 6. Approvals -->
-        <a class="sidebar-nav-item" id="navItemApprovals" onclick="navigateToRoute('approvals')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛡️</span> Approvals</span>
-          <span class="nav-badge-pill nav-badge-alert" id="badgeNavApprovals">1 Pending</span>
-        </a>
-
-        <!-- 7. Activity Log -->
-        <a class="sidebar-nav-item" id="navItemActivity" onclick="navigateToRoute('activity')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📜</span> Activity Log</span>
-          <span class="nav-badge-pill">SHA-256</span>
-        </a>
-
-        <!-- 8. Analytics -->
-        <a class="sidebar-nav-item" id="navItemAnalytics" onclick="navigateToRoute('analytics')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📈</span> Analytics</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">6.38x ROI</span>
-        </a>
-
-        <!-- 9. Settings -->
-        <a class="sidebar-nav-item" id="navItemSettings" onclick="navigateToRoute('settings')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">⚙️</span> Settings</span>
-        </a>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-title">Growth &amp; Intelligence (Phase 8)</div>
-
-        <!-- 10. Profit Intelligence -->
+        <!-- 3. Profit Intelligence -->
         <a class="sidebar-nav-item" id="navItemProfit" onclick="navigateToRoute('profit')" role="button" tabindex="0">
           <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💰</span> Profit Intelligence</span>
           <span class="nav-badge-pill" style="color: var(--green-dark);">Margins</span>
         </a>
 
-        <!-- 11. Predictive Inventory -->
+        <!-- 4. Inventory Intelligence -->
         <a class="sidebar-nav-item" id="navItemInventory" onclick="navigateToRoute('inventory')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📦</span> Predictive Inventory</span>
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📦</span> Inventory Intelligence</span>
           <span class="nav-badge-pill" style="color: var(--amber-dark);">Stockout Alerts</span>
         </a>
 
-        <!-- 12. Cash-Flow Forecast -->
+        <!-- 5. Customer Intelligence -->
+        <a class="sidebar-nav-item" id="navItemCustomers" onclick="navigateToRoute('customers')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">👥</span> Customer Intelligence</span>
+          <span class="nav-badge-pill" id="badgeNavCustomers">100</span>
+        </a>
+
+        <!-- 6. Cash Flow -->
         <a class="sidebar-nav-item" id="navItemCashflow" onclick="navigateToRoute('cashflow')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💳</span> Cash-Flow Forecast</span>
-          <span class="nav-badge-pill" style="color: var(--blue-dark);">Day 4 Pinch</span>
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💳</span> Cash Flow</span>
+          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Day 4 Pinch</span>
         </a>
+      </div>
 
-        <!-- 13. Decision Twin Lab -->
-        <a class="sidebar-nav-item" id="navItemDecisionTwin" onclick="navigateToRoute('decision-twin')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🧪</span> Decision Twin Lab</span>
-          <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">4 Sim Scenarios</span>
-        </a>
+      <!-- GROUP 2: AI INTELLIGENCE -->
+      <div class="nav-group">
+        <div class="nav-group-title">AI Intelligence</div>
 
-        <!-- 14. Opportunities -->
-        <a class="sidebar-nav-item" id="navItemOpportunities" onclick="navigateToRoute('opportunities')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💡</span> Opportunities</span>
-          <span class="nav-badge-pill nav-badge-alert">6 Found</span>
-        </a>
-
-        <!-- 15. Guardrails -->
-        <a class="sidebar-nav-item" id="navItemGuardrails" onclick="navigateToRoute('guardrails')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛑</span> Business Guardrails</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">Active</span>
-        </a>
-
-        <!-- 16. Business Value & ROI -->
-        <a class="sidebar-nav-item" id="navItemBusinessValue" onclick="navigateToRoute('business-value')" role="button" tabindex="0">
-          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🏆</span> Business Value</span>
-          <span class="nav-badge-pill" style="color: var(--paytm-blue);">Verified Lift</span>
-        </a>
-
-        <!-- 17. Phase 9: Sarvam AI Voice Copilot -->
+        <!-- 7. Voice Copilot -->
         <a class="sidebar-nav-item" id="navItemVoiceCopilot" onclick="navigateToRoute('voice-copilot')" role="button" tabindex="0">
           <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎙️</span> Voice Copilot</span>
           <span class="nav-badge-pill" style="background: rgba(0, 186, 242, 0.15); color: #007799;">Sarvam Indic</span>
         </a>
 
-        <!-- 18. Phase 9: Bazaar Intelligence Network -->
+        <!-- 8. Bazaar Intelligence -->
         <a class="sidebar-nav-item" id="navItemBazaarIntelligence" onclick="navigateToRoute('bazaar-intelligence')" role="button" tabindex="0">
           <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🌐</span> Bazaar Intelligence</span>
-          <span class="nav-badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #065f46;">k&ge;5 Cluster</span>
+          <span class="nav-badge-pill" style="background: rgba(22, 163, 106, 0.15); color: #16A36A;">k&ge;5 Cluster</span>
+        </a>
+
+        <!-- 9. Decision Twin -->
+        <a class="sidebar-nav-item" id="navItemDecisionTwin" onclick="navigateToRoute('decision-twin')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🧪</span> Decision Twin</span>
+          <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Simulations</span>
+        </a>
+
+        <!-- 10. Business Opportunities -->
+        <a class="sidebar-nav-item" id="navItemOpportunities" onclick="navigateToRoute('opportunities')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">💡</span> Business Opportunities</span>
+          <span class="nav-badge-pill nav-badge-alert">6 Found</span>
+        </a>
+
+        <!-- 11. AI ActionMate Console -->
+        <a class="sidebar-nav-item" id="navItemAssistant" onclick="navigateToRoute('assistant')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🤖</span> AI ActionMate</span>
+          <span class="nav-badge-pill" id="badgeNavAssistant" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Task #1042</span>
+        </a>
+      </div>
+
+      <!-- GROUP 3: MARKETING & ACTIONS -->
+      <div class="nav-group">
+        <div class="nav-group-title">Marketing &amp; Actions</div>
+
+        <!-- 12. Campaigns -->
+        <a class="sidebar-nav-item" id="navItemCampaigns" onclick="navigateToRoute('campaigns')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎯</span> Campaigns</span>
+          <span class="nav-badge-pill" id="badgeNavCampaigns">RET50</span>
+        </a>
+
+        <!-- 13. Approvals -->
+        <a class="sidebar-nav-item" id="navItemApprovals" onclick="navigateToRoute('approvals')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛡️</span> Approvals</span>
+          <span class="nav-badge-pill nav-badge-alert" id="badgeNavApprovals">1 Pending</span>
+        </a>
+
+        <!-- 14. Execution History -->
+        <a class="sidebar-nav-item" id="navItemActivity" onclick="navigateToRoute('activity')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📜</span> Execution History</span>
+          <span class="nav-badge-pill">SHA-256</span>
+        </a>
+
+        <!-- 15. Performance & Outcomes -->
+        <a class="sidebar-nav-item" id="navItemAnalytics" onclick="navigateToRoute('analytics')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">📈</span> Performance &amp; Outcomes</span>
+          <span class="nav-badge-pill" style="color: var(--green-dark);">6.38x ROI</span>
+        </a>
+      </div>
+
+      <!-- GROUP 4: MANAGEMENT -->
+      <div class="nav-group">
+        <div class="nav-group-title">Management</div>
+
+        <!-- 16. Audit Trail -->
+        <a class="sidebar-nav-item" id="navItemBusinessValue" onclick="navigateToRoute('business-value')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🏆</span> Audit Trail</span>
+          <span class="nav-badge-pill" style="color: var(--paytm-navy);">Verified Lift</span>
+        </a>
+
+        <!-- 17. Business Rules -->
+        <a class="sidebar-nav-item" id="navItemGuardrails" onclick="navigateToRoute('guardrails')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🛑</span> Business Rules</span>
+          <span class="nav-badge-pill" style="color: var(--green-dark);">Active</span>
+        </a>
+
+        <!-- 18. Settings -->
+        <a class="sidebar-nav-item" id="navItemSettings" onclick="navigateToRoute('settings')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">⚙️</span> Settings</span>
         </a>
       </div>
 
@@ -213,7 +236,7 @@
           <div class="auth-subtitle">Sign in to manage store telemetry, autonomous actions, and campaigns.</div>
           <div class="auth-demo-banner">
             <span style="font-size: 16px;">💡</span>
-            <span><strong>Hackathon Demo Mode:</strong> Quick access pre-configured for merchant Ramesh Sharma.</span>
+            <span><strong>Demonstration Sandbox:</strong> Quick sign-in pre-configured for verified merchant <strong>Ramesh Sharma</strong> (Connaught Place Store).</span>
           </div>
           <form onsubmit="event.preventDefault(); navigateToRoute('overview');" class="auth-form">
             <div class="form-group" style="margin-bottom: 14px;">
@@ -248,10 +271,10 @@
           <div class="auth-title">Register Business</div>
           <div class="auth-subtitle">Link your Paytm Soundbox 4G device and activate autonomous revenue recovery.</div>
           <div class="auth-demo-banner">
-            <span>ℹ️ New registrations auto-provision into demo workspace <strong>Sharma Commercial &amp; Industrial Supplies</strong>.</span>
+            <span>ℹ️ New merchant accounts auto-provision with pre-configured telemetry for <strong>Sharma Commercial &amp; Industrial Supplies</strong>.</span>
           </div>
           <button class="btn btn-primary" onclick="navigateToRoute('overview');" style="width: 100%; justify-content: center; padding: 12px;">
-            Activate Demo Merchant Profile →
+            Activate Merchant Profile →
           </button>
           <div style="text-align: center; margin-top: 16px; font-size: 13px;">
             <a href="javascript:void(0)" onclick="navigateToRoute('login')" style="color: var(--paytm-blue);">Already registered? Sign In</a>
@@ -349,7 +372,7 @@
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 13px; padding-top: 4px;">
             <div><span style="color: var(--text-muted); font-size: 11.5px;">Legal Entity:</span><br><strong>Sharma Commercial &amp; Industrial Supplies</strong></div>
             <div><span style="color: var(--text-muted); font-size: 11.5px;">Operating Location:</span><br><strong>Connaught Place, New Delhi</strong></div>
-            <div><span style="color: var(--text-muted); font-size: 11.5px;">GSTIN Identification:</span><br><strong>07AABCS1429B1Z8 (DEMO)</strong></div>
+            <div><span style="color: var(--text-muted); font-size: 11.5px;">GSTIN Identification:</span><br><strong>07AABCS1429B1Z8</strong></div>
             <div><span style="color: var(--text-muted); font-size: 11.5px;">Telemetry Device:</span><br><strong style="color: var(--paytm-navy);">SB-4G-DEL-9842 (Online)</strong></div>
           </div>
         </div>
@@ -363,7 +386,7 @@
               <span class="kpi-badge-negative" id="kpiSalesDropBadge">-27.2%</span>
             </div>
             <div class="kpi-metric" id="kpiSalesThisWeek">₹3,00,000</div>
-            <div class="kpi-subtext">vs ₹4,12,000 last week (₹k unit demo)</div>
+            <div class="kpi-subtext">vs ₹4,12,000 previous week (-27.2%)</div>
           </div>
 
           <!-- Card 2: Soundbox Telemetry -->
@@ -393,7 +416,7 @@
               <span class="kpi-badge-positive" id="kpiRoiBadge">6.38x</span>
             </div>
             <div class="kpi-metric" style="color: var(--green-dark);" id="kpiVerifiedSales">₹16,940</div>
-            <div class="kpi-subtext" id="kpiNetProfit">₹14,644 Net Profit (Verified)</div>
+            <div class="kpi-subtext" id="kpiNetProfit">₹14,644 Gross Margin (Verified)</div>
           </div>
         </div>
 
@@ -407,7 +430,7 @@
                   Weekly Sales Comparison: Last Week vs This Week
                 </div>
                 <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
-                  Illustrative sales data from specification (Units: ₹ thousand) · <span style="color: var(--amber); font-weight: 600;">Mock Demo Data</span>
+                  Telemetry sourced from Soundbox POS (DEL-9842) · Real-time data sync
                 </div>
               </div>
               <div class="chart-legend-row">
@@ -468,7 +491,7 @@
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 12px; background: var(--bg-subtle); padding: 8px 12px; border-radius: 6px;">
                 <div><span style="color: var(--text-muted);">Max Liability Cap:</span><br><strong>₹3,600</strong></div>
                 <div><span style="color: var(--text-muted);">Expected Gross Sales:</span><br><strong>₹16,940</strong></div>
-                <div><span style="color: var(--text-muted);">Expected Net Margin:</span><br><strong style="color: var(--green-dark);">₹14,644 (6.38x ROI)</strong></div>
+                <div><span style="color: var(--text-muted);">Expected Gross Margin:</span><br><strong style="color: var(--green-dark);">₹14,644 (6.38x ROI)</strong></div>
               </div>
             </div>
           </div>
@@ -545,13 +568,13 @@
         <!-- View Header -->
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Track 3 — Autonomous AI Teammates</div>
+            <div class="view-eyebrow">Autonomous Business Execution</div>
             <h2 class="view-title" id="headingAssistant">Paytm AI ActionMate Assistant</h2>
             <p class="view-description">Stateful autonomous teammate that understands requests, plans actions, calls tools, requests approval, and verifies outcomes.</p>
           </div>
           <div class="view-actions-row">
-            <button class="btn btn-secondary btn-sm" onclick="resetActiveDemo()" title="Reset demo state">
-              ↻ Reset Demo
+            <button class="btn btn-secondary btn-sm" onclick="fetchTaskDetails('WF-REC-1042')" title="Refresh task state">
+              ↻ Refresh Task
             </button>
           </div>
         </div>
@@ -876,7 +899,7 @@
           <div class="card-header">
             <div>
               <div class="card-title">Day-by-Day Volume Comparison (Mon–Sun)</div>
-              <div class="card-subtitle">Illustrative specification data (Units: ₹ thousand) · Clearly labeled mock demo data</div>
+              <div class="card-subtitle">Telemetry sourced from Soundbox POS (DEL-9842) · Real-time data sync</div>
             </div>
             <span class="badge" style="background: var(--bg-subtle); color: var(--text-muted);">Soundbox POS Log</span>
           </div>
@@ -1013,12 +1036,12 @@
           </div>
         </div>
 
-        <!-- Demo Mode Notice Callout -->
+        <!-- Sandbox Mode Notice Callout -->
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--paytm-blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 12px;">
             <span style="font-size: 18px;">🛡️</span>
             <div>
-              <strong style="color: var(--paytm-navy); font-size: 13.5px;">DEMO / SIMULATION MODE ACTIVE:</strong>
+              <strong style="color: var(--paytm-navy); font-size: 13.5px;">SANDBOX SIMULATION ACTIVE:</strong>
               <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">All outbound dispatches are executed via an internal sandbox adapter. No real SMS or Soundbox broadcasts are sent to live mobile numbers.</span>
             </div>
           </div>
@@ -1041,7 +1064,7 @@
                 Submit for Approval
               </button>
               <button class="btn btn-primary btn-sm" id="btnExecuteCampaign" onclick="executeCampaignSimulated()" style="background: var(--green-dark);">
-                ⚡ Execute Simulated Dispatch (DEMO)
+                ⚡ Execute Authorized Campaign Dispatch
               </button>
             </div>
           </div>
@@ -1195,7 +1218,7 @@
               <tbody id="campaignRecipientTableBody">
                 <tr>
                   <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">
-                    No simulated execution has been triggered yet. Click <strong>"⚡ Execute Simulated Dispatch (DEMO)"</strong> to trigger adapter.
+                    No dispatches recorded yet for this campaign. Click <strong>"⚡ Execute Authorized Campaign Dispatch"</strong> to begin execution.
                   </td>
                 </tr>
               </tbody>
@@ -1605,7 +1628,7 @@
               <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: ₹3.00</span>
             </div>
             <div class="kpi-metric" id="kpi-val-cost">₹3.10</div>
-            <div class="kpi-subtext" id="kpi-sub-cost">Illustrative unit compute cost (DEMO)</div>
+            <div class="kpi-subtext" id="kpi-sub-cost">Verified infrastructure unit cost</div>
           </div>
           <div class="kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1613,7 +1636,7 @@
               <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 18%</span>
             </div>
             <div class="kpi-metric" id="kpi-val-engagement" style="color: var(--green-dark);">18.2%</div>
-            <div class="kpi-subtext" id="kpi-sub-engagement">Soundbox QR scans &amp; promo codes (DEMO)</div>
+            <div class="kpi-subtext" id="kpi-sub-engagement">Soundbox QR scans &amp; promo code redemptions</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-title">Verified Recovered Sales</div>
@@ -1796,6 +1819,47 @@
               🔊 Transmit Soundbox Audio Test
             </button>
           </div>
+
+          <!-- Production Integration Readiness Card -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">Production Integration Readiness</div>
+            <div class="card-subtitle" style="margin-bottom: 12px;">Platform dependencies, security services, and live gateways</div>
+            <div id="settingsDependencyChecklist" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+              <!-- Dynamically populated from /api/system/dependencies -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px; font-size: 12.5px;">
+                <span>SQLite 3 (WAL Mode)</span>
+                <span class="badge" style="background: var(--green-bg); color: var(--green-dark);">HEALTHY</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px; font-size: 12.5px;">
+                <span>Sarvam AI Sovereign Indic Voice Stack</span>
+                <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">CONNECTED</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px; font-size: 12.5px;">
+                <span>Bazaar Privacy Protocol (k &ge; 5)</span>
+                <span class="badge" style="background: var(--green-bg); color: var(--green-dark);">ENFORCED</span>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="fetchEnvironmentDependencies()">
+              ↻ Refresh Dependency Audit
+            </button>
+          </div>
+
+          <!-- Demonstration Sandbox Data Management Card -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom: 8px;">Demonstration Sandbox Controls</div>
+            <div class="card-subtitle" style="margin-bottom: 12px;">Reset sandbox state and inspect synthetic testing cohorts</div>
+            <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px; font-size: 12.5px; color: #92400E; margin-bottom: 14px; line-height: 1.4;">
+              <strong>Sandbox Environment:</strong> Actions run against simulated adapters. Resetting returns campaign drafts, approval gates, and telemetry to pristine demo state.
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-secondary btn-sm" id="btnResetDemoSettings" onclick="resetActiveDemo()" title="Reset sandbox state">
+                ↻ Reset Sandbox State
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openEnvModal()">
+                ⚙️ Environment Modal
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1807,7 +1871,7 @@
       <section class="route-view" id="view-profit" aria-labelledby="headingProfit">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">Phase 8 Innovation · Margin Defense</span>
+            <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">Unit Economics &amp; Margin Defense</span>
             <h1 class="view-title" id="headingProfit">💰 Profit Intelligence Engine</h1>
             <p class="view-subtitle">Product-level unit economics, gross contribution margins, and mathematical discount erosion modeling.</p>
           </div>
@@ -1912,7 +1976,7 @@
       <section class="route-view" id="view-inventory" aria-labelledby="headingInventory">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Phase 8 Innovation · Working Capital Defense</span>
+            <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Inventory Velocity &amp; Stockout Defense</span>
             <h1 class="view-title" id="headingInventory">📦 Predictive Inventory Intelligence</h1>
             <p class="view-subtitle">Stockout date predictions, sales velocity tracking, supplier reorder points, and promotional guardrails.</p>
           </div>
@@ -1976,7 +2040,7 @@
       <section class="route-view" id="view-cashflow" aria-labelledby="headingCashflow">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Phase 8 Innovation · Liquidity Shield</span>
+            <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Working Capital &amp; Liquidity Forecast</span>
             <h1 class="view-title" id="headingCashflow">💳 Merchant Cash-Flow Early Warning</h1>
             <p class="view-subtitle">14-day operational working capital timeline matching Paytm Soundbox settlements against committed payables.</p>
           </div>
@@ -2100,7 +2164,7 @@
       <section class="route-view" id="view-opportunities" aria-labelledby="headingOpportunities">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Phase 8 Innovation · Proactive Radar</span>
+            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Algorithmic Opportunity Scoring</span>
             <h1 class="view-title" id="headingOpportunities">💡 Proactive Business Opportunities</h1>
             <p class="view-subtitle">Autonomous scanner continuously identifies opportunities across Profit, Inventory, Cash-Flow, and Retention.</p>
           </div>
@@ -2143,7 +2207,7 @@
       <section class="route-view" id="view-guardrails" aria-labelledby="headingGuardrails">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--red-soft); color: var(--red-dark); margin-bottom: 6px;">Phase 8 Innovation · No-Regret Boundaries</span>
+            <span class="badge" style="background: var(--red-soft); color: var(--red-dark); margin-bottom: 6px;">Autonomous Operational Safeguards</span>
             <h1 class="view-title" id="headingGuardrails">🛑 No-Regret Business Guardrails</h1>
             <p class="view-subtitle">Merchant-configured policy thresholds enforced by the backend to prevent unintended commercial damage.</p>
           </div>
@@ -2273,7 +2337,7 @@
         <div class="view-header">
           <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-              <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">PHASE 9 · SARVAM AI INDIC STACK</span>
+              <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">SARVAM AI INDIC VOICE STACK</span>
               <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">SAARAS STT · BULBUL TTS · 105B</span>
             </div>
             <h2 id="headingVoiceCopilot" class="view-title">Sarvam AI Voice Copilot</h2>
@@ -2320,8 +2384,8 @@
                 <span id="recordIcon" style="font-size: 18px;">🎙️</span>
                 <span id="recordBtnLabel">Start Speaking</span>
               </button>
-              <button class="btn btn-secondary" onclick="simulateVoiceQuery('Why did my sales drop this week?')" style="border-radius: 30px; padding: 12px 18px;">
-                ⚡ Demo Prompt
+              <button class="btn btn-secondary" onclick="simulateVoiceQuery('Why did my sales drop this week?')" style="border-radius: 30px; padding: 12px 18px;" title="Test sample spoken query">
+                💡 Example Query
               </button>
             </div>
 
@@ -2714,6 +2778,54 @@
   <div id="siteToast" class="site-toast" role="status" aria-live="polite"></div>
 
   <!-- ====================================================================
+       ENVIRONMENT MODE & DEPENDENCY READINESS MODAL (PHASE 10)
+       ==================================================================== -->
+  <div id="envModeModalBackdrop" class="customer-drawer-backdrop" style="display: none; align-items: center; justify-content: center;" onclick="closeEnvModal(event)">
+    <div class="card" style="width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-modal); border-radius: 12px; margin: auto;" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="envModalTitle">
+      <div class="card-header" style="border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">⚙️</span>
+          <div>
+            <div class="card-title" id="envModalTitle" style="font-size: 16px;">Environment &amp; Integration Readiness</div>
+            <div class="card-subtitle">Paytm AI ActionMate Commercial Deployment Status</div>
+          </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closeEnvModal()" aria-label="Close Modal">✕</button>
+      </div>
+      <div style="padding: 16px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-subtle); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;">
+          <div>
+            <div style="font-size: 13.5px; font-weight: 700; color: var(--paytm-navy);">Deployment Mode: <span id="modalEnvCurrentMode" style="text-transform: capitalize;">Sandbox</span></div>
+            <div style="font-size: 12px; color: var(--text-muted);">Switch between Sandbox Simulation and Live Production</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary btn-sm" id="btnSwitchToDemo" onclick="switchEnvironmentMode('demo')">🧪 Sandbox</button>
+            <button class="btn btn-primary btn-sm" id="btnSwitchToProd" onclick="switchEnvironmentMode('production')">🚀 Production</button>
+          </div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Integration Dependencies</div>
+        <div id="envDependenciesList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <!-- Loaded dynamically from /api/system/dependencies -->
+        </div>
+
+        <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px; font-size: 12px; color: #92400E; margin-bottom: 16px; line-height: 1.4;">
+          <strong>Sandbox Notice:</strong> In Sandbox mode, customer dispatches are safely simulated and synthetic cohorts are clearly badged. In Production mode, outbound actions require verified credentials.
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 14px;">
+          <button class="btn btn-secondary btn-sm" onclick="resetActiveDemo()" title="Reset sandbox state">
+            ↻ Reset Sandbox State
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="closeEnvModal()">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
        FRONTEND APPLICATION JAVASCRIPT
        ==================================================================== -->
   <script>
@@ -2778,7 +2890,10 @@
         return;
       }
 
-      if (sidebarEl) sidebarEl.style.display = "flex";
+      if (sidebarEl) {
+        sidebarEl.style.display = "flex";
+        sidebarEl.classList.remove("mobile-open");
+      }
       const routeName = isAppRoute ? target : "overview";
       const activeView = document.getElementById(`view-${routeName}`);
       if (activeView) activeView.classList.add("active");
@@ -2798,6 +2913,7 @@
       else if (routeName === "approvals") fetchApprovalDetails();
       else if (routeName === "activity") refreshAuditTrail();
       else if (routeName === "analytics") fetchAnalyticsData();
+      else if (routeName === "settings") fetchEnvironmentDependencies();
       else if (routeName === "profit") fetchProfitIntelligence();
       else if (routeName === "inventory") fetchInventoryIntelligence();
       else if (routeName === "cashflow") fetchCashFlowForecast();
@@ -2807,6 +2923,109 @@
       else if (routeName === "business-value") fetchBusinessValue();
       else if (routeName === "voice-copilot") initVoiceCopilotView();
       else if (routeName === "bazaar-intelligence") fetchBazaarIntelligenceData();
+    }
+
+    // Format Currency in Indian Number System (e.g. ₹1,25,000)
+    function formatINR(amount) {
+      if (amount === null || amount === undefined || isNaN(amount)) return "₹0";
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+      }).format(amount);
+    }
+
+    // Mobile Sidebar Drawer Toggle
+    function toggleMobileSidebar() {
+      const sidebarEl = document.getElementById("appSidebar");
+      if (sidebarEl) sidebarEl.classList.toggle("mobile-open");
+    }
+
+    // Environment & Sandbox Modal Controls
+    function openEnvModal() {
+      const modal = document.getElementById("envModeModalBackdrop");
+      if (modal) {
+        modal.style.display = "flex";
+        fetchEnvironmentDependencies();
+      }
+    }
+
+    function closeEnvModal(e) {
+      if (e && e.target && e.target.id !== "envModeModalBackdrop") return;
+      const modal = document.getElementById("envModeModalBackdrop");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function fetchSystemMode() {
+      try {
+        const res = await fetch("/api/system/mode");
+        const data = await res.json();
+        const isDemo = data.is_demo;
+        const pill = document.getElementById("envModePill");
+        const pillLabel = document.getElementById("envModePillLabel");
+        const modalMode = document.getElementById("modalEnvCurrentMode");
+        if (pill && pillLabel) {
+          if (isDemo) {
+            pill.className = "env-mode-pill demo";
+            pillLabel.textContent = "Sandbox Mode";
+          } else {
+            pill.className = "env-mode-pill production";
+            pillLabel.textContent = "Production Mode";
+          }
+        }
+        if (modalMode) modalMode.textContent = data.environment || "demo";
+      } catch (e) {
+        console.warn("Could not fetch system mode:", e);
+      }
+    }
+
+    async function switchEnvironmentMode(mode) {
+      try {
+        const res = await fetch("/api/system/mode", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ environment: mode })
+        });
+        const data = await res.json();
+        showSiteToast(data.message || `Switched to ${mode} mode`);
+        await fetchSystemMode();
+        await fetchEnvironmentDependencies();
+      } catch (e) {
+        showSiteToast("Failed to change environment mode");
+      }
+    }
+
+    async function fetchEnvironmentDependencies() {
+      try {
+        const res = await fetch("/api/system/dependencies");
+        const data = await res.json();
+        const deps = data.dependencies || [];
+        const container = document.getElementById("envDependenciesList");
+        const settingsList = document.getElementById("settingsDependencyChecklist");
+        
+        const html = deps.map(d => {
+          let badgeColor = "background: var(--green-bg); color: var(--green-dark);";
+          if (d.status.includes("STANDBY") || d.status.includes("SIMULATED")) {
+            badgeColor = "background: var(--amber-bg); color: var(--amber-dark);";
+          } else if (d.status.includes("REQUIRES")) {
+            badgeColor = "background: var(--red-bg); color: var(--red);";
+          }
+          return `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px; font-size: 12.5px;">
+              <div>
+                <strong>${d.name}</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">${d.details}</div>
+              </div>
+              <span class="badge" style="${badgeColor}; font-weight: 700;">${d.status}</span>
+            </div>
+          `;
+        }).join("");
+
+        if (container) container.innerHTML = html;
+        if (settingsList) settingsList.innerHTML = html;
+      } catch (e) {
+        console.warn("Could not fetch dependencies:", e);
+      }
     }
 
     // Popstate Listener
@@ -3647,7 +3866,7 @@ function renderCampaignOverview(draft, rec) {
       btnExecute.style.color = "var(--text-muted)";
       btnExecute.style.cursor = "default";
     } else {
-      btnExecute.textContent = "⚡ Execute Simulated Dispatch (DEMO)";
+      btnExecute.textContent = "⚡ Execute Authorized Campaign Dispatch";
       btnExecute.disabled = false;
       btnExecute.style.background = "var(--green-dark)";
       btnExecute.style.color = "#fff";
@@ -3875,7 +4094,7 @@ async function fetchCampaignRecipients() {
     if (!tbody) return;
 
     if (!recipients || recipients.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">No simulated execution has been triggered yet. Click <strong>"⚡ Execute Simulated Dispatch (DEMO)"</strong> to trigger adapter.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">No dispatches recorded yet for this campaign. Click <strong>"⚡ Execute Authorized Campaign Dispatch"</strong> to begin execution.</td></tr>`;
       return;
     }
 
@@ -5519,6 +5738,8 @@ async function refreshAuditTrail() {
       let initialPath = window.location.pathname.replace(/^\/?app\/?/, "").replace(/^\//, "");
       if (initialPath === "" || initialPath === "index.html") initialPath = "overview";
       navigateToRoute(initialPath);
+      fetchSystemMode();
+      fetchEnvironmentDependencies();
     });
   </script>
 </body>

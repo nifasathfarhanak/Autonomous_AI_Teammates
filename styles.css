@@ -1,60 +1,60 @@
 /* ==========================================================================
    Paytm AI ActionMate - Master Stylesheet
-   Designed for: Everyday Merchants (Layman-Friendly) & Hackathon Judges
-   Brand Identity: Authentic Paytm Navy (#002E6E), Cyan (#00BAF2) & Sarvam Indic Orange (#EA580C)
+   Commercial SaaS Merchant Intelligence & Autonomous Business Growth Platform
+   Design System: Paytm Fintech Theme (#00BAF2, #002970, #001B54, #F5F9FC)
    ========================================================================== */
 
 :root {
-  /* Paytm Core Brand Colors */
-  --paytm-navy: #002E6E;
-  --paytm-navy-dark: #001A40;
-  --paytm-cyan: #00BAF2;
-  --paytm-cyan-light: #E0F7FD;
+  /* Paytm Core Brand Colors - Commercial SaaS System */
+  --paytm-cyan: #00BAF2;          /* Primary Blue */
+  --paytm-navy: #002970;          /* Deep Blue */
+  --paytm-navy-dark: #001B54;     /* Navy */
+  --paytm-cyan-light: #EAF8FF;    /* Light Blue */
   --paytm-cyan-hover: #0099C7;
-  --paytm-blue: #1E6FE0;
-  --paytm-blue-soft: #EEF5FF;
+  --paytm-blue: #002970;
+  --paytm-blue-soft: #EAF8FF;
 
-  /* Sarvam AI Indic Accent */
+  /* Indic AI Brand Accents */
   --sarvam-orange: #EA580C;
   --sarvam-orange-light: #FFF7ED;
   --sarvam-orange-border: #FED7AA;
 
   /* Clean Neutrals */
-  --bg-page: #F4F7FC;
-  --bg-card: #FFFFFF;
-  --bg-subtle: #F8FAFD;
-  --border-light: #E2E8F0;
-  --border-subtle: #EDF2F7;
-  --text-main: #0B1B33;
+  --bg-page: #F5F9FC;             /* Main Background */
+  --bg-card: #FFFFFF;             /* Card Background */
+  --bg-subtle: #F0F6FA;
+  --border-light: #DCE8F1;        /* Border */
+  --border-subtle: #E6EFF5;
+  --text-main: #172B4D;           /* Main Text */
   --text-body: #334155;
-  --text-muted: #64748B;
+  --text-muted: #64748B;          /* Secondary Text */
   --text-light: #94A3B8;
 
   /* Status Colors */
-  --green: #10B981;
-  --green-bg: #ECFDF5;
-  --green-border: #A7F3D0;
-  --green-dark: #047857;
+  --green: #16A36A;               /* Success */
+  --green-bg: #E8F8F0;
+  --green-border: #A3E5C4;
+  --green-dark: #16A36A;
 
-  --amber: #F59E0B;
+  --amber: #F59E0B;               /* Warning */
   --amber-bg: #FFFBEB;
   --amber-border: #FDE68A;
   --amber-dark: #B45309;
 
-  --red: #EF4444;
-  --red-bg: #FEF2F2;
-  --red-border: #FECACA;
+  --red: #DC3545;                 /* Error */
+  --red-bg: #FEECEE;
+  --red-border: #F8B4BB;
 
   /* Typography */
   --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 46, 110, 0.05);
-  --shadow-md: 0 4px 16px rgba(0, 46, 110, 0.07);
-  --shadow-lg: 0 10px 30px rgba(0, 46, 110, 0.12);
-  --shadow-modal: 0 25px 50px -12px rgba(0, 26, 64, 0.25);
+  /* Subtle Professional Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 41, 112, 0.06), 0 1px 2px rgba(0, 41, 112, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 41, 112, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 41, 112, 0.10);
+  --shadow-modal: 0 20px 45px -10px rgba(0, 27, 84, 0.22);
 }
 
 * {
@@ -2758,4 +2758,154 @@ body {
 .backend-state-step.completed .state-dot {
   background: var(--green);
 }
+
+/* ==========================================================================
+   Phase 10: Production Polish, Accessibility & Responsive Standards
+   ========================================================================== */
+
+/* 1. Global Keyboard Focus Indicator for WCAG 2.1 AA Compliance */
+:focus-visible {
+  outline: 2px solid var(--paytm-cyan) !important;
+  outline-offset: 2px !important;
+}
+
+/* 2. Reduced-Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 3. Environment & Sandbox Pills */
+.env-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.env-mode-pill.demo {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.env-mode-pill.production {
+  background: #E8F8F0;
+  color: #16A36A;
+  border: 1px solid #A3E5C4;
+}
+
+.env-mode-pill:hover {
+  filter: brightness(0.97);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 4. Production Empty & Error States */
+.prod-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  background: #FFFFFF;
+  border: 1px dashed var(--border-light);
+  border-radius: 8px;
+}
+
+.prod-empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.prod-empty-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.prod-empty-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  max-width: 440px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* 5. Responsive Mobile & Tablet Layout Controls */
+.mobile-nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--paytm-navy);
+}
+
+@media (max-width: 992px) {
+  .mobile-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    top: 60px;
+    left: -280px;
+    width: 280px;
+    height: calc(100vh - 60px);
+    z-index: 1000;
+    transition: left 0.25s ease;
+    background: #FFFFFF;
+    box-shadow: var(--shadow-modal);
+  }
+
+  .app-sidebar.mobile-open {
+    left: 0;
+  }
+
+  .app-viewport {
+    width: 100% !important;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2-col, .grid-3-col, .grid-4-col, .kpi-grid-4, .kpi-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .view-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .store-badge, .soundbox-pill {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+
 

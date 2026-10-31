@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /app/
+Disallow: /api/
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /forgot-password
+
+Sitemap: https://actionmate.paytm.com/sitemap.xml

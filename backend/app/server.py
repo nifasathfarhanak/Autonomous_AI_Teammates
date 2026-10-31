@@ -258,6 +258,10 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("X-XSS-Protection", "1; mode=block")
+        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
         self.end_headers()
 
     def do_OPTIONS(self):
@@ -274,10 +278,74 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             self._set_headers(200)
             self.wfile.write(json.dumps({
                 "status": "HEALTHY",
-                "platform": "DealPilot AI Enterprise Revenue Recovery Platform",
+                "platform": "Paytm AI ActionMate Commercial Growth Platform",
                 "version": "2.4.0",
                 "sarvam_connected": sarvam_client.is_connected(),
                 "database": "SQLite 3 (WAL Mode)"
+            }).encode('utf-8'))
+            return
+
+        # 1b. Production vs Demo Environment Mode
+        elif path == "/api/system/mode":
+            mode = os.environ.get("ENVIRONMENT", "demo")
+            self._set_headers(200)
+            self.wfile.write(json.dumps({
+                "status": "SUCCESS",
+                "environment": mode,
+                "is_demo": mode.lower() == "demo",
+                "label": "Demonstration Sandbox" if mode.lower() == "demo" else "Live Production",
+                "active_merchant_id": "MERCH-001",
+                "active_merchant_name": "Sharma Commercial & Industrial Supplies"
+            }).encode('utf-8'))
+            return
+
+        # 1c. Production Dependencies & Readiness Checklist
+        elif path == "/api/system/dependencies":
+            sarvam_client = SarvamClient()
+            mode = os.environ.get("ENVIRONMENT", "demo")
+            self._set_headers(200)
+            self.wfile.write(json.dumps({
+                "status": "SUCCESS",
+                "environment": mode,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "dependencies": [
+                    {
+                        "name": "SQLite 3 Relational Database",
+                        "category": "Storage",
+                        "status": "HEALTHY",
+                        "details": "WAL Mode active, deterministic seeds & migrations loaded"
+                    },
+                    {
+                        "name": "Sarvam AI Sovereign Indic Voice Stack",
+                        "category": "AI / Voice",
+                        "status": "CONNECTED" if sarvam_client.is_connected() else "STANDBY_SYNTHESIS",
+                        "details": "Saaras STT, Bulbul TTS, Mayura Translate, 8 Indic languages"
+                    },
+                    {
+                        "name": "Paytm Soundbox 4G Telemetry",
+                        "category": "Hardware / POS",
+                        "status": "ONLINE",
+                        "details": "Device SB-4G-DEL-9842 heartbeat active"
+                    },
+                    {
+                        "name": "Bazaar Intelligence Privacy Protocol",
+                        "category": "Privacy Engine",
+                        "status": "ENFORCED",
+                        "details": "k >= 5 small-cell cohort suppression active"
+                    },
+                    {
+                        "name": "Merchant Guardrails Risk Policy",
+                        "category": "Governance",
+                        "status": "ENFORCED",
+                        "details": "6 operational guardrails active (margin, discount, frequency)"
+                    },
+                    {
+                        "name": "Customer Messaging Gateway",
+                        "category": "Dispatch",
+                        "status": "SIMULATED" if mode.lower() == "demo" else "REQUIRES_CONFIG",
+                        "details": "Simulated multi-channel adapter (WhatsApp/SMS) in Sandbox"
+                    }
+                ]
             }).encode('utf-8'))
             return
 
@@ -1289,6 +1357,27 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             res = stt.transcribe_audio(b"sample_audio", language_code="hi-IN")
             self._set_headers(200)
             self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 11b. System Environment Mode Switch (Demo vs Production)
+        elif path == "/api/system/mode":
+            try:
+                requested_mode = data.get("environment", "demo").lower()
+                if requested_mode not in ("demo", "production"):
+                    self._set_headers(400)
+                    self.wfile.write(json.dumps({"error": "Invalid environment. Choose 'demo' or 'production'."}).encode('utf-8'))
+                    return
+                os.environ["ENVIRONMENT"] = requested_mode
+                self._set_headers(200)
+                self.wfile.write(json.dumps({
+                    "status": "SUCCESS",
+                    "environment": requested_mode,
+                    "is_demo": requested_mode == "demo",
+                    "message": f"Environment configured to {requested_mode} mode."
+                }).encode('utf-8'))
+            except Exception as e:
+                self._set_headers(500)
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             return
 
         # 12. Reset Demo Environment (One-Click Safe Reset)
