@@ -1,39 +1,67 @@
-"""Saaras v4 Speech-to-Text Integration.
-Transcribes spoken Indian language customer voice replies and notes.
+"""Saaras v4 speech-to-text integration for merchant voice queries.
 """
 
 from typing import Dict, Any, Optional
 from .client import SarvamClient
 from .config import ENDPOINTS, MODEL_STT
+from .exceptions import SarvamError
 
 class SaarasSTT:
-    """Transcribes customer audio recordings into text."""
+    """Transcribes recorded merchant questions with the Sarvam Saaras API."""
 
     def __init__(self, client: Optional[SarvamClient] = None):
         self.client = client or SarvamClient()
 
-    def transcribe_audio(self, audio_bytes: bytes, language_code: str = "hi-IN") -> Dict[str, Any]:
-        """Transcribes incoming audio file or buffer."""
+    def transcribe_audio(
+        self,
+        audio_bytes: bytes,
+        language_code: str = "hi-IN",
+        content_type: str = "audio/webm"
+    ) -> Dict[str, Any]:
+        """Transcribes an audio recording and returns the recognized language."""
+        if not audio_bytes:
+            return {"error": "No audio was recorded.", "provider": "SARVAM_SAARAS_V4"}
+
         if not self.client.is_connected():
             return {
-                "transcript": "हाँ, हमें कोटेशन मिल गया है। क्या हम मंगलवार दोपहर को 15 मिनट की कॉल रख सकते हैं?",
+                "error": "SARVAM_API_KEY is not configured. Speech recognition is unavailable.",
                 "language_code": language_code,
-                "confidence": 0.94,
-                "provider": "SAARAS_STT_SIMULATION"
+                "provider": "SARVAM_SAARAS_UNAVAILABLE"
             }
 
-        # Real Sarvam multipart file upload if connected
+        filename = "merchant-question.webm"
+        if content_type == "audio/mp4":
+            filename = "merchant-question.mp4"
+        elif content_type == "audio/wav":
+            filename = "merchant-question.wav"
+        elif content_type == "audio/ogg":
+            filename = "merchant-question.ogg"
+
         try:
+            result = self.client.post_multipart(
+                ENDPOINTS["speech_to_text"],
+                {"model": MODEL_STT, "language_code": language_code},
+                "file",
+                filename,
+                audio_bytes,
+                content_type
+            )
+            transcript = result.get("transcript")
+            if not isinstance(transcript, str) or not transcript.strip():
+                return {
+                    "error": "Sarvam could not recognize speech in this recording. Please try again.",
+                    "language_code": result.get("language_code") or language_code,
+                    "provider": "SARVAM_SAARAS_V4"
+                }
             return {
-                "transcript": "Transcription processed successfully.",
-                "language_code": language_code,
-                "confidence": 0.96,
-                "provider": "SARVAM_SAARAS_V4_LIVE"
+                "transcript": transcript.strip(),
+                "language_code": result.get("language_code") or language_code,
+                "request_id": result.get("request_id"),
+                "provider": "SARVAM_SAARAS_V4"
             }
-        except Exception as e:
+        except SarvamError as e:
             return {
                 "error": str(e),
-                "transcript": "Error during live speech-to-text processing.",
-                "provider": "SAARAS_STT_ERROR"
+                "language_code": language_code,
+                "provider": "SARVAM_SAARAS_ERROR"
             }
-

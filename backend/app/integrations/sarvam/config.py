@@ -11,7 +11,7 @@ SARVAM_BASE_URL = os.environ.get("SARVAM_BASE_URL", "https://api.sarvam.ai")
 # Official model identifiers
 MODEL_CHAT_105B = "sarvam-105b"
 MODEL_TRANSLATE = "mayura:v1"
-MODEL_STT = "saaras:v2"
+MODEL_STT = "saaras:v4"
 MODEL_TTS = "bulbul:v4-flash"
 
 # Endpoint paths
@@ -39,4 +39,3 @@ SUPPORTED_LANGUAGES: Dict[str, Dict[str, str]] = {
 
 DEFAULT_TIMEOUT = 10.0  # seconds
 MAX_RETRIES = 2
-

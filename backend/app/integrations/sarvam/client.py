@@ -5,6 +5,7 @@ and transparent fallback when credentials are not configured.
 
 import json
 import time
+import uuid
 import urllib.request
 import urllib.error
 from typing import Dict, Any, Optional
@@ -122,3 +123,62 @@ class SarvamClient:
             raise last_error
         raise SarvamError("Request to Sarvam AI failed after retries.")
 
+    def post_multipart(
+        self,
+        url: str,
+        fields: Dict[str, str],
+        file_field: str,
+        filename: str,
+        file_bytes: bytes,
+        content_type: str,
+        timeout: float = 30.0
+    ) -> Dict[str, Any]:
+        """Uploads an audio file and form fields to a Sarvam multipart endpoint."""
+        if not self.has_active_key:
+            raise SarvamAuthError("SARVAM_API_KEY is not configured.", status_code=401)
+        if not file_bytes:
+            raise SarvamValidationError("Audio file is empty.", status_code=400)
+
+        boundary = f"----ActionMate{uuid.uuid4().hex}"
+        body = bytearray()
+        for name, value in fields.items():
+            body.extend(f"--{boundary}\r\n".encode("ascii"))
+            body.extend(f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode("ascii"))
+            body.extend(str(value).encode("utf-8"))
+            body.extend(b"\r\n")
+
+        body.extend(f"--{boundary}\r\n".encode("ascii"))
+        body.extend(
+            f'Content-Disposition: form-data; name="{file_field}"; filename="{filename}"\r\n'.encode("ascii")
+        )
+        body.extend(f"Content-Type: {content_type}\r\n\r\n".encode("ascii"))
+        body.extend(file_bytes)
+        body.extend(f"\r\n--{boundary}--\r\n".encode("ascii"))
+
+        request = urllib.request.Request(
+            url,
+            data=bytes(body),
+            headers={
+                "Content-Type": f"multipart/form-data; boundary={boundary}",
+                "api-subscription-key": self.api_key.strip(),
+                "User-Agent": "DealPilot-AI-Enterprise/2.4"
+            },
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                result = json.loads(response.read().decode("utf-8"))
+                if not isinstance(result, dict):
+                    raise SarvamError("Sarvam AI returned an invalid response.")
+                return result
+        except urllib.error.HTTPError as error:
+            details = error.read().decode("utf-8", errors="ignore")
+            if error.code in (401, 403):
+                raise SarvamAuthError("Sarvam AI authentication failed.", status_code=error.code) from error
+            if error.code == 429:
+                raise SarvamRateLimitError("Sarvam AI rate limit exceeded.", status_code=429) from error
+            if error.code == 400:
+                raise SarvamValidationError(f"Sarvam AI rejected the audio request: {details}", status_code=400) from error
+            raise SarvamError(f"Sarvam AI audio request failed with HTTP {error.code}: {details}", status_code=error.code) from error
+        except (urllib.error.URLError, TimeoutError) as error:
+            raise SarvamConnectionError(f"Failed to reach Sarvam AI: {error}") from error

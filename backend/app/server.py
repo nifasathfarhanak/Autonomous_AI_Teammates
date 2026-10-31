@@ -1139,6 +1139,12 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
         # Phase 9: Voice Copilot & Bazaar Intelligence Endpoints (do_GET)
         # =====================================================================
 
+        # 53b. Phase 9: Sarvam Voice Provider Readiness
+        elif path == "/api/voice/status":
+            self._set_headers(200)
+            self.wfile.write(json.dumps(voice_copilot_service.get_provider_status()).encode('utf-8'))
+            return
+
         # 54. Phase 9: Voice Copilot Session
         elif path == "/api/voice/session":
             mid = query.get("merchant_id", ["MERCH-002"])[0]
@@ -1990,8 +1996,23 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
         elif path == "/api/voice/transcribe":
             lang = data.get("language_code", "hi-IN")
             audio_b64 = data.get("audio_base64", "")
-            raw_bytes = base64.b64decode(audio_b64.split(",")[-1]) if audio_b64 else b""
-            res = voice_copilot_service.transcribe_audio_payload(raw_bytes, lang)
+            content_type = data.get("content_type", "audio/webm")
+            supported_types = {"audio/webm", "audio/mp4", "audio/wav", "audio/ogg"}
+            if content_type not in supported_types:
+                self._set_headers(400)
+                self.wfile.write(json.dumps({"error": "Unsupported audio format."}).encode('utf-8'))
+                return
+            try:
+                raw_bytes = base64.b64decode(audio_b64.split(",")[-1], validate=True) if audio_b64 else b""
+            except (ValueError, TypeError):
+                self._set_headers(400)
+                self.wfile.write(json.dumps({"error": "Audio payload is not valid base64."}).encode('utf-8'))
+                return
+            if len(raw_bytes) > 10 * 1024 * 1024:
+                self._set_headers(413)
+                self.wfile.write(json.dumps({"error": "Recording is too large. Please record a shorter question."}).encode('utf-8'))
+                return
+            res = voice_copilot_service.transcribe_audio_payload(raw_bytes, lang, content_type)
             self._set_headers(200)
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return

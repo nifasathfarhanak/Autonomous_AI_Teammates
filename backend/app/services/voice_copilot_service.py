@@ -8,9 +8,6 @@ Integrates with Sarvam AI stack (Saaras STT, Bulbul TTS, Mayura Translate, and S
 import json
 import uuid
 import time
-import math
-import struct
-import base64
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 
@@ -25,30 +22,6 @@ from ..services.guardrails_service import GuardrailsService
 from ..services.decision_twin_service import DecisionTwinService
 from ..services.incremental_outcome_service import IncrementalOutcomeService
 from ..services.sales_intelligence_service import detect_sales_drop, calculate_sales_summary
-
-def _generate_synthetic_tone_wav_base64(duration_sec: float = 1.6, freq: float = 520.0, sample_rate: int = 8000) -> str:
-    """Generates a soft, pleasant, playable PCM WAV tone in base64 data URI format.
-    Uses 100% Python standard library (struct, math, base64).
-    Enables HTML5 Audio and Web Audio API visualizer playback without external network dependencies.
-    """
-    num_samples = int(duration_sec * sample_rate)
-    raw_data = bytearray()
-    for i in range(num_samples):
-        # Bell-curve envelope for a soft acoustic chime
-        envelope = math.sin(math.pi * i / num_samples) ** 1.5
-        sample = int(32767.0 * 0.35 * envelope * math.sin(2.0 * math.pi * freq * (i / sample_rate)))
-        raw_data.extend(struct.pack('<h', max(-32768, min(32767, sample))))
-
-    data_size = len(raw_data)
-    # Standard 44-byte WAV header
-    header = struct.pack(
-        '<4sI4s4sIHHIIHH4sI',
-        b'RIFF', data_size + 36, b'WAVE',
-        b'fmt ', 16, 1, 1, sample_rate, sample_rate * 2, 2, 16,
-        b'data', data_size
-    )
-    wav_bytes = header + raw_data
-    return "data:audio/wav;base64," + base64.b64encode(wav_bytes).decode("ascii")
 
 class VoiceCopilotService:
     """Multilingual Conversational Voice Copilot for Indian Merchants."""
@@ -93,9 +66,29 @@ class VoiceCopilotService:
             "created_at": now_utc
         }
 
-    def transcribe_audio_payload(self, audio_bytes: bytes, language_code: str = "hi-IN") -> Dict[str, Any]:
-        """Transcribes incoming audio bytes using Saaras STT or realistic Indic simulation."""
-        return self.stt.transcribe_audio(audio_bytes, language_code)
+    def get_provider_status(self) -> Dict[str, Any]:
+        """Reports configured voice providers without exposing credential material."""
+        configured = self.sarvam_client.is_connected()
+        return {
+            "provider": "Sarvam AI",
+            "api_key_configured": configured,
+            "speech_recognition": "Saaras v4" if configured else "Unavailable",
+            "spoken_replies": "Bulbul v4 Flash" if configured else "Unavailable",
+            "message": (
+                "Sarvam speech recognition and spoken replies are configured."
+                if configured else
+                "Set SARVAM_API_KEY on the server to enable speech recognition and spoken replies."
+            )
+        }
+
+    def transcribe_audio_payload(
+        self,
+        audio_bytes: bytes,
+        language_code: str = "hi-IN",
+        content_type: str = "audio/webm"
+    ) -> Dict[str, Any]:
+        """Transcribes incoming audio using Sarvam Saaras."""
+        return self.stt.transcribe_audio(audio_bytes, language_code, content_type)
 
     def process_query(
         self,
@@ -122,7 +115,7 @@ class VoiceCopilotService:
         structured_payload = intent_result.get("payload", {})
         suggested_actions = intent_result.get("actions", [])
 
-        # Generate Speech Audio (via Bulbul TTS or base64 synthetic chime)
+        # Generate speech from the grounded business response using Bulbul TTS.
         speech_result = self.synthesize_speech(response_text, language_code)
         audio_base64 = speech_result.get("audio_base64")
         latency_ms = int((time.time() - start_time) * 1000)
@@ -159,6 +152,7 @@ class VoiceCopilotService:
             "language_code": language_code,
             "response_text": response_text,
             "audio_base64": audio_base64,
+            "speech_error": speech_result.get("error"),
             "structured_payload": structured_payload,
             "suggested_actions": suggested_actions,
             "latency_ms": latency_ms,
@@ -167,25 +161,23 @@ class VoiceCopilotService:
         }
 
     def synthesize_speech(self, text: str, language_code: str = "hi-IN", speaker: str = "meera") -> Dict[str, Any]:
-        """Synthesizes natural speech using Sarvam Bulbul TTS or local base64 WAV chime."""
-        if self.sarvam_client.is_connected():
-            try:
-                res = self.tts.generate_speech(text, language_code)
-                if res.get("audio_base64"):
-                    return res
-            except Exception:
-                pass
+        """Synthesizes natural speech with Sarvam Bulbul, or reports why it is unavailable."""
+        if not self.sarvam_client.is_connected():
+            return {
+                "error": "SARVAM_API_KEY is not configured. Spoken replies are unavailable.",
+                "speaker": speaker,
+                "language": language_code,
+                "provider": "SARVAM_BULBUL_UNAVAILABLE"
+            }
 
-        # High-fidelity playable fallback tone with audio metadata
-        audio_b64 = _generate_synthetic_tone_wav_base64(duration_sec=1.5, freq=480.0)
+        result = self.tts.generate_speech(text, language_code, speaker)
+        if result.get("audio_base64"):
+            return result
         return {
-            "audio_base64": audio_b64,
-            "audio_url": None,
-            "duration_seconds": 1.5,
+            "error": result.get("error") or "Sarvam Bulbul did not return speech audio.",
             "speaker": speaker,
             "language": language_code,
-            "provider": "BULBUL_TTS_STANDBY_AUDIO",
-            "message": "Playable Indic speech audio synthesized."
+            "provider": result.get("provider", "SARVAM_BULBUL_ERROR")
         }
 
     def get_interaction_history(self, merchant_id: str, limit: int = 20) -> List[Dict[str, Any]]:
