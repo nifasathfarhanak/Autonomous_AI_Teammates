@@ -161,3 +161,4 @@ class InventoryIntelligenceService:
             "days_on_hand": sku["days_on_hand"],
             "stock_units": sku["current_stock_units"]
         }
+

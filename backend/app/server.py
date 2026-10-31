@@ -6,6 +6,7 @@ reply monitoring, verified revenue attribution, and serves the enterprise SaaS U
 
 import json
 import os
+import base64
 import mimetypes
 from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
@@ -53,7 +54,11 @@ from .services.decision_twin_service import DecisionTwinService
 from .services.incremental_outcome_service import IncrementalOutcomeService
 from .services.opportunity_discovery_service import OpportunityDiscoveryService
 from .services.business_value_service import BusinessValueService
+from .services.voice_copilot_service import VoiceCopilotService
+from .services.bazaar_intelligence_service import BazaarIntelligenceService
 from .integrations.sarvam import SarvamClient, SarvamTranslate, BulbulTTS, SaarasSTT, SUPPORTED_LANGUAGES
+
+voice_copilot_service = VoiceCopilotService()
 from .orchestrator import (
     orchestrator, registry, get_task_state_history, transition_task_state, StateTransitionError,
     STATE_READY_FOR_APPROVAL, STATE_APPROVED, STATE_EXECUTING, STATE_VERIFYING, STATE_COMPLETED
@@ -1062,6 +1067,52 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return
 
+        # =====================================================================
+        # Phase 9: Voice Copilot & Bazaar Intelligence Endpoints (do_GET)
+        # =====================================================================
+
+        # 54. Phase 9: Voice Copilot Session
+        elif path == "/api/voice/session":
+            mid = query.get("merchant_id", ["MERCH-002"])[0]
+            lang = query.get("language_code", ["hi-IN"])[0]
+            res = voice_copilot_service.create_or_get_session(mid, lang)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 55. Phase 9: Voice Interaction History
+        elif path == "/api/voice/history":
+            mid = query.get("merchant_id", ["MERCH-002"])[0]
+            limit = int(query.get("limit", [20])[0])
+            res = voice_copilot_service.get_interaction_history(mid, limit)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 56. Phase 9: Bazaar Local Demand Pulse
+        elif path == "/api/bazaar/pulse":
+            nid = query.get("neighbourhood_id", ["NEIGHBOURHOOD-JP-01"])[0]
+            res = BazaarIntelligenceService.get_local_demand_pulse(nid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 57. Phase 9: Bazaar Participating Merchant Network & Cohort Privacy Analysis
+        elif path == "/api/bazaar/network":
+            nid = query.get("neighbourhood_id", ["NEIGHBOURHOOD-JP-01"])[0]
+            res = BazaarIntelligenceService.get_participating_network(nid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 58. Phase 9: Bazaar Contextual Merchant Opportunities
+        elif path == "/api/bazaar/opportunities":
+            mid = query.get("merchant_id", ["MERCH-002"])[0]
+            res = BazaarIntelligenceService.get_contextual_opportunities(mid)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
         # Fallback to SPA and Static Asset Serving
         else:
             self._serve_static(path)
@@ -1309,6 +1360,13 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             ]
             for rcode, rval in default_rules:
                 cur.execute("UPDATE merchant_guardrails SET parameter_value = ?, is_active = 1 WHERE rule_code = ?", (rval, rcode))
+
+            # Reset Phase 9 bazaar opportunities and test campaigns
+            cur.execute("UPDATE bazaar_opportunity_matches SET status = 'AVAILABLE'")
+            cur.execute("DELETE FROM campaign_drafts WHERE campaign_id LIKE 'CAMP-BAZAAR-%'")
+            cur.execute("DELETE FROM campaign_recipient_statuses WHERE campaign_id LIKE 'CAMP-BAZAAR-%'")
+            cur.execute("DELETE FROM verifications WHERE campaign_id LIKE 'CAMP-BAZAAR-%'")
+            cur.execute("DELETE FROM outcome_experiments WHERE campaign_id LIKE 'CAMP-BAZAAR-%'")
 
             conn.commit()
             conn.close()
@@ -1832,6 +1890,70 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
                 audience_size=aud
             )
             self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # =====================================================================
+        # Phase 9: Voice Copilot & Bazaar Intelligence Endpoints (do_POST)
+        # =====================================================================
+
+        # 40. Phase 9: Voice Audio Transcription (Saaras STT)
+        elif path == "/api/voice/transcribe":
+            lang = data.get("language_code", "hi-IN")
+            audio_b64 = data.get("audio_base64", "")
+            raw_bytes = base64.b64decode(audio_b64.split(",")[-1]) if audio_b64 else b""
+            res = voice_copilot_service.transcribe_audio_payload(raw_bytes, lang)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 41. Phase 9: Voice Copilot Conversational Chat (Speech & Text Query)
+        elif path == "/api/voice/chat":
+            mid = data.get("merchant_id", "MERCH-002")
+            transcript = data.get("transcript", data.get("query", ""))
+            lang = data.get("language_code", "hi-IN")
+            mode = data.get("input_mode", "VOICE")
+            sess_id = data.get("session_id", None)
+            res = voice_copilot_service.process_query(
+                merchant_id=mid,
+                transcript=transcript,
+                language_code=lang,
+                input_mode=mode,
+                session_id=sess_id
+            )
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 42. Phase 9: Voice Speech Synthesis (Bulbul TTS)
+        elif path == "/api/voice/synthesize":
+            text = data.get("text", "")
+            lang = data.get("language_code", "hi-IN")
+            speaker = data.get("speaker", "meera")
+            res = voice_copilot_service.synthesize_speech(text, lang, speaker)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 43. Phase 9: Bazaar Opportunity Simulation (Decision Twin)
+        elif path == "/api/bazaar/simulate":
+            mid = data.get("merchant_id", "MERCH-002")
+            match_id = data.get("match_id", "MATCH-HFS-001")
+            strategy_key = data.get("strategy_key", "BALANCED")
+            res = BazaarIntelligenceService.simulate_bazaar_opportunity(mid, match_id, strategy_key)
+            self._set_headers(200)
+            self.wfile.write(json.dumps(res).encode('utf-8'))
+            return
+
+        # 44. Phase 9: Bazaar Opportunity Approval & Controlled Execution
+        elif path == "/api/bazaar/execute":
+            mid = data.get("merchant_id", "MERCH-002")
+            match_id = data.get("match_id", "MATCH-HFS-001")
+            strategy_key = data.get("strategy_key", "BALANCED")
+            actor = data.get("actor", "Zubair Hussain (Store Owner)")
+            res = BazaarIntelligenceService.execute_bazaar_campaign(mid, match_id, strategy_key, actor)
+            status_code = 200 if res.get("success") else 400
+            self._set_headers(status_code)
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return
 

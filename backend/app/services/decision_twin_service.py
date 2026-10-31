@@ -285,3 +285,4 @@ class DecisionTwinService:
             ),
             "epistemic_disclaimer": "SIMULATION ESTIMATES: Projected revenues and gross margins are calculated deterministically from merchant unit costs, target audience size, and historical price elasticity. True conversion depends on customer execution timing."
         }
+

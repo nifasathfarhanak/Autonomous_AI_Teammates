@@ -147,7 +147,7 @@ class KPIService:
         # KPI 4 — Approval Compliance
         # -------------------------------------------------------------
         # Denominator: Executions of actions requiring approval (Category B)
-        cur.execute("SELECT COUNT(*) FROM campaign_drafts WHERE status IN ('COMPLETED', 'EXECUTED')")
+        cur.execute("SELECT COUNT(*) FROM campaign_drafts WHERE status IN ('COMPLETED', 'EXECUTED') AND merchant_id = ?", (merchant_id,))
         executed_campaigns_count = cur.fetchone()[0] or 0
 
         cur.execute("""
@@ -155,10 +155,11 @@ class KPIService:
         JOIN campaign_drafts c ON a.campaign_id = c.campaign_id
         WHERE a.decision = 'APPROVED' AND a.approval_status IN ('VALID', 'SUPERSEDED')
         AND c.status IN ('COMPLETED', 'EXECUTED')
-        """)
+        AND c.merchant_id = ?
+        """, (merchant_id,))
         valid_approved_executions = cur.fetchone()[0] or 0
 
-        cur.execute("SELECT COUNT(*) FROM audit_trail WHERE action_type = 'ACTION_BLOCKED_UNAPPROVED'")
+        cur.execute("SELECT COUNT(*) FROM audit_trail WHERE action_type = 'ACTION_BLOCKED_UNAPPROVED' AND merchant_id = ?", (merchant_id,))
         blocked_violations = cur.fetchone()[0] or 0
 
         if executed_campaigns_count == 0 and valid_approved_executions == 0:

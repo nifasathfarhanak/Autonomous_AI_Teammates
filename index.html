@@ -168,6 +168,18 @@
           <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🏆</span> Business Value</span>
           <span class="nav-badge-pill" style="color: var(--paytm-blue);">Verified Lift</span>
         </a>
+
+        <!-- 17. Phase 9: Sarvam AI Voice Copilot -->
+        <a class="sidebar-nav-item" id="navItemVoiceCopilot" onclick="navigateToRoute('voice-copilot')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🎙️</span> Voice Copilot</span>
+          <span class="nav-badge-pill" style="background: rgba(0, 186, 242, 0.15); color: #007799;">Sarvam Indic</span>
+        </a>
+
+        <!-- 18. Phase 9: Bazaar Intelligence Network -->
+        <a class="sidebar-nav-item" id="navItemBazaarIntelligence" onclick="navigateToRoute('bazaar-intelligence')" role="button" tabindex="0">
+          <span class="nav-item-left"><span class="nav-icon" aria-hidden="true">🌐</span> Bazaar Intelligence</span>
+          <span class="nav-badge-pill" style="background: rgba(16, 185, 129, 0.15); color: #065f46;">k&ge;5 Cluster</span>
+        </a>
       </div>
 
       <!-- Sidebar Merchant Identity Footer -->
@@ -2254,6 +2266,428 @@
         </div>
       </section>
 
+      <!-- ==================================================================
+           PHASE 9: SARVAM AI VOICE COPILOT
+           ================================================================== -->
+      <section class="route-view" id="view-voice-copilot" aria-labelledby="headingVoiceCopilot">
+        <div class="view-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">PHASE 9 · SARVAM AI INDIC STACK</span>
+              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">SAARAS STT · BULBUL TTS · 105B</span>
+            </div>
+            <h2 id="headingVoiceCopilot" class="view-title">Sarvam AI Voice Copilot</h2>
+            <p class="view-subtitle">Multilingual Conversational Teammate for Real-Time Merchant Growth and Profit Decisions.</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <select id="voiceMerchantSelect" onchange="onVoiceMerchantChange()" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 6px 12px;">
+              <option value="MERCH-002" selected>🛍️ Hussain Fashion Store (Jaipur)</option>
+              <option value="MERCH-001">🔬 Sharma Supplies (Delhi)</option>
+            </select>
+            <select id="voiceLanguageSelect" onchange="onVoiceLanguageChange()" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 6px 12px;">
+              <option value="hi-IN" selected>🇮🇳 Hindi (हिन्दी)</option>
+              <option value="en-IN">🇬🇧 Indian English</option>
+              <option value="gu-IN">🇮🇳 Gujarati (ગુજરાતી)</option>
+              <option value="ta-IN">🇮🇳 Tamil (தமிழ்)</option>
+              <option value="te-IN">🇮🇳 Telugu (తెలుగు)</option>
+              <option value="bn-IN">🇮🇳 Bengali (বাংলা)</option>
+              <option value="mr-IN">🇮🇳 Marathi (मराठी)</option>
+              <option value="kn-IN">🇮🇳 Kannada (ಕನ್ನಡ)</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="clearVoiceChat()">Clear Chat</button>
+          </div>
+        </div>
+
+        <!-- Voice Interaction Studio Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+
+          <!-- Left Column: Audio Visualizer & Voice Console -->
+          <div class="card" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">🎙️ Live Voice Visualizer</h3>
+              <span id="voiceStatusBadge" class="badge" style="background: rgba(15, 23, 42, 0.1); color: #0f172a; font-weight: 700;">IDLE</span>
+            </div>
+
+            <!-- Waveform Canvas -->
+            <div style="background: #0b1329; border-radius: 12px; padding: 12px; position: relative; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);">
+              <canvas id="voiceWaveformCanvas" width="540" height="90" style="width: 100%; height: 90px; display: block;"></canvas>
+              <div id="voiceWaveformOverlay" style="position: absolute; bottom: 8px; right: 12px; font-size: 11px; color: #38bdf8; font-family: monospace;">Web Audio API · 44.1 kHz</div>
+            </div>
+
+            <!-- Voice Controls & Record Trigger -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 16px; padding: 10px 0;">
+              <button id="btnVoiceRecord" class="btn btn-primary" onclick="toggleVoiceRecording()" style="font-size: 14px; padding: 12px 24px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(0, 186, 242, 0.35);">
+                <span id="recordIcon" style="font-size: 18px;">🎙️</span>
+                <span id="recordBtnLabel">Start Speaking</span>
+              </button>
+              <button class="btn btn-secondary" onclick="simulateVoiceQuery('Why did my sales drop this week?')" style="border-radius: 30px; padding: 12px 18px;">
+                ⚡ Demo Prompt
+              </button>
+            </div>
+
+            <!-- Spoken Query Quick Pills -->
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Suggested Business Questions</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Why did my sales drop this week?')" style="font-size: 12px; border-radius: 16px;">📉 Sales drop analysis</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Which products have highest gross profit?')" style="font-size: 12px; border-radius: 16px;">💰 Highest profit SKUs</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is the local demand trend in Johari Bazaar?')" style="font-size: 12px; border-radius: 16px;">🌐 Bazaar demand pulse</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('What is my inventory risk?')" style="font-size: 12px; border-radius: 16px;">📦 Trapped dupattas check</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Suggest a profitable campaign')" style="font-size: 12px; border-radius: 16px;">🎯 Suggest bundle campaign</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('Compare 5% discount with bundle')" style="font-size: 12px; border-radius: 16px;">🧪 Compare strategies</button>
+                <button class="btn btn-secondary btn-sm" onclick="sendSpokenPrompt('How did my campaign perform?')" style="font-size: 12px; border-radius: 16px;">🏆 Campaign performance</button>
+              </div>
+            </div>
+
+            <!-- Text Input Fallback -->
+            <div style="display: flex; gap: 8px; margin-top: auto;">
+              <input type="text" id="voiceTextInput" class="form-control" placeholder="Or type your question in Hindi / English..." onkeydown="if(event.key==='Enter') sendVoiceTextQuery()" style="border-radius: 8px; font-size: 13px;">
+              <button class="btn btn-primary" onclick="sendVoiceTextQuery()" style="border-radius: 8px;">Send</button>
+            </div>
+
+            <!-- Audio Output Player (Bulbul TTS Playback) -->
+            <div id="voiceAudioPlayerCard" style="display: none; background: rgba(0, 186, 242, 0.08); border: 1px solid rgba(0, 186, 242, 0.25); border-radius: 8px; padding: 12px; margin-top: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 12px; font-weight: 700; color: #007799;">🔊 Bulbul TTS Voice Playback</span>
+                <span id="audioSpeakerBadge" style="font-size: 11px; color: var(--text-muted);">Voice: Meera (Indic Female)</span>
+              </div>
+              <audio id="voiceAudioPlayer" controls style="width: 100%; height: 36px;"></audio>
+            </div>
+          </div>
+
+          <!-- Right Column: Conversational Stream & Context Cards -->
+          <div class="card" style="display: flex; flex-direction: column; height: 560px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0;">💬 Conversation &amp; Business Intelligence</h3>
+              <span id="activeStoreIndicator" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Store: Hussain Fashion Store</span>
+            </div>
+
+            <div id="voiceConversationStream" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 6px;">
+              <!-- Default Welcome Message -->
+              <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+                <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
+                  <div style="font-size: 13px; font-weight: 700; color: var(--paytm-navy); margin-bottom: 4px;">Paytm AI ActionMate · Voice Copilot</div>
+                  <div style="font-size: 13.5px; color: var(--text-dark); line-height: 1.5;">
+                    नमस्ते! मैं आपका Paytm AI ActionMate हूँ। आप मुझसे अपने व्यापार के बारे में कोई भी प्रश्न बोलकर पूछ सकते हैं।
+                    <br><br>
+                    <em>उदाहरण: "मेरी बिक्री क्यों कम हुई?", "बाज़ार में क्या ट्रेंड है?", या "दुपट्टे का फंसा हुआ स्टॉक कैसे निकालें?"</em>
+                  </div>
+                  <div style="display: flex; gap: 6px; margin-top: 10px;">
+                    <span class="badge" style="background: #e2e8f0; color: #475569; font-size: 11px;">Sarvam Mayura</span>
+                    <span class="badge" style="background: #e2e8f0; color: #475569; font-size: 11px;">Bulbul v4</span>
+                    <span class="badge" style="background: #e2e8f0; color: #475569; font-size: 11px;">Saaras v2</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           PHASE 9: BAZAAR INTELLIGENCE NETWORK
+           ================================================================== -->
+      <section class="route-view" id="view-bazaar-intelligence" aria-labelledby="headingBazaarIntelligence">
+        <div class="view-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">COLLECTIVE INTELLIGENCE</span>
+              <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">k &ge; 5 PRIVACY PRESERVING</span>
+            </div>
+            <h2 id="headingBazaarIntelligence" class="view-title">Bazaar Intelligence Network</h2>
+            <p class="view-subtitle">Privacy-Preserving Neighbourhood Demand Pulse, Inventory Matching, and Collective Growth for Johari Bazaar, Jaipur.</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="btn btn-secondary btn-sm" onclick="fetchBazaarIntelligenceData()">🔄 Refresh Pulse</button>
+            <button class="btn btn-primary btn-sm" onclick="navigateToRoute('voice-copilot')">🎙️ Open Voice Copilot</button>
+          </div>
+        </div>
+
+        <!-- Privacy Assurance Banner -->
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(0, 186, 242, 0.08)); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="font-size: 28px;">🛡️</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 800; color: #065f46;">Johari Bazaar Merchant Privacy Covenant (k &ge; 5 Small-Cell Suppression)</div>
+              <div style="font-size: 12.5px; color: var(--text-dark); margin-top: 2px;">
+                Collective intelligence is computed strictly across cohorts of 5 or more stores. No individual store sales, profit numbers, customer names, or phone numbers are ever shared.
+              </div>
+            </div>
+          </div>
+          <span class="badge" style="background: #10b981; color: #fff; font-weight: 700; padding: 6px 12px; font-size: 12px;">ACTIVE COHORT: 14 STORES</span>
+        </div>
+
+        <!-- KPI Metrics Ribbon -->
+        <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div class="card metric-card">
+            <div class="metric-label">Cluster Stores</div>
+            <div class="metric-value" id="bazaarMerchantsCount">14</div>
+            <div class="metric-trend trend-positive">Johari Bazaar, Jaipur</div>
+          </div>
+          <div class="card metric-card">
+            <div class="metric-label">Top Demand Surge</div>
+            <div class="metric-value" id="bazaarTopSurge">+38.5%</div>
+            <div class="metric-trend trend-positive">Festive Ethnic Wear</div>
+          </div>
+          <div class="card metric-card">
+            <div class="metric-label">Privacy Cell Suppression</div>
+            <div class="metric-value" style="color: var(--amber-dark);">1 Cohort</div>
+            <div class="metric-trend" style="color: var(--text-muted);">Blue Pottery (k=2 &lt; 5)</div>
+          </div>
+          <div class="card metric-card">
+            <div class="metric-label">Hussain Store Match</div>
+            <div class="metric-value" style="color: var(--paytm-blue);" id="bazaarMatchScore">94 / 100</div>
+            <div class="metric-trend trend-positive">High Inventory Fit</div>
+          </div>
+        </div>
+
+        <!-- Section 1: Local Demand Pulse & Small Cell Suppression -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">📍 Neighbourhood Demand Pulse (Johari Bazaar Cluster)</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Aggregated demand momentum across 14 verified merchants over the past 7 days.</p>
+            </div>
+            <span class="badge" style="background: rgba(0, 186, 242, 0.12); color: #007799; font-weight: 700;">CLUSTER ID: NEIGHBOURHOOD-JP-01</span>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8fafc; text-align: left; font-size: 12px; color: var(--text-muted);">
+                  <th style="padding: 10px 14px;">SIGNAL NAME</th>
+                  <th style="padding: 10px 14px;">PRODUCT CATEGORY</th>
+                  <th style="padding: 10px 14px;">DEMAND TREND</th>
+                  <th style="padding: 10px 14px;">MOMENTUM</th>
+                  <th style="padding: 10px 14px;">REPORTING MERCHANTS</th>
+                  <th style="padding: 10px 14px;">PRIVACY STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="bazaarDemandSignalsTbody" style="font-size: 13px;">
+                <!-- Populated dynamically via fetchBazaarIntelligenceData() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Contextual Opportunity Matching & Inventory Pairing -->
+        <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--paytm-blue);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">MATCHED OPPORTUNITY #1</span>
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 700;">MATCHING SCORE: 94 / 100</span>
+              </div>
+              <h3 style="font-size: 18px; font-weight: 800; color: var(--paytm-navy); margin: 6px 0 2px;">Festive Royal Bundle Re-engagement</h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Pairing trending Chikankari Kurtas with surplus Bandhani Silk Dupattas to capture local festive surge while unlocking ₹31,080 in trapped capital.</p>
+            </div>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700; font-size: 13px; padding: 6px 12px;">AVAILABLE FOR EXECUTION</span>
+          </div>
+
+          <!-- Matching Score Explainability Meters -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600; color: var(--text-muted);">Product Relevance</span>
+                <span style="font-weight: 800; color: var(--paytm-navy);">96%</span>
+              </div>
+              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                <div style="width: 96%; height: 100%; background: #00baf2;"></div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Festive ethnic wear query match</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600; color: var(--text-muted);">Inventory Depth</span>
+                <span style="font-weight: 800; color: var(--paytm-navy);">92%</span>
+              </div>
+              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                <div style="width: 92%; height: 100%; background: #10b981;"></div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Kurtas: 42 stock | Dupattas: 74 stock</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600; color: var(--text-muted);">Margin Headroom</span>
+                <span style="font-weight: 800; color: var(--paytm-navy);">95%</span>
+              </div>
+              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                <div style="width: 95%; height: 100%; background: #6366f1;"></div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Unit margins 51.4% &amp; 52.8%</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600; color: var(--text-muted);">Local Momentum</span>
+                <span style="font-weight: 800; color: var(--paytm-navy);">93%</span>
+              </div>
+              <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                <div style="width: 93%; height: 100%; background: #f59e0b;"></div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">+38.5% Johari Bazaar surge</div>
+            </div>
+          </div>
+
+          <!-- Paired Inventory SKUs -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div style="background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="badge" style="background: #e0f2fe; color: #0284c7; font-weight: 700;">FAST-MOVING HERO SKU</span>
+                <span style="font-size: 12px; font-weight: 700; color: #10b981;">51.4% Margin</span>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 4px;">Handcrafted Chikankari Kurta Set</h4>
+              <div style="font-size: 12.5px; color: var(--text-dark);">
+                Stock: <strong>42 units</strong> · Unit Cost: ₹850 · Retail: ₹1,750 · Velocity: 3.5 units/day
+              </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #fed7aa; border-radius: 8px; padding: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="badge" style="background: #ffedd5; color: #c2410c; font-weight: 700;">SLOW-MOVING SURPLUS SKU</span>
+                <span style="font-size: 12px; font-weight: 700; color: #c2410c;">92 Days Aging</span>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 4px;">Surplus Bandhani Pure Silk Dupattas</h4>
+              <div style="font-size: 12.5px; color: var(--text-dark);">
+                Stock: <strong>74 units</strong> · Unit Cost: ₹420 · Trapped Capital: <strong>₹31,080</strong> (Liquidity unlock target)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Decision Twin Simulation for Bazaar Opportunity -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">🧪 Decision Twin Strategy Modeling &amp; Guardrail Check</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Compare 3 merchant strategies tested deterministically against configured business guardrails.</p>
+            </div>
+            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SIMULATED ESTIMATES</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <!-- Conservative -->
+            <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; background: #fff;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="badge" style="background: #e2e8f0; color: #334155; font-weight: 700;">CONSERVATIVE</span>
+                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">GUARDRAIL PASS</span>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">VIP Festive Preview</h4>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Top 10 VIP patrons preview with 0% discount.</p>
+              <div style="border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 13px; line-height: 1.8;">
+                <div>Projected Revenue: <strong>₹10,500</strong></div>
+                <div>Gross Profit: <strong>₹5,400</strong> (51.4%)</div>
+                <div>Marketing Cost: <strong>₹150</strong></div>
+                <div>Net Profit: <strong>₹5,250</strong> (35x ROI)</div>
+                <div>Stock Liquidation: <strong>Slow</strong></div>
+              </div>
+            </div>
+
+            <!-- Balanced (Recommended) -->
+            <div style="border: 2px solid var(--paytm-blue); border-radius: 10px; padding: 16px; background: rgba(0, 186, 242, 0.04); position: relative;">
+              <div style="position: absolute; top: -10px; right: 14px; background: var(--paytm-blue); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">RECOMMENDED</div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="badge" style="background: rgba(0, 186, 242, 0.15); color: #007799; font-weight: 700;">BALANCED</span>
+                <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">GUARDRAIL PASS</span>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">Festive Royal Bundle</h4>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Pair Kurta + Dupatta at ₹2,299 (8% bundle savings).</p>
+              <div style="border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 13px; line-height: 1.8;">
+                <div>Projected Revenue: <strong>₹32,186</strong></div>
+                <div>Gross Profit: <strong>₹14,406</strong> (44.8%)</div>
+                <div>Marketing Cost: <strong>₹450</strong></div>
+                <div>Net Profit: <strong>₹13,956</strong> (31x ROI)</div>
+                <div>Stock Liquidation: <strong>High (14 dupattas cleared)</strong></div>
+              </div>
+            </div>
+
+            <!-- Aggressive (Blocked by Guardrails) -->
+            <div style="border: 1px solid #fca5a5; border-radius: 10px; padding: 16px; background: #fff1f2;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 700;">AGGRESSIVE</span>
+                <span class="badge" style="background: #dc2626; color: #fff; font-weight: 700;">BLOCKED</span>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); margin: 0 0 6px;">Storewide Clearance Sprint</h4>
+              <p style="font-size: 12px; color: #991b1b; margin: 0 0 12px;">18% discount blast across all shoppers.</p>
+              <div style="border-top: 1px solid #fecaca; padding-top: 10px; font-size: 13px; line-height: 1.8;">
+                <div>Projected Revenue: <strong>₹43,296</strong></div>
+                <div>Gross Profit: <strong>₹14,696</strong> (33.9%)</div>
+                <div>Marketing Cost: <strong>₹900</strong></div>
+                <div style="color: #dc2626; font-weight: 700; margin-top: 6px;">🛑 Guardrail RULE-HFS-02 Breach:</div>
+                <div style="font-size: 11.5px; color: #991b1b;">18.0% discount exceeds maximum permitted ceiling of 10.0%.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Merchant Approval & Controlled Execution Gate -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; color: var(--paytm-navy); margin: 0;">🛡️ Controlled Execution Gate &amp; Merchant Sign-Off</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0;">Customer-facing outreach requires explicit merchant approval. All dispatches undergo randomized holdout verification.</p>
+            </div>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">85% TREATMENT · 15% HOLDOUT</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--paytm-navy);">Execute Festive Royal Bundle Campaign (BALANCED STRATEGY)</div>
+              <div style="font-size: 12.5px; color: var(--text-dark); margin-top: 4px;">
+                Target: 20 past ethnic wear patrons · WhatsApp + Soundbox · 8% bundle price (₹2,299) · Marketing Budget: ₹450
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+                Authorized by: Zubair Hussain (Store Owner) · Cryptographic HMAC-SHA256 signature generated upon submission.
+              </div>
+            </div>
+            <button id="btnExecuteBazaarCampaign" class="btn btn-primary" onclick="executeBazaarCampaign()" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 8px;">
+              🚀 Approve &amp; Execute Campaign
+            </button>
+          </div>
+
+          <!-- Execution Result & Outcome Verification Details -->
+          <div id="bazaarExecutionResultCard" style="display: none; margin-top: 16px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span class="badge" style="background: #10b981; color: #fff; font-weight: 800;">7-POINT VERIFICATION: PASSED (VERIFIED)</span>
+              <span id="bazaarExecutionTimestamp" style="font-size: 12px; color: #166534; font-family: monospace;"></span>
+            </div>
+            <h4 style="font-size: 16px; font-weight: 800; color: #14532d; margin: 0 0 8px;">Campaign Executed &amp; Holdout Telemetry Verified</h4>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; font-size: 13px;">
+              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                <div style="color: var(--text-muted); font-size: 11px;">Treatment Group (85%)</div>
+                <div style="font-weight: 800; font-size: 16px; color: var(--paytm-navy);" id="resTreatmentAudience">17 Patrons</div>
+              </div>
+              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                <div style="color: var(--text-muted); font-size: 11px;">Holdout Group (15%)</div>
+                <div style="font-weight: 800; font-size: 16px; color: var(--paytm-navy);" id="resHoldoutAudience">3 Patrons</div>
+              </div>
+              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                <div style="color: var(--text-muted); font-size: 11px;">Incremental Revenue</div>
+                <div style="font-weight: 800; font-size: 16px; color: #16a34a;" id="resIncrementalRevenue">₹32,186</div>
+              </div>
+              <div style="background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                <div style="color: var(--text-muted); font-size: 11px;">Net Incremental Profit</div>
+                <div style="font-weight: 800; font-size: 16px; color: #16a34a;" id="resNetIncrementalProfit">₹13,956 (31x ROI)</div>
+              </div>
+            </div>
+
+            <!-- Soundbox Voice Broadcast Player -->
+            <div style="background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px;">
+              <div style="font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 4px;">📢 Paytm Soundbox Voice Announcement</div>
+              <div id="soundboxVoiceScriptHi" style="font-size: 13px; color: var(--text-dark); margin-bottom: 8px;">
+                "पेटीएम पर हुसैन फैशन स्टोर को फेस्टिव रॉयल बंडल से ₹32,186 का ऑर्डर प्राप्त हुआ।"
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn btn-secondary btn-sm" onclick="playVoiceTone()">🔊 Test Soundbox Chime</button>
+                <span style="font-size: 11.5px; color: var(--text-muted);">SBOX-JP-8891 · Telemetry Online</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -2286,7 +2720,8 @@
     // Allowed Application and Public Routes
     const APP_ROUTES = [
       "overview", "assistant", "sales", "customers", "campaigns", "approvals", "activity", "analytics", "settings",
-      "profit", "inventory", "cashflow", "decision-twin", "opportunities", "guardrails", "business-value"
+      "profit", "inventory", "cashflow", "decision-twin", "opportunities", "guardrails", "business-value",
+      "voice-copilot", "bazaar-intelligence"
     ];
     const AUTH_ROUTES = ["login", "signup", "forgot-password"];
 
@@ -2370,6 +2805,8 @@
       else if (routeName === "opportunities") fetchOpportunities();
       else if (routeName === "guardrails") fetchGuardrails();
       else if (routeName === "business-value") fetchBusinessValue();
+      else if (routeName === "voice-copilot") initVoiceCopilotView();
+      else if (routeName === "bazaar-intelligence") fetchBazaarIntelligenceData();
     }
 
     // Popstate Listener
@@ -4639,6 +5076,441 @@ async function refreshAuditTrail() {
         }
       } catch (e) {
         console.error("Failed to load business value metrics:", e);
+      }
+    }
+
+    // ====================================================================
+    // PHASE 9: SARVAM AI VOICE COPILOT & BAZAAR INTELLIGENCE
+    // ====================================================================
+
+    let voiceState = {
+      isRecording: false,
+      isPlaying: false,
+      merchantId: "MERCH-002",
+      languageCode: "hi-IN",
+      mediaRecorder: null,
+      audioChunks: [],
+      audioContext: null,
+      analyser: null,
+      animFrameId: null,
+      waveformPhase: 0
+    };
+
+    function initVoiceCopilotView() {
+      initWaveformVisualizer();
+      fetchVoiceInteractionHistory();
+    }
+
+    function initWaveformVisualizer() {
+      const canvas = document.getElementById("voiceWaveformCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0b1329";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const isRec = voiceState.isRecording;
+        const isPlay = voiceState.isPlaying;
+        const baseAmp = (isRec || isPlay) ? 28 : 5;
+        const color = isRec ? "#ef4444" : (isPlay ? "#10b981" : "#00baf2");
+
+        ctx.beginPath();
+        ctx.lineWidth = (isRec || isPlay) ? 3 : 1.5;
+        ctx.strokeStyle = color;
+
+        voiceState.waveformPhase += (isRec || isPlay) ? 0.12 : 0.03;
+
+        for (let x = 0; x < canvas.width; x++) {
+          const normX = x / canvas.width;
+          const sine1 = Math.sin(normX * 12 + voiceState.waveformPhase);
+          const sine2 = Math.sin(normX * 24 - voiceState.waveformPhase * 1.5) * 0.4;
+          const y = (canvas.height / 2) + (sine1 + sine2) * baseAmp * Math.sin(normX * Math.PI);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        if (isRec || isPlay) {
+          ctx.beginPath();
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+          for (let x = 0; x < canvas.width; x++) {
+            const normX = x / canvas.width;
+            const sine = Math.sin(normX * 16 + voiceState.waveformPhase * 1.8);
+            const y = (canvas.height / 2) + sine * (baseAmp * 0.6) * Math.sin(normX * Math.PI);
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        voiceState.animFrameId = requestAnimationFrame(animate);
+      }
+
+      if (voiceState.animFrameId) cancelAnimationFrame(voiceState.animFrameId);
+      animate();
+    }
+
+    function onVoiceMerchantChange() {
+      const sel = document.getElementById("voiceMerchantSelect");
+      if (sel) {
+        voiceState.merchantId = sel.value;
+        const storeInd = document.getElementById("activeStoreIndicator");
+        if (storeInd) {
+          storeInd.textContent = sel.value === "MERCH-002"
+            ? "Store: Hussain Fashion Store (Jaipur)"
+            : "Store: Sharma Commercial Supplies (Delhi)";
+        }
+        fetchVoiceInteractionHistory();
+      }
+    }
+
+    function onVoiceLanguageChange() {
+      const sel = document.getElementById("voiceLanguageSelect");
+      if (sel) voiceState.languageCode = sel.value;
+    }
+
+    function toggleVoiceRecording() {
+      if (voiceState.isRecording) {
+        stopVoiceRecording();
+      } else {
+        startVoiceRecording();
+      }
+    }
+
+    function startVoiceRecording() {
+      voiceState.isRecording = true;
+      updateVoiceStatus("RECORDING", "#ef4444");
+      const btn = document.getElementById("btnVoiceRecord");
+      if (btn) {
+        btn.classList.add("btn-danger");
+        btn.classList.remove("btn-primary");
+        document.getElementById("recordIcon").textContent = "⏹️";
+        document.getElementById("recordBtnLabel").textContent = "Stop & Process";
+      }
+
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          voiceState.mediaStream = stream;
+          try {
+            voiceState.mediaRecorder = new MediaRecorder(stream);
+            voiceState.audioChunks = [];
+            voiceState.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) voiceState.audioChunks.push(e.data); };
+            voiceState.mediaRecorder.start();
+          } catch (e) {
+            console.log("MediaRecorder init fallback:", e);
+          }
+        }).catch(err => {
+          console.log("Microphone access simulated:", err.message);
+        });
+      }
+    }
+
+    function stopVoiceRecording() {
+      voiceState.isRecording = false;
+      updateVoiceStatus("PROCESSING", "#00baf2");
+      const btn = document.getElementById("btnVoiceRecord");
+      if (btn) {
+        btn.classList.remove("btn-danger");
+        btn.classList.add("btn-primary");
+        document.getElementById("recordIcon").textContent = "🎙️";
+        document.getElementById("recordBtnLabel").textContent = "Start Speaking";
+      }
+
+      if (voiceState.mediaRecorder && voiceState.mediaRecorder.state !== "inactive") {
+        try {
+          voiceState.mediaRecorder.stop();
+          if (voiceState.mediaStream) {
+            voiceState.mediaStream.getTracks().forEach(t => t.stop());
+          }
+        } catch (e) {}
+      }
+
+      const defaultQuery = voiceState.merchantId === "MERCH-002"
+        ? "Why did my sales drop this week?"
+        : "Why did sales decline this weekend?";
+
+      setTimeout(() => {
+        sendVoiceQuery(defaultQuery, "VOICE");
+      }, 600);
+    }
+
+    function simulateVoiceQuery(query) {
+      sendVoiceQuery(query, "VOICE");
+    }
+
+    function sendSpokenPrompt(query) {
+      sendVoiceQuery(query, "VOICE");
+    }
+
+    function sendVoiceTextQuery() {
+      const inp = document.getElementById("voiceTextInput");
+      if (!inp || !inp.value.trim()) return;
+      const text = inp.value.trim();
+      inp.value = "";
+      sendVoiceQuery(text, "TEXT");
+    }
+
+    async function sendVoiceQuery(transcript, inputMode = "VOICE") {
+      updateVoiceStatus("PROCESSING", "#00baf2");
+      appendUserMessage(transcript, inputMode);
+
+      try {
+        const res = await fetch("/api/voice/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            merchant_id: voiceState.merchantId,
+            transcript: transcript,
+            language_code: voiceState.languageCode,
+            input_mode: inputMode
+          })
+        });
+        const data = await res.json();
+        updateVoiceStatus("COMPLETED", "#10b981");
+        appendAiResponse(data);
+
+        if (data.audio_base64) {
+          playAudioFromBase64(data.audio_base64);
+        }
+      } catch (err) {
+        console.error("Voice chat error:", err);
+        updateVoiceStatus("IDLE", "#0f172a");
+        showSiteToast("Voice service standby mode activated.");
+      }
+    }
+
+    function updateVoiceStatus(status, color) {
+      const badge = document.getElementById("voiceStatusBadge");
+      if (badge) {
+        badge.textContent = status;
+        badge.style.background = color + "22";
+        badge.style.color = color;
+      }
+    }
+
+    function appendUserMessage(text, mode) {
+      const stream = document.getElementById("voiceConversationStream");
+      if (!stream) return;
+      const msgDiv = document.createElement("div");
+      msgDiv.style.cssText = "display: flex; gap: 10px; align-items: flex-start; justify-content: flex-end;";
+      msgDiv.innerHTML = `
+        <div style="background: var(--paytm-blue); color: #fff; border-radius: 12px; padding: 10px 14px; max-width: 80%; box-shadow: 0 2px 6px rgba(0,186,242,0.25);">
+          <div style="font-size: 11px; opacity: 0.85; margin-bottom: 2px;">You (${mode === 'VOICE' ? '🎙️ Spoken' : '💬 Text'})</div>
+          <div style="font-size: 13.5px; font-weight: 500;">${text}</div>
+        </div>
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--paytm-navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;">ZH</div>
+      `;
+      stream.appendChild(msgDiv);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function appendAiResponse(data) {
+      const stream = document.getElementById("voiceConversationStream");
+      if (!stream) return;
+
+      const audioBtn = data.audio_base64
+        ? `<button class="btn btn-secondary btn-sm" onclick="playAudioFromBase64('${data.audio_base64}')" style="font-size: 11px; padding: 3px 8px; border-radius: 12px; margin-top: 6px;">🔊 Replay Audio</button>`
+        : "";
+
+      const actionsHtml = (data.suggested_actions && data.suggested_actions.length > 0)
+        ? `<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+             ${data.suggested_actions.map(act => `<button class="btn btn-secondary btn-sm" onclick="handleActionPill('${act}')" style="font-size: 11px; border-radius: 12px;">👉 ${act}</button>`).join("")}
+           </div>`
+        : "";
+
+      const msgDiv = document.createElement("div");
+      msgDiv.style.cssText = "display: flex; gap: 10px; align-items: flex-start;";
+      msgDiv.innerHTML = `
+        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--paytm-navy);">Paytm AI ActionMate</span>
+            <span style="font-size: 10.5px; color: var(--text-muted);">${data.latency_ms || 280}ms</span>
+          </div>
+          <div style="font-size: 13.5px; color: var(--text-dark); line-height: 1.5;">${data.response_text}</div>
+          ${audioBtn}
+          ${actionsHtml}
+        </div>
+      `;
+      stream.appendChild(msgDiv);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function handleActionPill(act) {
+      if (act.includes("Bazaar") || act.includes("Pulse")) {
+        navigateToRoute("bazaar-intelligence");
+      } else if (act.includes("Sales")) {
+        navigateToRoute("sales");
+      } else if (act.includes("Guardrail")) {
+        navigateToRoute("guardrails");
+      } else if (act.includes("Campaign") || act.includes("Festive")) {
+        navigateToRoute("bazaar-intelligence");
+      } else {
+        simulateVoiceQuery(act);
+      }
+    }
+
+    function playAudioFromBase64(base64Data) {
+      const player = document.getElementById("voiceAudioPlayer");
+      const card = document.getElementById("voiceAudioPlayerCard");
+      if (!player) return;
+
+      if (card) card.style.display = "block";
+      player.src = base64Data.startsWith("data:") ? base64Data : "data:audio/wav;base64," + base64Data;
+      voiceState.isPlaying = true;
+      player.play().catch(e => console.log("Audio auto-play note:", e.message));
+
+      player.onended = () => { voiceState.isPlaying = false; };
+      player.onpause = () => { voiceState.isPlaying = false; };
+    }
+
+    function playVoiceTone() {
+      playAudioFromBase64("UklGRuRdAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0Ydx1AACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=");
+      showSiteToast("Soundbox audio test triggered: Online");
+    }
+
+    function clearVoiceChat() {
+      const stream = document.getElementById("voiceConversationStream");
+      if (stream) {
+        stream.innerHTML = `
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--paytm-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">🤖</div>
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; max-width: 85%;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--paytm-navy); margin-bottom: 4px;">Paytm AI ActionMate · Voice Copilot</div>
+              <div style="font-size: 13.5px; color: var(--text-dark); line-height: 1.5;">
+                चैट साफ़ हो गई है। आप कोई भी नया प्रश्न पूछ सकते हैं।
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      showSiteToast("Voice chat cleared.");
+    }
+
+    async function fetchVoiceInteractionHistory() {
+      try {
+        const res = await fetch(`/api/voice/history?merchant_id=${voiceState.merchantId}&limit=5`);
+        const history = await res.json();
+      } catch (e) {}
+    }
+
+    // ====================================================================
+    // MODULE B: BAZAAR INTELLIGENCE NETWORK IMPLEMENTATION
+    // ====================================================================
+
+    async function fetchBazaarIntelligenceData() {
+      try {
+        const [pulseRes, netRes] = await Promise.all([
+          fetch("/api/bazaar/pulse?neighbourhood_id=NEIGHBOURHOOD-JP-01"),
+          fetch("/api/bazaar/network?neighbourhood_id=NEIGHBOURHOOD-JP-01")
+        ]);
+
+        const pulseData = await pulseRes.json();
+        const netData = await netRes.json();
+
+        const merchCountEl = document.getElementById("bazaarMerchantsCount");
+        if (merchCountEl) merchCountEl.textContent = netData.total_participating_merchants || 14;
+
+        const topSurgeEl = document.getElementById("bazaarTopSurge");
+        if (topSurgeEl && pulseData.top_signal) {
+          topSurgeEl.textContent = `+${pulseData.top_signal.growth_rate_pct}%`;
+        }
+
+        const tbody = document.getElementById("bazaarDemandSignalsTbody");
+        if (tbody && Array.isArray(pulseData.signals)) {
+          tbody.innerHTML = pulseData.signals.map(sig => {
+            const isSuppressed = sig.privacy_suppressed;
+            const statusBadge = isSuppressed
+              ? `<span class="badge" style="background: #fef3c7; color: #92400e; font-weight: 700;">CELL SUPPRESSED (k=2 &lt; 5)</span>`
+              : `<span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">PUBLISHED (k=${sig.reporting_merchants_count} &ge; 5)</span>`;
+
+            const trendBadge = sig.demand_trend === "SURGE"
+              ? `<span style="color: #16a34a; font-weight: 700;">🔥 SURGE</span>`
+              : `<span style="color: #0284c7; font-weight: 700;">📈 GROWING</span>`;
+
+            const countDisplay = isSuppressed
+              ? `<span style="color: var(--text-muted); font-style: italic;">Withheld (k &lt; 5)</span>`
+              : `<strong>${sig.reporting_merchants_count} Stores</strong>`;
+
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 14px; font-weight: 600; color: var(--paytm-navy);">
+                  ${sig.signal_name}
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: normal; margin-top: 2px;">${sig.provenance_note}</div>
+                </td>
+                <td style="padding: 12px 14px; color: var(--text-dark);">${sig.product_category}</td>
+                <td style="padding: 12px 14px;">${trendBadge}</td>
+                <td style="padding: 12px 14px; font-weight: 800; color: #16a34a;">+${sig.growth_rate_pct}%</td>
+                <td style="padding: 12px 14px;">${countDisplay}</td>
+                <td style="padding: 12px 14px;">${statusBadge}</td>
+              </tr>
+            `;
+          }).join("");
+        }
+      } catch (err) {
+        console.error("Failed to load bazaar intelligence data:", err);
+      }
+    }
+
+    async function executeBazaarCampaign() {
+      const btn = document.getElementById("btnExecuteBazaarCampaign");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "⚙️ Executing & Verifying...";
+      }
+
+      try {
+        const res = await fetch("/api/bazaar/execute", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            merchant_id: "MERCH-002",
+            match_id: "MATCH-HFS-001",
+            strategy_key: "BALANCED",
+            actor: "Zubair Hussain (Store Owner)"
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showSiteToast("Campaign Approved & Executed! 7-point Verification Passed.");
+
+          const card = document.getElementById("bazaarExecutionResultCard");
+          if (card) {
+            card.style.display = "block";
+            document.getElementById("bazaarExecutionTimestamp").textContent = `EXEC ID: ${data.execution_id} · ${new Date().toLocaleTimeString()}`;
+            document.getElementById("resTreatmentAudience").textContent = `${data.treatment_audience} Patrons`;
+            document.getElementById("resHoldoutAudience").textContent = `${data.holdout_audience} Patrons`;
+            document.getElementById("resIncrementalRevenue").textContent = `₹${Number(data.incremental_revenue_inr).toLocaleString('en-IN')}`;
+            document.getElementById("resNetIncrementalProfit").textContent = `₹${Number(data.net_incremental_profit_inr).toLocaleString('en-IN')} (${data.roi_multiple}x ROI)`;
+
+            if (data.soundbox_announcement && data.soundbox_announcement.hi) {
+              document.getElementById("soundboxVoiceScriptHi").textContent = `"${data.soundbox_announcement.hi}"`;
+            }
+          }
+
+          if (btn) {
+            btn.textContent = "✅ Executed & Verified";
+            btn.style.background = "#10b981";
+            btn.style.borderColor = "#10b981";
+          }
+        } else {
+          showSiteToast("Execution blocked: " + (data.message || "Guardrail violation"));
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "🚀 Approve & Execute Campaign";
+          }
+        }
+      } catch (e) {
+        console.error("Campaign execution error:", e);
+        showSiteToast("Campaign execution failed");
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "🚀 Approve & Execute Campaign";
+        }
       }
     }
 

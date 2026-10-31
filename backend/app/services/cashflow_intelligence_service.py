@@ -127,3 +127,4 @@ class CashFlowIntelligenceService:
                 "and user-entered merchant payables. It is NOT a credit score, loan eligibility assessment, or underwriting decision."
             )
         }
+

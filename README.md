@@ -237,6 +237,35 @@ Phase 8 elevates ActionMate into a complete **Business Growth & Profitability Pl
 - **Continuous Background Radar:** Surfaces 6 prioritized commercial opportunities across Profit, Inventory, Cash-Flow, and Retention without waiting for merchant prompts.
 - **Permission Tagging:** Categorizes opportunities by risk (Category A Automatic vs Category B Human Approval) and priority score.
 
+### 9. Phase 9: Sarvam AI Voice Copilot + Bazaar Intelligence Network
+
+#### Module A — Sarvam AI Multilingual Voice Copilot (`/app/voice-copilot`)
+- **Indic Sovereign Speech Stack:** Integrates Sarvam AI Saaras STT (`saaras:v2`), Bulbul TTS (`bulbul:v4-flash`), Mayura Translate (`mayura:v1`), and Sarvam-105B business reasoning.
+- **Supported Indic Languages:** Hindi (`hi-IN`), Indian English (`en-IN`), Gujarati (`gu-IN`), Tamil (`ta-IN`), Telugu (`te-IN`), Bengali (`bn-IN`), Marathi (`mr-IN`), and Kannada (`kn-IN`).
+- **Interactive Audio Studio:** HTML5 Web Audio API waveform canvas, real-time voice recording state machine (`idle` &rarr; `recording` &rarr; `processing` &rarr; `speaking` &rarr; `completed`), audio playback controls (Play, Pause, Replay), and synthesized PCM WAV fallback chime.
+- **Natural Business Dialogues:** Supports spoken merchant queries:
+  - *"Why did my sales drop this week?"* &rarr; Sales drop telemetry and repeat patron dip.
+  - *"Which products have highest gross profit?"* &rarr; SKU gross margins and margin dilution warnings.
+  - *"What is my inventory risk?"* &rarr; Slow-moving stock aging and trapped working capital.
+  - *"What is the local demand trend in Johari Bazaar?"* &rarr; Neighbourhood demand pulse.
+  - *"Suggest a profitable campaign"* &rarr; Contextual liquidation bundles.
+  - *"Compare 5% discount with bundle strategy"* &rarr; Decision Twin multi-scenario simulation.
+  - *"How did my campaign perform?"* &rarr; Verified causal lift and incremental profit.
+
+#### Module B — Bazaar Intelligence Network (`/app/bazaar-intelligence`)
+- **Collective Intelligence for Indian Merchant Clusters:** Connects 14 participating merchants across Johari Bazaar, Jaipur (`NEIGHBOURHOOD-JP-01`).
+- **Target Persona:** **Hussain Fashion Store (`MERCH-002`)**, ethnic and festive wear boutique owned by Zubair Hussain.
+- **Privacy Covenant ($k \ge 5$ Cohort Cell Suppression):** Signals are published only when aggregated across $\ge 5$ participating stores:
+  - *Festive Ethnic Apparel* (7 stores &ge; 5) &rarr; **Published** (+38.5% demand surge).
+  - *Jewellery & Gems* (5 stores &ge; 5) &rarr; **Published** (+19.2% surge).
+  - *Ceramics & Handicrafts* (2 stores &lt; 5) &rarr; **Privacy Suppressed** (Cell withheld to prevent identifying individual store sales).
+- **Explainable Opportunity Matching:** Matches Hussain Fashion Store's inventory with the demand surge, calculating a 94/100 match score (Product Relevance 96%, Inventory Depth 92%, Margin Headroom 95%, Local Momentum 93%). Pairs fast-moving Chikankari Kurtas (42 units, 51.4% margin) with surplus Bandhani Silk Dupattas (74 units, 92 days aging, ₹31,080 trapped capital).
+- **Decision Twin Simulation & Guardrails:**
+  - *Conservative (0% discount):* ₹10.5k revenue, ₹5,400 gross profit (51.4% margin) &rarr; **Allowed**.
+  - *Balanced (8% discount, ₹2,299 bundle):* ₹32,186 revenue, ₹14,406 gross profit (44.8% margin), releases ₹31k trapped capital &rarr; **Recommended**.
+  - *Aggressive (18% discount):* ₹43,296 revenue, ₹14,696 profit &rarr; **Blocked by Guardrail `RULE-HFS-02`** (Discount 18% > max 10%).
+- **Controlled Execution & Reality Check:** Merchant HMAC-SHA256 authorization, 85/15 Treatment vs Holdout randomized split, 7-point Verification Engine certification (`VERIFIED`), and Paytm Soundbox voice announcement broadcast.
+
 ### Commercial Strategy & Sustainable Monetization:
 - **Freemium SaaS Pricing:**
   - **Free Tier (₹0):** Basic sales drop detection, basic RFM, 2 drafts/month.

@@ -91,3 +91,4 @@ class OpportunityDiscoveryService:
             "top_priority_opportunity": opps[0] if opps else None,
             "opportunities": opps
         }
+

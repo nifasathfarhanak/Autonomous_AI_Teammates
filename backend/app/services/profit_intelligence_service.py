@@ -183,3 +183,4 @@ class ProfitIntelligenceService:
                 f"Warning: Discount erodes margin to {discounted_margin_pct}%. Requires {breakeven_volume_lift_pct}% volume lift to break even."
             )
         }
+

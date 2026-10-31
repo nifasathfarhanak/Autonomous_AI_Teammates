@@ -702,7 +702,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS merchant_guardrails (
         rule_id TEXT PRIMARY KEY,
         merchant_id TEXT NOT NULL,
-        rule_code TEXT NOT NULL UNIQUE,
+        rule_code TEXT NOT NULL,
         rule_name TEXT NOT NULL,
         parameter_value REAL NOT NULL,
         unit TEXT NOT NULL,
@@ -711,7 +711,8 @@ def init_db():
         is_active BOOLEAN DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id),
+        UNIQUE(merchant_id, rule_code)
     );
     """)
 
@@ -797,6 +798,103 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 38. Phase 9: Voice Copilot Sessions Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS voice_sessions (
+        session_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        language_code TEXT DEFAULT 'hi-IN',
+        status TEXT DEFAULT 'ACTIVE',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 39. Phase 9: Voice Copilot Interactions Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS voice_interactions (
+        interaction_id TEXT PRIMARY KEY,
+        session_id TEXT NOT NULL,
+        merchant_id TEXT NOT NULL,
+        input_mode TEXT DEFAULT 'VOICE',
+        transcript TEXT NOT NULL,
+        detected_intent TEXT NOT NULL,
+        language_code TEXT DEFAULT 'hi-IN',
+        response_text TEXT NOT NULL,
+        audio_response_url TEXT,
+        audio_base64 TEXT,
+        structured_payload_json JSON,
+        latency_ms INTEGER DEFAULT 350,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(session_id) REFERENCES voice_sessions(session_id),
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id)
+    );
+    """)
+
+    # 40. Phase 9: Bazaar Participating Merchants Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bazaar_participating_merchants (
+        merchant_id TEXT PRIMARY KEY,
+        store_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        sub_category TEXT,
+        neighbourhood_id TEXT NOT NULL,
+        neighbourhood_name TEXT NOT NULL,
+        city TEXT NOT NULL,
+        consent_opt_in BOOLEAN DEFAULT 1,
+        participating_since TEXT,
+        annual_turnover_tier TEXT,
+        reputation_score REAL DEFAULT 4.8,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    # 41. Phase 9: Bazaar Aggregated Demand Signals Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bazaar_demand_signals (
+        signal_id TEXT PRIMARY KEY,
+        neighbourhood_id TEXT NOT NULL,
+        product_category TEXT NOT NULL,
+        sub_category TEXT NOT NULL,
+        signal_name TEXT NOT NULL,
+        demand_trend TEXT NOT NULL,
+        growth_rate_pct REAL NOT NULL,
+        reporting_merchants_count INTEGER NOT NULL,
+        min_cohort_threshold INTEGER DEFAULT 5,
+        privacy_suppressed BOOLEAN DEFAULT 0,
+        suppression_reason TEXT,
+        confidence_score REAL DEFAULT 0.92,
+        time_window TEXT DEFAULT 'Past 7 Days',
+        is_simulated BOOLEAN DEFAULT 1,
+        provenance_note TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    # 42. Phase 9: Bazaar Opportunity Matches Table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bazaar_opportunity_matches (
+        match_id TEXT PRIMARY KEY,
+        merchant_id TEXT NOT NULL,
+        signal_id TEXT NOT NULL,
+        opportunity_name TEXT NOT NULL,
+        matching_score REAL NOT NULL,
+        relevance_status TEXT NOT NULL,
+        score_breakdown_json JSON NOT NULL,
+        compatible_products_json JSON NOT NULL,
+        recommended_strategy_json JSON NOT NULL,
+        decision_twin_scenarios_json JSON NOT NULL,
+        estimated_revenue_inr REAL NOT NULL,
+        estimated_gross_profit_inr REAL NOT NULL,
+        stockout_risk TEXT DEFAULT 'LOW',
+        status TEXT DEFAULT 'AVAILABLE',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(merchant_id) REFERENCES merchants(id),
+        FOREIGN KEY(signal_id) REFERENCES bazaar_demand_signals(signal_id)
     );
     """)
 
@@ -1211,6 +1309,12 @@ def seed_enterprise_data(conn):
     except Exception as e:
         print(f"Warning: Failed to seed Phase 8 business innovation data: {e}")
 
+    # Seed Phase 9 Voice Copilot & Bazaar Intelligence Data
+    try:
+        _seed_phase9_data(conn)
+    except Exception as e:
+        print(f"Warning: Failed to seed Phase 9 data: {e}")
+
 def _seed_phase8_data(conn):
     """Seeds realistic Phase 8 inventory, expenses, settlements, guardrails, and business opportunities."""
     cur = conn.cursor()
@@ -1272,7 +1376,7 @@ def _seed_phase8_data(conn):
             """, st)
 
     # 4. Seed No-Regret Merchant Guardrails
-    cur.execute("SELECT COUNT(*) FROM merchant_guardrails")
+    cur.execute("SELECT COUNT(*) FROM merchant_guardrails WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] == 0:
         guardrails = [
             ("RULE-01", "MERCH-001", "MAX_DISCOUNT_PERCENT", "Maximum Promotional Discount", 10.0, "PERCENT", "Promotional campaigns cannot offer discounts exceeding 10.0%", "HARD_BLOCK"),
@@ -1355,6 +1459,256 @@ def _seed_phase8_data(conn):
 
     conn.commit()
 
+def _seed_phase9_data(conn):
+    """Seeds Phase 9 Hussain Fashion Store (MERCH-002), Johari Bazaar participating merchants, demand signals, and opportunity match."""
+    cur = conn.cursor()
+    now_utc = datetime.now(timezone.utc).isoformat()
+    today = datetime.now(timezone.utc)
+
+    # 1. Seed Merchant MERCH-002 (Hussain Fashion Store)
+    cur.execute("SELECT COUNT(*) FROM merchants WHERE id = 'MERCH-002'")
+    if cur.fetchone()[0] == 0:
+        cur.execute("""
+        INSERT OR REPLACE INTO merchants (
+            id, store_name, owner_name, email, phone, city, soundbox_device_id, soundbox_status, currency
+        ) VALUES (
+            'MERCH-002', 'Hussain Fashion Store', 'Zubair Hussain', 'zubair@hussainfashion.in',
+            '+91 98290-11234', 'Jaipur', 'SBOX-JP-8891', 'ONLINE', 'INR'
+        )
+        """)
+
+    # 2. Seed Products for MERCH-002
+    hfs_products = [
+        ("PROD-HFS-001", "MERCH-002", "SKU-HFS-001", "Handcrafted Chikankari Kurta Set", "Festive Ethnic Wear", 1750.0),
+        ("PROD-HFS-002", "MERCH-002", "SKU-HFS-002", "Surplus Bandhani Pure Silk Dupattas", "Ethnic Accessories", 890.0),
+        ("PROD-HFS-003", "MERCH-002", "SKU-HFS-003", "Banarasi Brocade Festive Sherwani", "Wedding & Festive Wear", 5500.0),
+        ("PROD-HFS-004", "MERCH-002", "SKU-HFS-004", "Jaipuri Printed Cotton Anarkali", "Casual & Festive Wear", 999.0),
+        ("PROD-HFS-005", "MERCH-002", "SKU-HFS-005", "Embroidered Velvet Festive Shawl", "Winter Ethnic Wear", 1650.0),
+        ("PROD-HFS-006", "MERCH-002", "SKU-HFS-006", "Zari Work Georgette Saree", "Ethnic Sarees", 2450.0),
+        ("PROD-HFS-007", "MERCH-002", "SKU-HFS-007", "Gota Patti Festive Kurti", "Festive Ethnic Wear", 799.0),
+        ("PROD-HFS-008", "MERCH-002", "SKU-HFS-008", "Handblock Indigo Dabu Stole", "Ethnic Accessories", 450.0)
+    ]
+    for p in hfs_products:
+        cur.execute("""
+        INSERT OR REPLACE INTO products (
+            product_id, merchant_id, sku, name, category, unit_price
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        """, p)
+
+    # 3. Seed Inventory for MERCH-002 in merchant_inventory
+    hfs_inventory = [
+        ("INV-HFS-001", "MERCH-002", "PROD-HFS-001", "Handcrafted Chikankari Kurta Set", "Festive Ethnic Wear", 42, 10, 15, 3, 850.0, 1750.0, 14),
+        ("INV-HFS-002", "MERCH-002", "PROD-HFS-002", "Surplus Bandhani Pure Silk Dupattas", "Ethnic Accessories", 74, 15, 20, 4, 420.0, 890.0, 92),
+        ("INV-HFS-003", "MERCH-002", "PROD-HFS-003", "Banarasi Brocade Festive Sherwani", "Wedding & Festive Wear", 15, 5, 8, 5, 2400.0, 5500.0, 35),
+        ("INV-HFS-004", "MERCH-002", "PROD-HFS-004", "Jaipuri Printed Cotton Anarkali", "Casual & Festive Wear", 55, 12, 18, 3, 480.0, 999.0, 22),
+        ("INV-HFS-005", "MERCH-002", "PROD-HFS-005", "Embroidered Velvet Festive Shawl", "Winter Ethnic Wear", 28, 8, 12, 4, 750.0, 1650.0, 48),
+        ("INV-HFS-006", "MERCH-002", "PROD-HFS-006", "Zari Work Georgette Saree", "Ethnic Sarees", 32, 10, 15, 3, 1100.0, 2450.0, 19),
+        ("INV-HFS-007", "MERCH-002", "PROD-HFS-007", "Gota Patti Festive Kurti", "Festive Ethnic Wear", 60, 15, 20, 2, 380.0, 799.0, 16),
+        ("INV-HFS-008", "MERCH-002", "PROD-HFS-008", "Handblock Indigo Dabu Stole", "Ethnic Accessories", 40, 10, 15, 3, 210.0, 450.0, 41)
+    ]
+    for inv in hfs_inventory:
+        cur.execute("""
+        INSERT OR REPLACE INTO merchant_inventory (
+            inventory_id, merchant_id, product_id, product_name, category,
+            current_stock_units, min_safety_stock, reorder_point, lead_time_days,
+            unit_cost_inr, unit_selling_price_inr, stock_age_days, last_restocked_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (*inv, (today - timedelta(days=inv[11])).strftime("%Y-%m-%d")))
+
+    # 4. Seed Guardrails for MERCH-002
+    hfs_guardrails = [
+        ("RULE-HFS-01", "MERCH-002", "MAX_CAMPAIGN_BUDGET_INR", "Maximum Campaign Budget", 2500.0, "INR", "Campaigns cannot exceed ₹2,500 total marketing spend", "HARD_BLOCK"),
+        ("RULE-HFS-02", "MERCH-002", "MAX_DISCOUNT_PERCENT", "Maximum Promotional Discount", 10.0, "PERCENT", "Promotional discounts cannot exceed 10.0%", "HARD_BLOCK"),
+        ("RULE-HFS-03", "MERCH-002", "MIN_GROSS_MARGIN_PERCENT", "Minimum Product Gross Margin Floor", 25.0, "PERCENT", "Discounts cannot reduce gross product margin below 25.0%", "HARD_BLOCK"),
+        ("RULE-HFS-04", "MERCH-002", "INVENTORY_SAFETY_STOCK_DAYS", "Minimum Stock Days for Promotion", 5.0, "DAYS", "Cannot promote products with fewer than 5 days of inventory on hand", "HARD_BLOCK"),
+        ("RULE-HFS-05", "MERCH-002", "CUSTOMER_FREQUENCY_CAP_PER_MONTH", "Max Customer Contact Frequency", 2.0, "MESSAGES", "No single customer can receive more than 2 promotional messages in a calendar month", "HARD_BLOCK"),
+        ("RULE-HFS-06", "MERCH-002", "MANDATORY_HUMAN_APPROVAL", "Human Approval Gate Enforcement", 1.0, "BOOLEAN", "Customer-facing promotional messages strictly require merchant owner sign-off", "HARD_BLOCK")
+    ]
+    for g in hfs_guardrails:
+        cur.execute("""
+        INSERT OR REPLACE INTO merchant_guardrails (
+            rule_id, merchant_id, rule_code, rule_name, parameter_value, unit, description, enforcement_level, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+        """, g)
+
+    # 5. Seed Customers for MERCH-002
+    hfs_customers = [
+        ("CUST-HFS-001", "MERCH-002", "Pinky Sharma", "pinky.s@gmail.com", "Sharma Household", "+91 98290-33441", "2026-10-05", 2800.0, 14500.0, "Chikankari Kurtas", "2026-10-18", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-002", "MERCH-002", "Rehana Begum", "rehana.b@yahoo.co.in", "Begum Textiles", "+91 98291-55662", "2026-09-28", 4500.0, 22000.0, "Silk Dupattas & Kurtis", "2026-10-12", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-003", "MERCH-002", "Sunita Agarwal", "sunita.agarwal@outlook.com", "Agarwal Jewellers Family", "+91 98292-77883", "2026-10-10", 3500.0, 18200.0, "Festive Ethnic Sets", "2026-10-20", "CONVERTED", 0.0, "en", 0),
+        ("CUST-HFS-004", "MERCH-002", "Pooja Rathore", "pooja.rathore@jaipurarts.in", "Rathore Heritage", "+91 98293-99004", "2026-09-15", 1950.0, 9400.0, "Bandhani Dupattas", "2026-10-02", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-005", "MERCH-002", "Meenakshi Joshi", "meenakshi.j@gmail.com", "Joshi Residency", "+91 98294-11225", "2026-10-02", 5200.0, 28500.0, "Zari Sarees & Kurtas", "2026-10-15", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-006", "MERCH-002", "Kavita Singhal", "kavita.singhal@rediffmail.com", "Singhal Exports", "+91 98295-33446", "2026-09-20", 2400.0, 11800.0, "Anarkali Sets", "2026-10-08", "CONVERTED", 0.0, "en", 0),
+        ("CUST-HFS-007", "MERCH-002", "Anjali Pareek", "anjali.pareek@gmail.com", "Pareek Boutique", "+91 98296-55667", "2026-10-08", 3800.0, 16900.0, "Chikankari & Bandhani", "2026-10-22", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-008", "MERCH-002", "Deepika Shekhawat", "deepika.s@jaipurroyal.org", "Shekhawat Palace", "+91 98297-77888", "2026-09-12", 6800.0, 36000.0, "Festive Sherwanis & Sarees", "2026-10-01", "CONVERTED", 0.0, "en", 0),
+        ("CUST-HFS-009", "MERCH-002", "Farhana Qureshi", "farhana.q@gmail.com", "Qureshi Design Studio", "+91 98298-99009", "2026-10-01", 2100.0, 8900.0, "Silk Dupattas", "2026-10-14", "CONVERTED", 0.0, "hi", 0),
+        ("CUST-HFS-010", "MERCH-002", "Neelam Khandelwal", "neelam.k@khandelwalgems.com", "Khandelwal Gem Store", "+91 98299-11220", "2026-09-25", 4100.0, 21500.0, "Festive Kurtas", "2026-10-11", "CONVERTED", 0.0, "hi", 0)
+    ]
+    for c in hfs_customers:
+        cur.execute("""
+        INSERT OR REPLACE INTO customers (
+            customer_id, merchant_id, customer_name, email, company, phone,
+            last_purchase_date, last_purchase_value, lifetime_value,
+            interested_product, last_interaction_date, quotation_status,
+            quotation_value, preferred_language, is_unsubscribed
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, c)
+
+    # 6. Seed Bazaar Participating Merchants (14 merchants in Johari Bazaar cluster)
+    bazaar_merchants = [
+        # 7 Clothing & Apparel (Cohort size = 7 >= 5 -> PUBLISHED)
+        ("MERCH-002", "Hussain Fashion Store", "Festive Ethnic Apparel", "Kurtas & Silk Dupattas", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-01-10", "TIER_2_GROWING", 4.9),
+        ("MERCH-JP-003", "Meena Bazaar Jaipur", "Festive Ethnic Apparel", "Wedding & Bridal Wear", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2024-11-05", "TIER_1_ESTABLISHED", 4.8),
+        ("MERCH-JP-004", "Royal Rajasthani Silks", "Festive Ethnic Apparel", "Pure Silk Sarees", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-02-14", "TIER_2_GROWING", 4.7),
+        ("MERCH-JP-005", "Jaipur Kurti Emporium", "Festive Ethnic Apparel", "Handcrafted Kurtis", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-03-01", "TIER_2_GROWING", 4.6),
+        ("MERCH-JP-006", "Gulab Chand Prints", "Festive Ethnic Apparel", "Jaipuri Block Prints", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2024-09-12", "TIER_1_ESTABLISHED", 4.8),
+        ("MERCH-JP-007", "Kuber Ethnic Fab", "Festive Ethnic Apparel", "Mens Ethnic & Sherwanis", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-04-20", "TIER_3_EMERGING", 4.5),
+        ("MERCH-JP-008", "Zari Mahal", "Festive Ethnic Apparel", "Embroidered Festive Gowns", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2024-12-01", "TIER_2_GROWING", 4.7),
+        # 5 Jewellery & Gem (Cohort size = 5 >= 5 -> PUBLISHED)
+        ("MERCH-JP-009", "Surana Jewellers", "Jewellery & Gems", "Polki & Kundan", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2024-08-15", "TIER_1_ESTABLISHED", 4.9),
+        ("MERCH-JP-010", "Kothari Gems", "Jewellery & Gems", "Emeralds & Gemstones", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2024-10-10", "TIER_1_ESTABLISHED", 4.8),
+        ("MERCH-JP-011", "Johari Silver Palace", "Jewellery & Gems", "Sterling Silver Ornaments", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-01-25", "TIER_2_GROWING", 4.7),
+        ("MERCH-JP-012", "Shri Krishna Polki", "Jewellery & Gems", "Bridal Polki Sets", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-03-15", "TIER_2_GROWING", 4.6),
+        ("MERCH-JP-013", "Riddhi Siddhi Ornaments", "Jewellery & Gems", "Traditional Jadau", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-05-02", "TIER_3_EMERGING", 4.5),
+        # 2 Blue Pottery & Handicrafts (Cohort size = 2 < 5 -> PRIVACY SUPPRESSED)
+        ("MERCH-JP-014", "Jaipur Blue Art", "Ceramics & Handicrafts", "Glazed Blue Pottery", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-02-18", "TIER_3_EMERGING", 4.6),
+        ("MERCH-JP-015", "Royal Handicrafts", "Ceramics & Handicrafts", "Marble & Brass Crafts", "NEIGHBOURHOOD-JP-01", "Johari Bazaar, Jaipur", "Jaipur", 1, "2025-04-11", "TIER_3_EMERGING", 4.4)
+    ]
+    for bm in bazaar_merchants:
+        cur.execute("""
+        INSERT OR REPLACE INTO bazaar_participating_merchants (
+            merchant_id, store_name, category, sub_category, neighbourhood_id,
+            neighbourhood_name, city, consent_opt_in, participating_since,
+            annual_turnover_tier, reputation_score, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (*bm, now_utc))
+
+    # 7. Seed Bazaar Aggregated Demand Signals
+    bazaar_signals = [
+        (
+            "SIG-JP-001", "NEIGHBOURHOOD-JP-01", "Festive Ethnic Apparel", "Kurtas & Silk Dupattas",
+            "Festive Ethnic Kurtas & Silk Dupattas Surge", "SURGE", 38.5, 7, 5, 0, None, 0.94,
+            "Past 7 Days", 1,
+            "Aggregated from 7 participating apparel merchants in Johari Bazaar cluster. Cohort k=7 exceeds privacy threshold k>=5. No individual merchant sales or customer PII exposed."
+        ),
+        (
+            "SIG-JP-002", "NEIGHBOURHOOD-JP-01", "Ceramics & Handicrafts", "Glazed Blue Pottery",
+            "Traditional Glazed Blue Pottery Surge", "SURGE", 24.0, 2, 5, 1,
+            "Small Cell Suppression: Cohort size (2 merchants) is below minimum privacy threshold k=5. Aggregation blocked to prevent reverse-engineering individual store sales.",
+            0.88, "Past 7 Days", 1,
+            "Signal suppressed under k-anonymity privacy rule (k=2 < 5). Raw counts withheld."
+        ),
+        (
+            "SIG-JP-003", "NEIGHBOURHOOD-JP-01", "Jewellery & Gems", "Polki & Kundan",
+            "Festive Bridal Polki & Kundan Ornaments Surge", "GROWING", 19.2, 5, 5, 0, None, 0.91,
+            "Past 7 Days", 1,
+            "Aggregated from 5 participating jewellery merchants in Johari Bazaar cluster. Cohort k=5 meets privacy threshold k>=5. No individual store sales or ticket sizes exposed."
+        )
+    ]
+    for bs in bazaar_signals:
+        cur.execute("""
+        INSERT OR REPLACE INTO bazaar_demand_signals (
+            signal_id, neighbourhood_id, product_category, sub_category,
+            signal_name, demand_trend, growth_rate_pct, reporting_merchants_count,
+            min_cohort_threshold, privacy_suppressed, suppression_reason, confidence_score,
+            time_window, is_simulated, provenance_note, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (*bs, now_utc))
+
+    # 8. Seed Bazaar Contextual Opportunity Match for Hussain Fashion Store
+    opp_matches = [
+        (
+            "MATCH-HFS-001", "MERCH-002", "SIG-JP-001",
+            "Festive Royal Bundle Re-engagement", 94.0, "EXCELLENT",
+            json.dumps({
+                "product_relevance": 96.0,
+                "inventory_depth": 92.0,
+                "margin_headroom": 95.0,
+                "local_demand_momentum": 93.0,
+                "explanation": "High local demand surge (+38.5%) matches fast-selling Chikankari Kurtas (42 units, 51.4% margin) paired with slow-moving Silk Dupattas (74 units, 92 days aging, ₹31,080 trapped capital)."
+            }),
+            json.dumps([
+                {"product_id": "PROD-HFS-001", "product_name": "Handcrafted Chikankari Kurta Set", "current_stock": 42, "unit_cost_inr": 850.0, "selling_price_inr": 1750.0, "margin_pct": 51.4},
+                {"product_id": "PROD-HFS-002", "product_name": "Surplus Bandhani Pure Silk Dupattas", "current_stock": 74, "unit_cost_inr": 420.0, "selling_price_inr": 890.0, "margin_pct": 52.8, "stock_age_days": 92, "trapped_capital_inr": 31080.0}
+            ]),
+            json.dumps({
+                "strategy_key": "BALANCED",
+                "name": "Festive Royal Bundle (Recommended)",
+                "description": "Pair trending Chikankari Kurta with slow-moving Silk Dupatta at ₹2,299 (8% bundle savings). Unlocks ₹31k trapped capital while preserving 44.8% gross margin.",
+                "bundle_price_inr": 2299.0,
+                "discount_pct": 8.0,
+                "marketing_budget_inr": 450.0,
+                "target_audience_count": 20
+            }),
+            json.dumps({
+                "CONSERVATIVE": {
+                    "strategy_key": "CONSERVATIVE",
+                    "name": "VIP Festive Preview",
+                    "description": "Exclusive preview of new festive arrivals for top 10 repeat customers with zero discounting.",
+                    "discount_pct": 0.0,
+                    "target_audience": 10,
+                    "projected_orders": 6,
+                    "projected_revenue_inr": 10500.0,
+                    "projected_gross_profit_inr": 5400.0,
+                    "projected_margin_pct": 51.4,
+                    "marketing_cost_inr": 150.0,
+                    "net_contribution_inr": 5250.0,
+                    "roi_multiple": 35.0,
+                    "guardrails_passed": True,
+                    "violations": []
+                },
+                "BALANCED": {
+                    "strategy_key": "BALANCED",
+                    "name": "Festive Royal Bundle (Recommended)",
+                    "description": "Pair trending Chikankari Kurta with slow-moving Silk Dupatta at ₹2,299 (8% bundle discount). Releases ₹31k trapped capital.",
+                    "discount_pct": 8.0,
+                    "target_audience": 20,
+                    "projected_orders": 14,
+                    "projected_revenue_inr": 32186.0,
+                    "projected_gross_profit_inr": 14406.0,
+                    "projected_margin_pct": 44.8,
+                    "marketing_cost_inr": 450.0,
+                    "net_contribution_inr": 13956.0,
+                    "roi_multiple": 31.0,
+                    "guardrails_passed": True,
+                    "violations": []
+                },
+                "AGGRESSIVE": {
+                    "strategy_key": "AGGRESSIVE",
+                    "name": "Storewide Clearance Sprint",
+                    "description": "Aggressive 18% storewide discount blast across 30 contacts. Breaches merchant guardrail RULE-HFS-02 (max 10% discount).",
+                    "discount_pct": 18.0,
+                    "target_audience": 30,
+                    "projected_orders": 20,
+                    "projected_revenue_inr": 43296.0,
+                    "projected_gross_profit_inr": 14696.0,
+                    "projected_margin_pct": 33.9,
+                    "marketing_cost_inr": 900.0,
+                    "net_contribution_inr": 13796.0,
+                    "roi_multiple": 15.3,
+                    "guardrails_passed": False,
+                    "violations": [
+                        "RULE-HFS-02: Discount 18.0% exceeds maximum permitted discount of 10.0%",
+                        "RULE-HFS-04: Inventory velocity risk on fast-moving Kurta sets"
+                    ]
+                }
+            }),
+            32186.0, 14406.0, "LOW", "AVAILABLE"
+        )
+    ]
+    for om in opp_matches:
+        cur.execute("""
+        INSERT OR REPLACE INTO bazaar_opportunity_matches (
+            match_id, merchant_id, signal_id, opportunity_name,
+            matching_score, relevance_status, score_breakdown_json,
+            compatible_products_json, recommended_strategy_json,
+            decision_twin_scenarios_json, estimated_revenue_inr,
+            estimated_gross_profit_inr, stockout_risk, status, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (*om, now_utc))
+
+    conn.commit()
+
 def reset_database():
     """Drops and re-initializes clean database with fresh seed records."""
     conn = get_connection()
@@ -1371,7 +1725,9 @@ def reset_database():
         "campaign_drafts", "campaign_recipient_statuses", "campaign_activity_timeline",
         "verifications", "task_escalations",
         "merchant_inventory", "merchant_expenses", "merchant_settlements", "merchant_guardrails",
-        "decision_simulations", "outcome_experiments", "business_opportunities"
+        "decision_simulations", "outcome_experiments", "business_opportunities",
+        "voice_sessions", "voice_interactions", "bazaar_participating_merchants",
+        "bazaar_demand_signals", "bazaar_opportunity_matches"
     ]
     for t in tables:
         cur.execute(f"DROP TABLE IF EXISTS {t}")
