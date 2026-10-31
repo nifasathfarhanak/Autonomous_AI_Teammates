@@ -1,0 +1,13 @@
+# Environment and Secrets
+.env
+*.env
+.DS_Store
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Database
+dealpilot.db
+dealpilot.db-wal
+dealpilot.db-shm
