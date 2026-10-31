@@ -4896,6 +4896,169 @@ body {
   }
 }
 
+.results-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.results-request-card,
+.results-outcome-card {
+  min-width: 0;
+  padding: 22px;
+}
+
+.results-card-eyebrow {
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.results-request-status {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.results-request-status[data-status="approved"] {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.results-request-status[data-status="rejected"],
+.results-request-status[data-status="cancelled"] {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.results-request-status[data-status="paused"],
+.results-request-status[data-status="changes_requested"],
+.results-request-status[data-status="unavailable"] {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.results-request-card h3,
+.results-outcome-card h3 {
+  margin: 4px 0 8px;
+  color: var(--paytm-navy);
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.results-request-card p,
+.results-outcome-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.results-request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.results-sandbox-note {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.results-activity-details {
+  margin: 20px 0;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.results-activity-details > summary {
+  padding: 15px 18px;
+  color: var(--paytm-navy);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.results-activity-details[open] > summary {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.results-details-intro {
+  margin: 16px 18px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.results-activity-details > .card {
+  margin-right: 18px !important;
+  margin-left: 18px !important;
+}
+
+.results-shop-filter {
+  display: flex;
+  min-width: 180px;
+  flex: 1.5;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.results-shop-filter strong {
+  font-size: 12px;
+}
+
+.results-activity-details > .card:last-child {
+  margin-bottom: 18px !important;
+}
+
+@media (max-width: 700px) {
+  .results-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .results-request-card,
+  .results-outcome-card {
+    padding: 17px;
+  }
+
+  .results-request-actions {
+    flex-direction: column;
+  }
+
+  .results-request-actions .btn {
+    width: 100%;
+  }
+
+  .results-activity-details > .card {
+    margin-right: 12px !important;
+    margin-left: 12px !important;
+  }
+
+  .results-details-intro {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+}
+
 .bazaar-demo-note,
 .bazaar-owner-note {
   display: flex;

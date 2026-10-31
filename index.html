@@ -1637,9 +1637,9 @@
       <section class="route-view" id="view-analytics" aria-labelledby="headingAnalytics">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Your ActionMate activity</div>
+            <div class="view-eyebrow">Your shop · next steps and results</div>
             <h2 class="view-title" id="headingAnalytics">ActionMate results</h2>
-            <p class="view-description">See what has been completed, what needs your approval, and how the work is going.</p>
+            <p class="view-description">See where your current request stands. Verified sales results will appear when real offer and transaction records are available.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchAnalyticsData()">Refresh</button>
@@ -1648,6 +1648,30 @@
           </div>
         </div>
 
+        <div class="results-overview-grid">
+          <section class="card results-request-card" aria-labelledby="resultsRequestHeading">
+            <div class="results-card-eyebrow">Your current request</div>
+            <span class="badge results-request-status" id="results-request-status" role="status" aria-live="polite">Checking offer status…</span>
+            <h3 id="resultsRequestHeading">Bring regular grocery shoppers back</h3>
+            <p id="results-request-description">Checking the latest offer details…</p>
+            <div class="results-request-actions">
+              <button class="btn btn-primary btn-sm" id="results-request-action" onclick="navigateToRoute('approvals')">Review this offer</button>
+              <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('assistant')">Ask ActionMate</button>
+            </div>
+          </section>
+
+          <section class="card results-outcome-card" aria-labelledby="resultsOutcomeHeading">
+            <div class="results-card-eyebrow">Results for your shop</div>
+            <h3 id="resultsOutcomeHeading">No sales result to report yet</h3>
+            <p>Sales recovered and profit from this offer are <strong>not measured</strong>. They need real offer redemptions matched to completed shop transactions.</p>
+            <div class="results-sandbox-note">Sandbox demo · No customer messages have been sent.</div>
+          </section>
+        </div>
+
+        <details class="results-activity-details">
+          <summary>Show demo activity and filters</summary>
+          <p class="results-details-intro">These workflow counts and cost estimates are illustrative demo information, not your shop’s sales or a bill.</p>
+
         <!-- Filter Bar -->
         <div class="card" style="margin-bottom: 20px; padding: 14px 18px;">
           <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;">
@@ -1655,7 +1679,7 @@
               <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Date Range</label>
               <select id="kpi-filter-date" class="form-input" style="padding: 6px 10px; font-size: 12px; height: 34px;" onchange="applyKpiFilters()">
                 <option value="ALL">All Time</option>
-                <option value="7D" selected>Last 7 Days (Demo Period)</option>
+                <option value="7D" selected>Last 7 days</option>
                 <option value="30D">Last 30 Days</option>
               </select>
             </div>
@@ -1670,9 +1694,9 @@
                 <option value="FAILED">Failed</option>
               </select>
             </div>
-            <div style="flex: 1.5; min-width: 200px;">
-            <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Shop</label>
-            <input type="text" class="form-input" value="Sharma Family Grocery · demo" readonly style="padding: 6px 10px; font-size: 12px; height: 34px; background: var(--bg-subtle);">
+            <div class="results-shop-filter">
+            <span class="form-label">Shop</span>
+            <strong>Sharma Family Grocery</strong>
             </div>
             <div>
               <button class="btn btn-secondary btn-sm" style="height: 34px;" onclick="resetKpiFilters()">Reset Filters</button>
@@ -1788,6 +1812,7 @@
             <li>Profit and return need product costs and campaign costs.</li>
           </ul>
         </div>
+        </details>
 
         <!-- Task Audit Report Viewer Drawer / Modal (Initially Hidden) -->
         <div id="task-report-container" class="card" style="display: none; border: 2px solid var(--paytm-blue);">
@@ -2611,6 +2636,17 @@
           <span>Small groups are hidden to help protect shops. Only shared trends from groups of at least five shops are shown. These trends are not specific to Sharma Family Grocery.</span>
         </div>
 
+        <div class="bazaar-owner-note" role="note">
+          <div>
+            <strong>Keep control of your shop</strong>
+            <p>These market trends and the clothing-shop example do not apply directly to Sharma Family Grocery. Review your own shop's suggestions before taking action. Nothing is sent from this page.</p>
+          </div>
+          <div class="bazaar-owner-actions">
+            <button class="btn btn-secondary btn-sm" type="button" onclick="navigateToRoute('opportunities')">Review my shop suggestions</button>
+            <button class="btn btn-primary btn-sm" type="button" onclick="navigateToRoute('approvals')">Review my approvals</button>
+          </div>
+        </div>
+
         <div class="metrics-grid bazaar-summary-grid" aria-label="Nearby trend summary">
           <div class="card metric-card">
             <div class="metric-label">Shops in this sample</div>
@@ -2731,19 +2767,7 @@
             </div>
           </div>
         </div>
-
         </section>
-
-        <div class="bazaar-owner-note" role="note">
-          <div>
-            <strong>Keep control of your shop</strong>
-            <p>These market trends and the clothing-shop example do not apply directly to Sharma Family Grocery. Review your own shop's suggestions before taking action. Nothing is sent from this page.</p>
-          </div>
-          <div class="bazaar-owner-actions">
-            <button class="btn btn-secondary btn-sm" type="button" onclick="navigateToRoute('opportunities')">Review my shop suggestions</button>
-            <button class="btn btn-primary btn-sm" type="button" onclick="navigateToRoute('approvals')">Review my approvals</button>
-          </div>
-        </div>
       </section>
     </main>
   </div>
@@ -5804,9 +5828,80 @@ async function refreshAuditTrail() {
       `;
     }
 
+    async function fetchResultsRequestStatus() {
+      const status = document.getElementById("results-request-status");
+      const description = document.getElementById("results-request-description");
+      const action = document.getElementById("results-request-action");
+      if (!status || !description || !action) return;
+
+      try {
+        const response = await fetch("/api/approvals/pending");
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Offer status unavailable (${response.status}).`);
+
+        const state = data.current_status || "";
+        const summaries = {
+          PENDING_APPROVAL: {
+            label: "Waiting for your review",
+            description: "Check the offer and spending limit. This is a sandbox demo—approval will not send messages to customers.",
+            action: "Review this offer"
+          },
+          APPROVED: {
+            label: "Approved for demo",
+            description: "Your approval is recorded for the sandbox only. No messages were sent, and sales results are not measured.",
+            action: "View offer details"
+          },
+          PAUSED: {
+            label: "Offer paused",
+            description: "This offer is paused. You can review it and resume the demo when you are ready.",
+            action: "View paused offer"
+          },
+          REJECTED: {
+            label: "Offer declined",
+            description: "Your decision is recorded. No customer messages were sent.",
+            action: "View offer decision"
+          },
+          CHANGES_REQUESTED: {
+            label: "Changes requested",
+            description: "This offer needs updates before it can be approved. Review the request in the approvals page.",
+            action: "Review requested changes"
+          },
+          COMPLETED: {
+            label: "Demo preview complete",
+            description: "The sandbox preview is complete. It did not contact customers or verify sales.",
+            action: "View demo offer"
+          },
+          EXECUTED: {
+            label: "Demo preview complete",
+            description: "The sandbox preview is complete. It did not contact customers or verify sales.",
+            action: "View demo offer"
+          },
+          CANCELLED: {
+            label: "Offer cancelled",
+            description: "This offer was cancelled. No customer messages were sent.",
+            action: "View offer decision"
+          }
+        };
+        const summary = summaries[state];
+        if (!summary) throw new Error("The current offer status is not available.");
+
+        status.dataset.status = state.toLowerCase();
+        status.textContent = summary.label;
+        description.textContent = summary.description;
+        action.textContent = summary.action;
+      } catch (error) {
+        console.error("Current offer status error:", error);
+        status.dataset.status = "unavailable";
+        status.textContent = "Status unavailable";
+        description.textContent = `The current offer status could not be loaded: ${error instanceof Error ? error.message : "Please try again."}`;
+        action.textContent = "Open approvals";
+      }
+    }
+
     // --- 7. Analytics Data Loader & Phase 6 Interactive Engine ---
     async function fetchAnalyticsData() {
       try {
+        await fetchResultsRequestStatus();
         const dateFilter = document.getElementById("kpi-filter-date") ? document.getElementById("kpi-filter-date").value : "7D";
         const statusFilter = document.getElementById("kpi-filter-status") ? document.getElementById("kpi-filter-status").value : "";
         const params = new URLSearchParams({ merchant_id: "MERCH-001" });
