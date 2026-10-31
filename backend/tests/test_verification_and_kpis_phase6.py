@@ -82,7 +82,8 @@ class TestVerificationAndKPIsPhase6(unittest.TestCase):
             "CAMP-P6-REQHUM-04",
             "CAMP-P6-RETRY-05",
             "CAMP-P6-MAXRETRY-06",
-            "CAMP-P6-ENG-11"
+            "CAMP-P6-ENG-11",
+            "CAMP-P6-HISTORY-12"
         ]
         test_tids = ["TASK-P6-TEST-01", "TASK-P6-ESC-02", "TASK-P6-RETRY-03"]
         c_placeholders = ",".join(["?"] * len(test_cids))
@@ -365,7 +366,33 @@ class TestVerificationAndKPIsPhase6(unittest.TestCase):
         self.assertEqual(empty_res["kpis"]["approval_compliance_display"], "N/A")
         self.assertEqual(empty_res["kpis"]["cost_per_completed_task_inr"], 0.0)
 
-    def test_12_task_reporting_and_markdown_export(self):
+    def test_12_approval_history_is_campaign_scoped(self):
+        """Approval history returns governance decisions, not the legacy strategy queue."""
+        campaign_id = "CAMP-P6-HISTORY-12"
+        CampaignService.create_campaign_draft({
+            "campaign_id": campaign_id,
+            "merchant_id": "MERCH-001",
+            "campaign_name": "Approval History Test",
+            "business_objective": "Test scoped approval history",
+            "reason_for_recommendation": "Test endpoint response fields",
+            "target_customer_segment": "DECLINING_FREQUENCY",
+            "offer_configured": True
+        })
+        GovernanceService.approve_campaign(campaign_id, approver_id="USER-001")
+
+        handler = DummyHandler(
+            f"/api/approvals/history?merchant_id=MERCH-001&campaign_id={campaign_id}"
+        )
+        history = get_response_data(handler)
+        self.assertEqual(get_status_code(handler), 200)
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["campaign_id"], campaign_id)
+        self.assertEqual(history[0]["decision"], "APPROVED")
+        self.assertIn("approved_by", history[0])
+        self.assertIn("auth_signature", history[0])
+        self.assertNotIn("strategy_id", history[0])
+
+    def test_13_task_reporting_and_markdown_export(self):
         """Validates comprehensive task audit report generation and Markdown export."""
         report = TaskReportingService.generate_task_report("WF-REC-1042")
         self.assertEqual(report.task_id, "WF-REC-1042")

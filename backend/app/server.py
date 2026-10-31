@@ -962,6 +962,31 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             }).encode('utf-8'))
             return
 
+        elif path == "/api/approvals/history":
+            qs = parse_qs(parsed.query)
+            merchant_id = qs.get("merchant_id", ["MERCH-001"])[0]
+            campaign_id = qs.get("campaign_id", [None])[0]
+            conn = get_connection()
+            cur = conn.cursor()
+            history_query = """
+            SELECT id, workflow_id, task_id, campaign_id, merchant_id, approver_id,
+                   decision, approved_by, max_budget_authorized_inr, message_version,
+                   content_hash, reason_or_comments, approval_status, auth_signature, decided_at
+            FROM approvals
+            WHERE merchant_id = ?
+            """
+            history_params = [merchant_id]
+            if campaign_id:
+                history_query += " AND campaign_id = ?"
+                history_params.append(campaign_id)
+            history_query += " ORDER BY decided_at DESC"
+            cur.execute(history_query, history_params)
+            rows = [dict(row) for row in cur.fetchall()]
+            conn.close()
+            self._set_headers(200)
+            self.wfile.write(json.dumps(rows).encode("utf-8"))
+            return
+
         # 33. Phase 5: Pending Approval Request Details
         elif path in ("/api/approvals/pending", "/api/approvals/request"):
             req = GovernanceService.get_approval_request("CAMP-REC-1042")

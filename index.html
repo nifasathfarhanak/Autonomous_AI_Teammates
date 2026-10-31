@@ -1378,9 +1378,9 @@
       <section class="route-view" id="view-approvals" aria-labelledby="headingApprovals">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Human-in-the-Loop Governance &amp; Permission Control</div>
-            <h2 class="view-title" id="headingApprovals">Merchant Approvals Center</h2>
-            <p class="view-description">Review each offer before it is sent. Nothing goes out until you approve it.</p>
+            <div class="view-eyebrow">Your shop · your decision</div>
+            <h2 class="view-title" id="headingApprovals">Review an offer</h2>
+            <p class="view-description">Check who it is for, what customers will see, and the spending limit before you decide.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchApprovalDetails()">
@@ -1389,169 +1389,145 @@
           </div>
         </div>
 
-        <!-- 3-Category Policy Callout Banner -->
-        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-left: 4px solid var(--paytm-blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            
-            <div>
-              <strong style="color: var(--paytm-navy); font-size: 13.5px;">HOW YOUR STORE IS PROTECTED:</strong>
-              <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">
-                Looking up information is allowed &bull; sending offers needs your approval &bull; refunds and financial changes are blocked.
-              </span>
-            </div>
+        <div class="approval-safety-note">
+          <div>
+            <strong>Your shop stays in control</strong>
+            <p>Offers need your approval. This sandbox only records a demo decision—no customer messages are sent. Refunds and bank changes are not allowed.</p>
           </div>
-          <span class="badge" style="background: #ecfdf5; color: var(--green-dark); font-weight: 700;">POLICY ACTIVE</span>
+          <span class="badge" style="background: #ecfdf5; color: var(--green-dark); font-weight: 700;">DEMO MODE</span>
         </div>
 
         <!-- Comprehensive Pending Approval Review Card -->
         <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--amber);" id="approvalMainCard">
           <div class="card-header">
             <div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="badge" id="apprStatusBadge" style="background: var(--amber-bg); color: var(--amber-dark);">PENDING_APPROVAL</span>
-                <div class="card-title" id="apprCampaignTitle">Task #1042: Grocery shopper win-back offer</div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="badge" id="apprStatusBadge" style="background: var(--amber-bg); color: var(--amber-dark);">Waiting for your review</span>
+                <div class="card-title" id="apprCampaignTitle">Grocery shopper return offer</div>
               </div>
               <div class="card-subtitle">
-                Merchant: <strong style="color: var(--paytm-navy);" id="apprMerchantName">Sharma Family Grocery</strong> &bull;
-                Device: <span style="font-family: var(--font-mono); font-weight: 700;">SB-4G-DEL-9842</span> &bull;
-                Execution Mode: <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SIMULATED_DEMO (SANDBOX)</span>
+                For <strong style="color: var(--paytm-navy);" id="apprMerchantName">Sharma Family Grocery</strong> · Sandbox preview only
               </div>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="nav-badge-pill" id="apprVersionPill" style="background: var(--bg-subtle); color: var(--paytm-navy);">Version 1.0</span>
+              <span class="nav-badge-pill" id="apprVersionPill" style="background: var(--bg-subtle); color: var(--paytm-navy);">Offer version 1</span>
             </div>
           </div>
 
-          <!-- Rationale & Purpose Row -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
-            <div style="background: var(--bg-subtle); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--paytm-blue);">
-              <strong>Campaign Purpose:</strong>
+          <div class="approval-next-step" role="status" aria-live="polite">
+            <strong id="approvalNextStepTitle">What happens if I approve?</strong>
+            <p id="approvalNextStepText">Your approval is recorded for this demo. Nothing is sent to customers.</p>
+          </div>
+
+          <div class="approval-reason-grid">
+            <div class="approval-reason-card">
+              <strong>What this offer is for</strong>
               <div id="apprPurposeText" style="color: var(--text-body); margin-top: 4px;">
                 Review 46 regular grocery shoppers flagged in the simulated receipt data.
               </div>
             </div>
-            <div style="background: var(--bg-subtle); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--amber);">
-              <strong>Reason for Recommendation:</strong>
+            <div class="approval-reason-card">
+              <strong>Why ActionMate suggested it</strong>
               <div id="apprRationaleText" style="color: var(--text-body); margin-top: 4px;">
                 Repeat-basket share changed from 37% to 24% in the simulated data. The cause is not confirmed.
               </div>
             </div>
           </div>
 
-          <!-- Audience & KPI Row -->
-          <div class="kpi-grid-4" style="margin-bottom: 16px;">
+          <div class="approval-offer-summary">
             <div class="kpi-card">
-              <div class="kpi-title">Target Audience</div>
+              <div class="kpi-title">Who may receive it</div>
               <div class="kpi-metric" id="apprAudienceCount" style="font-size: 20px;">Eligible shoppers</div>
-              <div class="kpi-subtext" id="apprAudienceSub">3 excluded (unsub / invalid)</div>
+              <div class="kpi-subtext" id="apprAudienceSub">Only eligible shoppers; exclusions are not contacted</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-title">Incentive Offer</div>
+              <div class="kpi-title">Customer offer</div>
               <div class="kpi-metric" id="apprOfferMetric" style="font-size: 20px;">₹50 OFF</div>
-              <div class="kpi-subtext">Code: GROCERY50 (Min > ₹499)</div>
+              <div class="kpi-subtext" id="apprOfferSub">Code GROCERY50 · on baskets above ₹499</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-title">Max Liability Cap</div>
+              <div class="kpi-title">Maximum offer budget</div>
               <div class="kpi-metric" id="apprBudgetMetric" style="font-size: 20px;">₹3,600</div>
-              <div class="kpi-subtext">Hard merchant budget ceiling</div>
+              <div class="kpi-subtext">Maximum discount spend for this offer</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-title">Channels</div>
-              <div class="kpi-metric" style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); padding-top: 4px;">SMS &amp; Soundbox</div>
-              <div class="kpi-subtext">Indic Hindi &amp; English</div>
+              <div class="kpi-title">Message channels</div>
+              <div class="kpi-metric" id="apprChannelsMetric" style="font-size: 15px; font-weight: 700; color: var(--paytm-navy); padding-top: 4px;">SMS &amp; Soundbox</div>
+              <div class="kpi-subtext">Drafts available in English and Hindi</div>
             </div>
           </div>
 
-          <!-- Complete Promotional Message Display -->
-          <div style="background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <div class="approval-message-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <span style="font-weight: 700; font-size: 13px; color: var(--paytm-navy);">Complete Promotional Message Copy (Subject to Human Sign-Off):</span>
-              <div style="display: flex; gap: 4px;">
+              <span style="font-weight: 700; font-size: 13px; color: var(--paytm-navy);">Message customers would see</span>
+              <div class="approval-language-buttons">
                 <button class="btn btn-secondary btn-sm active" id="btnApprLangEn" onclick="switchApprLang('en')">English</button>
                 <button class="btn btn-secondary btn-sm" id="btnApprLangHi" onclick="switchApprLang('hi')">Hindi</button>
-                <button class="btn btn-secondary btn-sm" id="btnApprLangSoundbox" onclick="switchApprLang('soundbox_voice')">Soundbox Voice</button>
+                <button class="btn btn-secondary btn-sm" id="btnApprLangSoundbox" onclick="switchApprLang('soundbox_voice')">Audio</button>
               </div>
             </div>
             <div id="apprMessageDisplayBox" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: var(--text-body); line-height: 1.5; min-height: 60px; white-space: pre-wrap;">
               Hi [Customer Name]! Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11.5px; color: var(--text-muted);">
-              <span>Content Hash: <code id="apprContentHashSpan" style="font-size: 11px; color: var(--paytm-blue);">Computing...</code></span>
-              <span>Editing message or offer automatically invalidates previous human approvals.</span>
-            </div>
+            <p class="approval-message-footnote">Changing the offer or message means it must be reviewed and approved again.</p>
           </div>
 
           <!-- Edit Campaign Inline Panel (Hidden by default) -->
           <div id="apprEditSection" style="display: none; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #92400e; font-size: 13px;">Edit Message &amp; Offer (Requires New Approval):</strong>
-              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(false)">Cancel Edit</button>
+              <strong style="color: #92400e; font-size: 13px;">Change the offer or its message</strong>
+              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(false)">Close</button>
             </div>
             <div class="form-group" style="margin-bottom: 10px;">
-              <label class="form-label" for="editEnMessageInput">English Message Text:</label>
+              <label class="form-label" for="editEnMessageInput">Message in English</label>
               <textarea id="editEnMessageInput" class="form-input" rows="2" style="width: 100%;"></textarea>
             </div>
             <div class="form-group" style="margin-bottom: 10px;">
-              <label class="form-label" for="editDiscountAmountInput">Discount Amount (INR):</label>
+              <label class="form-label" for="editDiscountAmountInput">Discount amount (₹)</label>
               <input type="number" id="editDiscountAmountInput" class="form-input" style="max-width: 160px;" value="50">
             </div>
             <button class="btn btn-primary btn-sm" onclick="submitCampaignEditGovernance()">
-              Save Changes &amp; Invalidate Prior Approvals
+              Save changes for review
             </button>
           </div>
 
-          <!-- Authorization Controls Row -->
-          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid var(--border-color);">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <label for="approvalBudgetCapInput" style="font-size: 12.5px; font-weight: 600; color: var(--text-body);">Max Budget Ceiling (INR):</label>
-              <input type="number" id="approvalBudgetCapInput" class="form-input" value="3600" style="width: 110px; padding: 4px 8px; font-size: 13px;">
-              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(true)">Edit Message</button>
-              <button class="btn btn-secondary btn-sm" onclick="requestChangesGovernance()">Request Changes</button>
-              <button class="btn btn-secondary btn-sm" id="btnPauseResume" onclick="togglePauseGovernance()">Pause</button>
+          <div class="approval-budget-control">
+            <div>
+              <label for="approvalBudgetCapInput">Maximum total discount spend</label>
+              <p>Set the most this demo offer could cost. It cannot exceed the shop’s ₹3,600 limit.</p>
             </div>
-            <div style="display: flex; gap: 10px;">
-              <button class="btn btn-secondary btn-sm" style="color: #be123c;" onclick="rejectCampaignGovernance()">Decline &amp; Reject</button>
+            <div class="approval-budget-input">
+              <span>₹</span>
+              <input type="number" id="approvalBudgetCapInput" class="form-input" value="3600" min="0" max="3600" step="50" aria-label="Maximum total discount spend in rupees">
+            </div>
+          </div>
+
+          <div class="approval-actions">
+            <div class="approval-secondary-actions">
+              <button class="btn btn-secondary btn-sm" onclick="toggleEditSection(true)">Change offer or message</button>
+              <button class="btn btn-secondary btn-sm" onclick="requestChangesGovernance()">Ask ActionMate to revise</button>
+              <button class="btn btn-secondary btn-sm" id="btnPauseResume" onclick="togglePauseGovernance()">Pause offer</button>
+              <button class="btn btn-secondary btn-sm approval-decline" onclick="rejectCampaignGovernance()">Decline offer</button>
+            </div>
+            <div class="approval-primary-action">
+              <span id="approvalActionHint">Approval records your decision for this demo. No messages will be sent.</span>
               <button class="btn btn-primary btn-sm" id="btnApproveCampaign" onclick="approveCampaignGovernance()" style="background: var(--green-dark);">
-                Approve Campaign
+                Approve this offer
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Approvals History Audit Table -->
-        <div class="card">
+        <div class="card approval-history-card">
           <div class="card-header">
             <div>
-              <div class="card-title">Approval Decision History &amp; Governance Ledger</div>
-              <div class="card-subtitle">Permanent records of human authorization gates, Secure Approval signatures, and invalidation events</div>
+              <div class="card-title">Your past decisions</div>
+              <div class="card-subtitle">A record of approvals, declines, and requested changes for this shop.</div>
             </div>
-            <span class="badge" id="apprLedgerCountBadge" style="background: var(--bg-subtle);">0 decisions recorded</span>
+            <span class="badge" id="apprLedgerCountBadge" style="background: var(--bg-subtle);">Loading…</span>
           </div>
-          <div class="card-body">
-            <h3 class="overview-visual-title">Offer review status</h3>
-            <p class="overview-visual-subtitle">The current offer and any decisions already recorded</p>
-            <div id="approvalDecisionChart" class="horizontal-chart" role="img" aria-label="Current offer status and past approval decisions"></div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Approval ID</th>
-                  <th>Decision</th>
-                  <th>Approver</th>
-                  <th>Status</th>
-                  <th>Budget Cap</th>
-                  <th>Content Fingerprint</th>
-                  <th>Secure Approval</th>
-                  <th>Timestamp</th>
-                </tr>
-              </thead>
-              <tbody id="approvalsHistoryTableBody">
-                <tr>
-                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">Loading governance approvals...</td>
-                </tr>
-              </tbody>
-            </table>
+          <div id="approvalsHistoryList" class="approval-history-list" aria-live="polite">
+            <p class="approval-history-empty">Loading your decision history…</p>
           </div>
         </div>
       </section>
@@ -5253,8 +5229,8 @@ let currentApprLang = "en";
 async function fetchApprovalDetails() {
   try {
     const res = await fetch("/api/approvals/pending");
-    if (!res.ok) return;
     const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Could not load the offer (${res.status}).`);
     currentApprData = data;
 
     const titleEl = document.getElementById("apprCampaignTitle");
@@ -5263,21 +5239,87 @@ async function fetchApprovalDetails() {
     const purposeEl = document.getElementById("apprPurposeText");
     const rationaleEl = document.getElementById("apprRationaleText");
     const audCountEl = document.getElementById("apprAudienceCount");
-    const hashSpan = document.getElementById("apprContentHashSpan");
+    const audSubEl = document.getElementById("apprAudienceSub");
+    const offerMetricEl = document.getElementById("apprOfferMetric");
+    const offerSubEl = document.getElementById("apprOfferSub");
+    const budgetMetricEl = document.getElementById("apprBudgetMetric");
     const budgetInput = document.getElementById("approvalBudgetCapInput");
     const editEnInput = document.getElementById("editEnMessageInput");
+    const editDiscountInput = document.getElementById("editDiscountAmountInput");
     const btnPause = document.getElementById("btnPauseResume");
+    const btnApprove = document.getElementById("btnApproveCampaign");
+    const nextStepTitle = document.getElementById("approvalNextStepTitle");
+    const nextStepText = document.getElementById("approvalNextStepText");
+    const actionHint = document.getElementById("approvalActionHint");
 
-    if (titleEl) titleEl.textContent = data.campaign_name || "Task #1042 Campaign";
+    if (titleEl) titleEl.textContent = data.ai_recommendation?.strategy || "Grocery shopper return offer";
     if (merchEl) merchEl.textContent = data.merchant_name || "Sharma Family Grocery";
-    if (purposeEl) purposeEl.textContent = data.campaign_purpose || "";
-    if (rationaleEl) rationaleEl.textContent = data.reason_for_recommendation || "";
-    if (audCountEl) audCountEl.textContent = `${data.customer_count || 0} shoppers`;
-    if (hashSpan) hashSpan.textContent = (data.content_hash ? data.content_hash.substring(0, 24) + "..." : "Deterministic  Active");
+    if (purposeEl) {
+      purposeEl.textContent = `Invite eligible regular shoppers to visit again with a small grocery offer.`;
+    }
+    if (rationaleEl) {
+      const rationale = String(data.reason_for_recommendation || "");
+      const repeatShare = rationale.match(/repeat-basket share moving from ([\d.]+)% to ([\d.]+)%/i);
+      const weeklySales = rationale.match(/weekly sales moving from ₹([\d,]+) to ₹([\d,]+)/i);
+      const estimatedAmount = rationale.match(/estimated ₹([\d,]+) at-risk amount/i);
+      const evidence = [];
+      if (repeatShare) evidence.push(`Repeat baskets fell from ${repeatShare[1]}% to ${repeatShare[2]}%.`);
+      if (weeklySales) evidence.push(`Weekly sales fell from ${formatINR(Number(weeklySales[1].replace(/,/g, "")))} to ${formatINR(Number(weeklySales[2].replace(/,/g, "")))}.`);
+      evidence.push("These sample records do not explain why sales changed.");
+      if (estimatedAmount) evidence.push(`${formatINR(Number(estimatedAmount[1].replace(/,/g, "")))} is only an estimate, not confirmed lost profit.`);
+      rationaleEl.textContent = evidence.join(" ");
+    }
+    const audienceMatch = String(data.target_audience || "").match(/\((\d+)\s+eligible,\s*(\d+)\s+excluded\)/i);
+    const eligibleCount = Number(data.customer_count) || 0;
+    const excludedCount = audienceMatch ? Number(audienceMatch[2]) : null;
+    if (audCountEl) audCountEl.textContent = `${eligibleCount} shoppers`;
+    if (audSubEl) {
+      audSubEl.textContent = excludedCount === null
+        ? "Eligible shoppers only; excluded shoppers are not contacted"
+        : `${eligibleCount} eligible · ${excludedCount} excluded from the offer`;
+    }
+
+    const settings = data.campaign_settings || {};
+    const discount = Number(settings.discount_amount_inr);
+    const minimumOrder = Number(settings.min_order_inr);
+    const discountCode = settings.discount_code || "GROCERY50";
+    if (offerMetricEl) offerMetricEl.textContent = Number.isFinite(discount) ? `${formatINR(discount)} off` : "Offer details unavailable";
+    if (offerSubEl) {
+      offerSubEl.textContent = Number.isFinite(minimumOrder)
+        ? `Code ${discountCode} · on baskets above ${formatINR(minimumOrder)}`
+        : `Code ${discountCode}`;
+    }
+    const maxBudget = Number(settings.max_liability_budget_inr);
+    if (budgetMetricEl) budgetMetricEl.textContent = Number.isFinite(maxBudget) ? formatINR(maxBudget) : "Not set";
+    if (budgetInput && Number.isFinite(maxBudget)) {
+      budgetInput.max = String(maxBudget);
+      budgetInput.value = String(maxBudget);
+    }
+    if (editDiscountInput && Number.isFinite(discount)) editDiscountInput.value = String(discount);
+    const channelNames = (settings.channels || []).map(channel => {
+      const channelName = String(channel);
+      if (channelName.toLowerCase().includes("soundbox")) return "Soundbox audio";
+      if (channelName.toLowerCase() === "sms") return "SMS";
+      if (channelName.toLowerCase() === "whatsapp") return "WhatsApp";
+      return channelName;
+    });
+    const channelsMetric = document.getElementById("apprChannelsMetric");
+    if (channelsMetric && channelNames.length) channelsMetric.textContent = channelNames.join(" · ");
+    const versionPill = document.getElementById("apprVersionPill");
+    if (versionPill) versionPill.textContent = `Offer version ${Number(data.message_version) || 1}`;
 
     const st = data.current_status || "PENDING_APPROVAL";
+    const statusLabels = {
+      PENDING_APPROVAL: "Waiting for your review",
+      APPROVED: "Approved for demo",
+      PAUSED: "Offer paused",
+      REJECTED: "Offer declined",
+      CHANGES_REQUESTED: "Changes requested",
+      COMPLETED: "Demo preview complete",
+      EXECUTED: "Demo preview complete"
+    };
     if (statusBadge) {
-      statusBadge.textContent = st;
+      statusBadge.textContent = statusLabels[st] || "Status unavailable";
       if (st === "APPROVED") {
         statusBadge.style.background = "var(--green-bg)";
         statusBadge.style.color = "var(--green-dark)";
@@ -5293,11 +5335,62 @@ async function fetchApprovalDetails() {
       } else if (st === "CHANGES_REQUESTED") {
         statusBadge.style.background = "#f3e8ff";
         statusBadge.style.color = "#7e22ce";
+      } else if (st === "COMPLETED" || st === "EXECUTED") {
+        statusBadge.style.background = "var(--green-bg)";
+        statusBadge.style.color = "var(--green-dark)";
       }
     }
 
     if (btnPause) {
-      btnPause.textContent = (st === "PAUSED") ? "▶️ Resume" : "⏸️ Pause";
+      btnPause.textContent = (st === "PAUSED") ? "Resume offer" : "Pause offer";
+    }
+    if (btnApprove) btnApprove.style.display = st === "PENDING_APPROVAL" ? "inline-flex" : "none";
+    if (nextStepTitle && nextStepText && actionHint) {
+      const stateCopy = {
+        PENDING_APPROVAL: [
+          "What happens if I approve?",
+          "Your approval is recorded for this demo only. No customer message will be sent.",
+          "Review the offer, audience, and budget. Approving records your choice; it does not send anything."
+        ],
+        APPROVED: [
+          "You approved this offer",
+          "Your decision is saved. This is a sandbox demo; no customer message was sent.",
+          "This offer version is approved in the demo. You can still ask for changes or pause it."
+        ],
+        PAUSED: [
+          "This offer is paused",
+          "No demo action can proceed while it is paused. Resume it if you want to continue reviewing.",
+          "Resume the offer to continue the demo workflow."
+        ],
+        REJECTED: [
+          "You declined this offer",
+          "The decline is saved. No customer messages were sent.",
+          "Ask ActionMate to revise the offer if you would like to review a different version."
+        ],
+        CHANGES_REQUESTED: [
+          "Changes have been requested",
+          "This version needs updates before it can be approved.",
+          "Wait for the revised offer, then review it again."
+        ],
+        COMPLETED: [
+          "Demo preview complete",
+          "The sandbox preview is complete. It did not contact customers or verify sales.",
+          "Actual sales results require real offer and transaction records."
+        ],
+        EXECUTED: [
+          "Demo preview complete",
+          "The sandbox preview is complete. It did not contact customers or verify sales.",
+          "Actual sales results require real offer and transaction records."
+        ]
+      };
+      const copy = stateCopy[st] || [
+        "Check the offer status",
+        "ActionMate could not identify this offer status.",
+        "Refresh the page or ask for help before making a decision."
+      ];
+      nextStepTitle.textContent = copy[0];
+      nextStepText.textContent = copy[1];
+      actionHint.textContent = copy[2];
     }
 
     if (editEnInput && data.promotional_message && data.promotional_message.en) {
@@ -5308,6 +5401,10 @@ async function fetchApprovalDetails() {
     await fetchApprovalsHistory();
   } catch (e) {
     console.error("Error fetching approval details:", e);
+    const nextStepTitle = document.getElementById("approvalNextStepTitle");
+    const nextStepText = document.getElementById("approvalNextStepText");
+    if (nextStepTitle) nextStepTitle.textContent = "Offer details could not be loaded";
+    if (nextStepText) nextStepText.textContent = e.message;
   }
 }
 
@@ -5363,7 +5460,8 @@ async function submitCampaignEditGovernance() {
       })
     });
     const result = await res.json();
-    showSiteToast("Campaign message edited. Previous approval INVALIDATED. Fresh sign-off required.");
+    if (!res.ok) throw new Error(result.error || `Could not save changes (${res.status}).`);
+    showSiteToast("Changes saved. The updated offer needs your approval.");
     toggleEditSection(false);
     await fetchApprovalDetails();
   } catch (e) {
@@ -5373,7 +5471,18 @@ async function submitCampaignEditGovernance() {
 
 async function approveCampaignGovernance() {
   const cid = (currentApprData && currentApprData.campaign_id) || "CAMP-REC-1042";
-  const budget = parseFloat(document.getElementById("approvalBudgetCapInput")?.value || "3600");
+  if (!currentApprData || currentApprData.current_status !== "PENDING_APPROVAL") {
+    showSiteToast("This offer is not waiting for approval.");
+    return;
+  }
+  const budgetInput = document.getElementById("approvalBudgetCapInput");
+  const budget = Number(budgetInput?.value);
+  const maxBudget = Number(currentApprData.campaign_settings?.max_liability_budget_inr);
+  if (!Number.isFinite(budget) || budget <= 0 || !Number.isFinite(maxBudget) || budget > maxBudget) {
+    showSiteToast(`Enter a budget greater than ₹0 and no higher than ${formatINR(maxBudget)}.`);
+    budgetInput?.focus();
+    return;
+  }
 
   try {
     const res = await fetch(`/api/approvals/${cid}/approve`, {
@@ -5387,12 +5496,12 @@ async function approveCampaignGovernance() {
     });
 
     if (res.ok) {
-      const rec = await res.json();
-      showSiteToast(`Campaign approved! Reference: ${rec.auth_signature.substring(0, 16)}...`);
+      await res.json();
+      showSiteToast("Your approval is saved for the demo. No customer messages were sent.");
       await fetchApprovalDetails();
     } else {
       const err = await res.json();
-      showSiteToast("Approval failed: " + (err.error || res.statusText));
+      showSiteToast("Could not approve this offer: " + (err.error || res.statusText));
     }
   } catch (e) {
     showSiteToast("Approval network error: " + e.message);
@@ -5408,8 +5517,11 @@ async function rejectCampaignGovernance() {
       body: JSON.stringify({ approver_id: "USER-001", reason: "Merchant declined campaign via Approvals Center." })
     });
     if (res.ok) {
-      showSiteToast("Campaign declined and marked REJECTED. Outbound dispatches strictly blocked.");
+      showSiteToast("Your decision to decline this offer is saved. No messages were sent.");
       await fetchApprovalDetails();
+    } else {
+      const err = await res.json();
+      showSiteToast("Could not decline this offer: " + (err.error || res.statusText));
     }
   } catch (e) {
     showSiteToast("Rejection failed: " + e.message);
@@ -5428,8 +5540,11 @@ async function requestChangesGovernance() {
       body: JSON.stringify({ approver_id: "USER-001", notes: notes })
     });
     if (res.ok) {
-      showSiteToast("Revisions requested. Workflow status transitioned to CHANGES_REQUESTED.");
+      showSiteToast("Your change request is saved. Review the updated offer before approving.");
       await fetchApprovalDetails();
+    } else {
+      const err = await res.json();
+      showSiteToast("Could not request changes: " + (err.error || res.statusText));
     }
   } catch (e) {
     showSiteToast("Request changes failed: " + e.message);
@@ -5450,6 +5565,9 @@ async function togglePauseGovernance() {
     if (res.ok) {
       showSiteToast(isPaused ? "Campaign resumed." : "Campaign paused. All executions blocked.");
       await fetchApprovalDetails();
+    } else {
+      const err = await res.json();
+      showSiteToast("Could not update this offer: " + (err.error || res.statusText));
     }
   } catch (e) {
     showSiteToast("Pause/Resume failed: " + e.message);
@@ -5458,65 +5576,89 @@ async function togglePauseGovernance() {
 
 async function fetchApprovalsHistory() {
   try {
-    const res = await fetch("/api/approvals");
-    if (!res.ok) return;
+    const campaignId = (currentApprData && currentApprData.campaign_id) || "CAMP-REC-1042";
+    const res = await fetch(`/api/approvals/history?merchant_id=MERCH-001&campaign_id=${encodeURIComponent(campaignId)}`);
+    if (!res.ok) throw new Error(`Could not load decision history (${res.status}).`);
     const list = await res.json();
 
-    const tbody = document.getElementById("approvalsHistoryTableBody");
+    const historyList = document.getElementById("approvalsHistoryList");
     const badge = document.getElementById("apprLedgerCountBadge");
-    if (badge) badge.textContent = `${list.length} decisions recorded`;
-    const decisionCounts = (Array.isArray(list) ? list : []).reduce((counts, approval) => {
-      const decision = String(approval.decision || "UNKNOWN").replace(/_/g, " ");
-      counts[decision] = (counts[decision] || 0) + 1;
-      return counts;
-    }, {});
-    if (currentApprData && currentApprData.current_status) {
-      const currentStatus = String(currentApprData.current_status).replace(/_/g, " ");
-      decisionCounts[`Current offer: ${currentStatus}`] = 1;
-    }
-    renderHorizontalBarChart(
-      "approvalDecisionChart",
-      Object.entries(decisionCounts).map(([label, value]) => ({ label, value })),
-      "label",
-      "value",
-      value => `${value} recorded`,
-      "#00BAF2"
-    );
-    if (!tbody) return;
+    const rows = Array.isArray(list) ? list : [];
+    if (badge) badge.textContent = `${rows.length} ${rows.length === 1 ? "decision" : "decisions"}`;
+    if (!historyList) return;
 
-    if (!list || list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">No approval decisions logged yet.</td></tr>`;
+    if (rows.length === 0) {
+      historyList.innerHTML = `<p class="approval-history-empty">No decisions have been recorded for this offer yet.</p>`;
       return;
     }
 
-    tbody.innerHTML = list.map(a => {
-      let decColor = "var(--green-dark)";
-      let decBg = "var(--green-bg)";
-      if (a.decision === "REJECTED") { decColor = "#991b1b"; decBg = "#fee2e2"; }
-      else if (a.decision === "CHANGES_REQUESTED") { decColor = "#7e22ce"; decBg = "#f3e8ff"; }
-      else if (a.decision === "PAUSED") { decColor = "#475569"; decBg = "#f1f5f9"; }
+    const decisionLabels = {
+      APPROVED: "Approved",
+      REJECTED: "Declined",
+      CHANGES_REQUESTED: "Changes requested",
+      PAUSED: "Paused",
+      RESUMED: "Resumed"
+    };
+    const approvalStatusLabels = {
+      VALID: "Still valid",
+      INVALIDATED: "No longer active",
+      SUPERSEDED: "Replaced by a newer decision"
+    };
+    const formatDecisionTime = value => {
+      if (!value) return "Date not recorded";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime())
+        ? "Date not recorded"
+        : new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(date);
+    };
 
-      let stBadge = "var(--green-bg)";
-      let stColor = "var(--green-dark)";
-      if (a.approval_status === "INVALIDATED") { stBadge = "#fee2e2"; stColor = "#991b1b"; }
-      else if (a.approval_status === "SUPERSEDED") { stBadge = "var(--bg-subtle)"; stColor = "var(--text-muted)"; }
+    historyList.innerHTML = rows.map(approval => {
+      const decision = String(approval.decision || "");
+      const decisionLabel = decisionLabels[decision] || "Decision recorded";
+      const status = String(approval.approval_status || "");
+      const statusLabel = approvalStatusLabels[status] || "Status not recorded";
+      const approver = escapeHtml(approval.approved_by || "Shop owner");
+      const budget = Number(approval.max_budget_authorized_inr);
+      const budgetLabel = Number.isFinite(budget) ? formatINR(budget) : "Not recorded";
+      const comments = approval.reason_or_comments
+        ? `<p><strong>Note:</strong> ${escapeHtml(approval.reason_or_comments)}</p>`
+        : "";
+      const auditDetails = [
+        ["Decision ID", approval.id],
+        ["Offer version", approval.message_version],
+        ["Content check", approval.content_hash],
+        ["Approval signature", approval.auth_signature]
+      ].filter(([, value]) => value !== null && value !== undefined && value !== "");
 
-      const hashDisp = a.content_hash ? a.content_hash.substring(0, 10) + "..." : "---";
-      const sigDisp = a.auth_signature ? a.auth_signature.substring(0, 12) + "..." : "---";
-
-      return `<tr>
-        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--paytm-blue);">${a.id}</td>
-        <td><span class="badge" style="background: ${decBg}; color: ${decColor}; font-weight: 700;">${a.decision}</span></td>
-        <td style="font-weight: 600; color: var(--paytm-navy);">${a.approved_by || 'Ramesh Sharma'}</td>
-        <td><span class="badge" style="background: ${stBadge}; color: ${stColor}; font-weight: 600;">${a.approval_status || 'VALID'}</span></td>
-        <td>₹${Number(a.max_budget_authorized_inr || 3600).toLocaleString('en-IN')}</td>
-        <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">${hashDisp}</td>
-        <td style="font-family: var(--font-mono); font-size: 11px; color: var(--paytm-blue);">${sigDisp}</td>
-        <td style="font-size: 11.5px; color: var(--text-muted);">${a.decided_at ? a.decided_at.substring(11, 19) : 'Just now'}</td>
-      </tr>`;
+      return `
+        <article class="approval-history-item">
+          <div class="approval-history-main">
+            <div>
+              <span class="approval-history-decision">${escapeHtml(decisionLabel)}</span>
+              <span class="approval-history-by">by ${approver}</span>
+              <div class="approval-history-date">${escapeHtml(formatDecisionTime(approval.decided_at))}</div>
+            </div>
+            <div class="approval-history-meta">
+              <span class="approval-history-status approval-history-status-${escapeHtml(status.toLowerCase())}">${escapeHtml(statusLabel)}</span>
+              <span>Maximum spend: <strong>${escapeHtml(budgetLabel)}</strong></span>
+            </div>
+          </div>
+          ${comments ? `<div class="approval-history-note">${comments}</div>` : ""}
+          ${auditDetails.length ? `
+            <details class="approval-audit-details">
+              <summary>View technical approval record</summary>
+              <dl>${auditDetails.map(([label, value]) => `
+                <div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>
+              `).join("")}</dl>
+            </details>
+          ` : ""}
+        </article>
+      `;
     }).join("");
   } catch (e) {
     console.error("Error fetching approvals history:", e);
+    const historyList = document.getElementById("approvalsHistoryList");
+    if (historyList) historyList.innerHTML = `<p class="approval-history-empty">Decision history could not be loaded: ${escapeHtml(e.message)}</p>`;
   }
 }
 
