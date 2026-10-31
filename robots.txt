@@ -7,3 +7,4 @@ Allow: /signup
 Allow: /forgot-password
 
 Sitemap: https://actionmate.paytm.com/sitemap.xml
+
