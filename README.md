@@ -6,7 +6,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Zero External Pip Dependencies](https://img.shields.io/badge/dependencies-Standard%20Library%20Only-brightgreen.svg)](#zero-external-pip-dependencies)
-[![Test Suite](https://img.shields.io/badge/tests-101%20passed%20%2F%20100%25-success.svg)](#automated-testing--verification)
+[![Test Suite](https://img.shields.io/badge/tests-113%20passed%20%2F%20100%25-success.svg)](#automated-testing--verification)
 [![Verification Engine](https://img.shields.io/badge/verification-7--Point%20Closed--Loop-blueviolet.svg)](#7-point-verification-engine)
 [![Security Policy](https://img.shields.io/badge/governance-3--Tier%20Risk%20Policy-orange.svg)](#action-risk-policy--human-approval)
 [![Phase 8 Innovation](https://img.shields.io/badge/phase%208-Profitability%20%26%20Decision%20Twin-blue.svg)](#phase-8--business-innovation-profitability-intelligence--decision-twin)
@@ -167,13 +167,14 @@ http://127.0.0.1:8000/app/overview
 
 ## 🧪 Automated Testing & Verification
 
-ActionMate includes a comprehensive 87-test automated verification suite covering unit logic, integration journeys, security constraints, and boundary edge cases:
+ActionMate includes a comprehensive 113-test automated verification suite covering unit logic, integration journeys, security constraints, and boundary edge cases:
 
 ```bash
 python3 -m unittest discover backend/tests -v
 ```
 
 ### Test Coverage Highlights:
+- **`test_hackathon_demo_readiness.py` (12 tests):** Validates the entire 14-step merchant journey end-to-end: sales drop detection, diagnostic evidence, customer/profit/inventory intelligence, proactive opportunities, Decision Twin 4-scenario simulation, guardrail checks, HMAC approval, omnichannel dispatch, 7-point verification, holdout causal lift, audit trail, and one-click demo reset.
 - **`test_phase8_business_innovation.py` (14 tests):** Tests all 8 Phase 8 innovations: profit catalog unit economics, discount erosion modeling, inventory sales velocity and stockout predictions, promotional safety guardrail, customer RFM scoring and CLV, 14-day cash-flow timeline with Day 4 pinch detection, Decision Twin 4-scenario simulation, business guardrails enforcement, 85/15 treatment vs holdout experiment, proactive opportunities ranking, provenanced business value metrics, and HTTP REST endpoints.
 - **`test_phase7_e2e_and_errors.py` (16 tests):** Complete 20-step end-to-end journey and the 15-scenario error/boundary matrix.
 - **`test_verification_and_kpis_phase6.py` (12 tests):** 7-point verification engine, partial verification, retry limits, 6 KPIs, and markdown reporting.
@@ -184,7 +185,7 @@ python3 -m unittest discover backend/tests -v
 - **`test_actionmate_phase1.py` (5 tests):** Phase 1 application foundation and UI endpoints.
 - **`test_enterprise_suite.py` & `test_workflow.py` (17 tests):** DealPilot AI agent workflows, CSV ingestion, scoring model, and revenue attribution.
 
-**Result: 101 passed / 0 failed / 100% pass rate.**
+**Result: 113 passed / 0 failed / 100% pass rate.**
 
 ---
 

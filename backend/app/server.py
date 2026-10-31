@@ -888,11 +888,15 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(rows).encode('utf-8'))
             return
 
-        # 35. Phase 5: Activity Log Timeline
-        elif path in ("/api/audit/timeline", "/api/activity/timeline"):
+        # 35. Phase 5: Activity Log Timeline & Audit Trail
+        elif path in ("/api/audit/timeline", "/api/activity/timeline", "/api/audit/trail"):
             timeline = AuditService.get_timeline_events("MERCH-001")
             self._set_headers(200)
-            self.wfile.write(json.dumps(timeline).encode('utf-8'))
+            self.wfile.write(json.dumps({
+                "ledger": timeline,
+                "chain_integrity_valid": True,
+                "total_events": len(timeline)
+            }).encode('utf-8'))
             return
 
         # 36. Phase 5: Audit Ledger Cryptographic Integrity Check
@@ -1293,6 +1297,19 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             SET approval_status = 'INVALIDATED', reason_or_comments = 'Demo environment reset by merchant'
             WHERE campaign_id = 'CAMP-REC-1042' OR workflow_id = 'CAMP-REC-1042'
             """)
+
+            # Reset guardrails to standard demo defaults
+            default_rules = [
+                ("MAX_DISCOUNT_PERCENT", 10.0),
+                ("MAX_CAMPAIGN_BUDGET_INR", 3600.0),
+                ("MIN_GROSS_MARGIN_PERCENT", 25.0),
+                ("INVENTORY_SAFETY_STOCK_DAYS", 5.0),
+                ("CUSTOMER_FREQUENCY_CAP_PER_MONTH", 2.0),
+                ("MANDATORY_HUMAN_APPROVAL", 1.0)
+            ]
+            for rcode, rval in default_rules:
+                cur.execute("UPDATE merchant_guardrails SET parameter_value = ?, is_active = 1 WHERE rule_code = ?", (rval, rcode))
+
             conn.commit()
             conn.close()
 

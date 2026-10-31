@@ -2746,14 +2746,34 @@
 
     async function resetActiveDemo() {
       try {
-        await fetch("/api/actionmate/tasks/WF-REC-1042/reset", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({})
-        });
-        showSiteToast("Demo reset to clean state for Task #1042.");
-        if (appState.currentRoute === "overview") fetchDashboardData();
-        else if (appState.currentRoute === "assistant") fetchAssistantTask();
+        await Promise.all([
+          fetch("/api/actionmate/tasks/WF-REC-1042/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({})
+          }),
+          fetch("/api/demo/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({})
+          })
+        ]);
+        showSiteToast("Demo reset cleanly to initial state for demonstration.");
+        const r = appState.currentRoute;
+        if (r === "overview") fetchDashboardData();
+        else if (r === "assistant") fetchAssistantTask();
+        else if (r === "sales") fetchSalesInsights();
+        else if (r === "campaigns") fetchCampaignData();
+        else if (r === "approvals") fetchApprovalDetails();
+        else if (r === "activity") refreshAuditTrail();
+        else if (r === "analytics") fetchAnalyticsData();
+        else if (r === "profit") fetchProfitIntelligence();
+        else if (r === "inventory") fetchInventoryIntelligence();
+        else if (r === "cashflow") fetchCashFlowForecast();
+        else if (r === "decision-twin") fetchDecisionTwin();
+        else if (r === "opportunities") fetchOpportunities();
+        else if (r === "guardrails") fetchGuardrails();
+        else if (r === "business-value") fetchBusinessValue();
       } catch (e) {
         showSiteToast("Reset failed: " + e.message);
       }
