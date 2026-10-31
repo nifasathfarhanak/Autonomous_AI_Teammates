@@ -76,6 +76,26 @@ class TestSarvamVoiceIntegration(unittest.TestCase):
         self.assertEqual(result["audio_base64"], "UklGR-audio")
         service.tts.generate_speech.assert_called_once_with("A spoken answer", "hi-IN", None)
 
+    def test_voice_reply_is_translated_to_the_selected_language(self):
+        service = VoiceCopilotService()
+        with patch.object(service.sarvam_client, "is_connected", return_value=True), \
+             patch.object(service.sarvam_client, "post", return_value={
+                 "translated_text": "உங்கள் விற்பனை நன்றாக உள்ளது."
+             }) as post:
+            translated, error = service._translate_reply("Your sales are doing well.", "ta-IN")
+
+        self.assertEqual(translated, "உங்கள் விற்பனை நன்றாக உள்ளது.")
+        self.assertIsNone(error)
+        self.assertEqual(post.call_args.args[1]["target_language_code"], "ta-IN")
+
+    def test_voice_reply_reports_unavailable_translation_instead_of_faking_it(self):
+        service = VoiceCopilotService()
+        with patch.object(service.sarvam_client, "is_connected", return_value=False):
+            translated, error = service._translate_reply("Your sales are doing well.", "ta-IN")
+
+        self.assertEqual(translated, "Your sales are doing well.")
+        self.assertIn("Set SARVAM_API_KEY", error)
+
     def test_transcription_endpoint_forwards_audio_and_mime_type(self):
         audio = b"recorded-audio"
         with patch.object(voice_copilot_service, "transcribe_audio_payload", return_value={

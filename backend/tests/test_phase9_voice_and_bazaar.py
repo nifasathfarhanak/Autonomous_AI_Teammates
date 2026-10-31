@@ -70,6 +70,46 @@ class TestPhase9VoiceAndBazaar(unittest.TestCase):
             self.assertIsNotNone(res["structured_payload"])
             self.assertGreater(len(res["suggested_actions"]), 0)
 
+    def test_voice_answer_does_not_speak_english_as_a_selected_indic_language(self):
+        session = self.voice_service.create_or_get_session("MERCH-002", "ta-IN")
+        with patch.object(self.voice_service.sarvam_client, "is_connected", return_value=False), \
+             patch.object(self.voice_service, "synthesize_speech") as synthesize:
+            result = self.voice_service.process_query(
+                merchant_id="MERCH-002",
+                transcript="Which products have highest gross profit?",
+                language_code="ta-IN",
+                input_mode="TEXT",
+                session_id=session["session_id"]
+            )
+
+        self.assertIn("Set SARVAM_API_KEY", result["response_language_error"])
+        self.assertIsNone(result["audio_base64"])
+        synthesize.assert_not_called()
+
+    def test_voice_answer_speaks_the_translated_selected_language(self):
+        session = self.voice_service.create_or_get_session("MERCH-002", "ta-IN")
+        tamil_reply = "உங்கள் விற்பனை நன்றாக உள்ளது."
+        with patch.object(self.voice_service.sarvam_client, "is_connected", return_value=True), \
+             patch.object(self.voice_service.sarvam_client, "post", return_value={
+                 "translated_text": tamil_reply
+             }), \
+             patch.object(self.voice_service, "synthesize_speech", return_value={
+                 "audio_base64": "UklGR-audio",
+                 "provider": "SARVAM_BULBUL_LIVE"
+             }) as synthesize:
+            result = self.voice_service.process_query(
+                merchant_id="MERCH-002",
+                transcript="Which products have highest gross profit?",
+                language_code="ta-IN",
+                input_mode="TEXT",
+                session_id=session["session_id"]
+            )
+
+        self.assertEqual(result["response_text"], tamil_reply)
+        self.assertEqual(result["audio_base64"], "UklGR-audio")
+        self.assertIsNone(result["response_language_error"])
+        synthesize.assert_called_once_with(tamil_reply, "ta-IN")
+
     def test_03_voice_speech_synthesis_and_playable_audio(self):
         """Verifies a Bulbul audio response is returned without making a live API request."""
         sample_text = "नमस्ते ज़ुबैर जी, आपके स्टोर का ग्रॉस मार्जिन 48.5% है।"

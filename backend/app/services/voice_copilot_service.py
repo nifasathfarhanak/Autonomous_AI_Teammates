@@ -6,13 +6,17 @@ Integrates with Sarvam AI stack (Saaras STT, Bulbul TTS, Mayura Translate, and S
 """
 
 import json
+import logging
 import uuid
 import time
 from datetime import datetime, timezone
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 
 from ..database import get_connection
 from ..integrations.sarvam.client import SarvamClient
+from ..integrations.sarvam.config import ENDPOINTS, SUPPORTED_LANGUAGES
+from ..integrations.sarvam.exceptions import SarvamError
+from ..integrations.sarvam.schemas import validate_translate_payload
 from ..integrations.sarvam.speech_to_text import SaarasSTT
 from ..integrations.sarvam.text_to_speech import BulbulTTS
 from ..integrations.sarvam.translate import SarvamTranslate
@@ -22,6 +26,9 @@ from ..services.guardrails_service import GuardrailsService
 from ..services.decision_twin_service import DecisionTwinService
 from ..services.incremental_outcome_service import IncrementalOutcomeService
 from ..services.sales_intelligence_service import detect_sales_drop, calculate_sales_summary
+
+logger = logging.getLogger(__name__)
+
 
 class VoiceCopilotService:
     """Multilingual Conversational Voice Copilot for Indian Merchants."""
@@ -112,11 +119,19 @@ class VoiceCopilotService:
         intent_result = self._dispatch_intent(detected_intent, merchant_id, language_code, normalized_q)
 
         response_text = intent_result["text"]
+        response_language_error = None
+        if language_code not in ("en-IN", "hi-IN", "en", "hi"):
+            response_text, response_language_error = self._translate_reply(response_text, language_code)
         structured_payload = intent_result.get("payload", {})
         suggested_actions = intent_result.get("actions", [])
 
-        # Generate speech from the grounded business response using Bulbul TTS.
-        speech_result = self.synthesize_speech(response_text, language_code)
+        if response_language_error:
+            speech_result = {
+                "error": "Spoken reply skipped because the answer could not be translated to the selected language.",
+                "provider": "SARVAM_TRANSLATION_UNAVAILABLE"
+            }
+        else:
+            speech_result = self.synthesize_speech(response_text, language_code)
         audio_base64 = speech_result.get("audio_base64")
         latency_ms = int((time.time() - start_time) * 1000)
 
@@ -153,12 +168,36 @@ class VoiceCopilotService:
             "response_text": response_text,
             "audio_base64": audio_base64,
             "speech_error": speech_result.get("error"),
+            "response_language_error": response_language_error,
             "structured_payload": structured_payload,
             "suggested_actions": suggested_actions,
             "latency_ms": latency_ms,
             "provider": speech_result.get("provider", "SARVAM_AI_INDIC_STACK"),
             "created_at": now_utc
         }
+
+    def _translate_reply(self, text: str, language_code: str) -> Tuple[str, Optional[str]]:
+        """Translate an English business reply to the selected language with Sarvam."""
+        language = SUPPORTED_LANGUAGES.get(language_code.split("-", 1)[0].lower())
+        if language is None:
+            return text, f"Replies are not configured for the selected language ({language_code})."
+        if language["code"] in ("en-IN", "hi-IN"):
+            return text, None
+        if not self.sarvam_client.is_connected():
+            return text, f"Sarvam translation is unavailable for {language['name']}. Set SARVAM_API_KEY to enable it."
+
+        payload = validate_translate_payload(text, "en-IN", language["code"])
+        try:
+            result = self.sarvam_client.post(ENDPOINTS["translate"], payload)
+        except SarvamError as error:
+            logger.warning("Sarvam reply translation failed for %s: %s", language_code, error)
+            return text, f"Could not translate this reply to {language['name']}. {error}"
+
+        translated_text = result.get("translated_text", "").strip() if isinstance(result, dict) else ""
+        if not translated_text:
+            logger.warning("Sarvam returned an empty reply translation for %s", language_code)
+            return text, f"Sarvam did not return a {language['name']} translation."
+        return translated_text, None
 
     def synthesize_speech(
         self,

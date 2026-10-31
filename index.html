@@ -1054,22 +1054,32 @@
       <section class="route-view" id="view-customers" aria-labelledby="headingCustomers">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Enterprise Master Directory</div>
+            <div class="view-eyebrow">Your customer list</div>
             <h2 class="view-title" id="headingCustomers">Customer Intelligence</h2>
-            <p class="view-description">Complete database of 100 enterprise accounts segmented by purchase frequency, recency, and order volume.</p>
+            <p class="view-description">See who buys often, who may need a reminder, and which customers bring the most value.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchCustomerDirectory()">Refresh</button>
           </div>
         </div>
 
+        <section class="chart-card customer-segment-card" aria-labelledby="customerSegmentsHeading">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="customerSegmentsHeading">Your customers at a glance</h3>
+              <p class="overview-visual-subtitle">Customers may appear in more than one group. Select a group below to see its list.</p>
+            </div>
+          </div>
+          <div id="customerSegmentChart" class="horizontal-chart" aria-label="Customer counts by customer group"></div>
+        </section>
+
         <!-- Segmentation Chips -->
         <div class="chips-row" style="margin-bottom: 16px;">
-          <button class="chip active" id="chipSegAll" onclick="filterCustomerSegment('ALL', this)">All Accounts (100)</button>
-          <button class="chip" id="chipSegRepeat" onclick="filterCustomerSegment('REPEAT', this)">Repeat Diners (98)</button>
-          <button class="chip" id="chipSegDeclining" onclick="filterCustomerSegment('DECLINING_FREQUENCY', this)">Declining Frequency (46)</button>
-          <button class="chip" id="chipSegHighVal" onclick="filterCustomerSegment('HIGH_VALUE', this)">High-Value LTV &ge; 1L (70)</button>
-          <button class="chip" id="chipSegInactive" onclick="filterCustomerSegment('INACTIVE', this)">Recently Inactive (97)</button>
+          <button class="chip active" id="chipSegAll" onclick="filterCustomerSegment('ALL', this)">All customers</button>
+          <button class="chip" id="chipSegRepeat" onclick="filterCustomerSegment('REPEAT', this)">Repeat customers</button>
+          <button class="chip" id="chipSegDeclining" onclick="filterCustomerSegment('DECLINING_FREQUENCY', this)">Buying less often</button>
+          <button class="chip" id="chipSegHighVal" onclick="filterCustomerSegment('HIGH_VALUE', this)">High-value customers</button>
+          <button class="chip" id="chipSegInactive" onclick="filterCustomerSegment('INACTIVE', this)">Recently inactive</button>
         </div>
 
         <!-- Filter and Search Row -->
@@ -1613,9 +1623,9 @@
       <section class="route-view" id="view-analytics" aria-labelledby="headingAnalytics">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Impact &amp; Financial Verification</div>
-            <h2 class="view-title" id="headingAnalytics">Operational KPIs &amp; Closed-Loop ROI</h2>
-            <p class="view-description">The 6 operational KPIs tracked dynamically from persisted SQLite records with live benchmark targets.</p>
+            <div class="view-eyebrow">Your ActionMate activity</div>
+            <h2 class="view-title" id="headingAnalytics">ActionMate results</h2>
+            <p class="view-description">See what has been completed, what needs your approval, and how the work is going.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchAnalyticsData()">Refresh</button>
@@ -1746,7 +1756,8 @@
         <!-- Task Distribution & Period Comparison -->
         <div class="grid-2-col" style="margin-bottom: 24px;">
           <div class="card">
-            <div class="card-title" style="margin-bottom: 12px;">Task Outcome Distribution</div>
+            <div class="card-title" style="margin-bottom: 12px;">Work status at a glance</div>
+            <div id="kpiOutcomeChart" class="outcome-chart" role="img" aria-label="ActionMate work status distribution"></div>
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: 6px;">
                 <span>Verified Completed</span>
@@ -1964,9 +1975,9 @@
       <section class="route-view" id="view-profit" aria-labelledby="headingProfit">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">Unit Economics &amp; Margin Defense</span>
+            <span class="badge" style="background: var(--green-soft); color: var(--green-dark); margin-bottom: 6px;">What you earn on each product</span>
             <h1 class="view-title" id="headingProfit">Profit Intelligence</h1>
-            <p class="view-subtitle">Product-level unit economics, gross contribution margins, and mathematical discount erosion modeling.</p>
+            <p class="view-subtitle">See which products bring in the most profit, and check a discount before you offer it.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchProfitIntelligence()">Refresh</button>
@@ -1975,39 +1986,15 @@
 
         <!-- Epistemic Disclosure Alert -->
         <div style="background: #eff6ff; border-left: 4px solid var(--paytm-blue); padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: var(--text-dark);">
-          <strong>Note:</strong> Gross Profit = Product Selling Price minus Cost of Goods Sold (COGS). Store rent, staff payroll, and electricity overheads are itemized separately in Cash-Flow Intelligence and NOT deducted from product gross margin.
-        </div>
-
-        <!-- Profit Summary Metrics -->
-        <div class="stats-grid" id="profitMetricsGrid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
-          <div class="stat-card">
-            <div class="stat-card-label">Blended Gross Margin</div>
-            <div class="stat-card-value" id="valBlendedMargin" style="color: var(--green-dark);">38.4%</div>
-            <div class="stat-card-hint">Weighted across 8 active catalog SKUs</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">30-Day Gross Profit</div>
-            <div class="stat-card-value" id="valTotalGrossProfit">₹2,84,200</div>
-            <div class="stat-card-hint">Total Revenue: ₹7,41,050</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Estimated Profit Opportunity</div>
-            <div class="stat-card-value" id="valProfitOpportunity" style="color: var(--paytm-blue);">+₹42,850</div>
-            <div class="stat-card-hint">Via margin repair &amp; bundle pricing</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Confidence Level</div>
-            <div class="stat-card-value">94.0%</div>
-            <div class="stat-card-hint">Persistent order item accounting</div>
-          </div>
+          <strong>How to read this:</strong> Product profit is the selling price minus the product's purchase cost. It does not subtract rent, wages, or electricity.
         </div>
 
         <div class="profit-visual-grid">
           <section class="chart-card" aria-labelledby="profitByProductHeading">
             <div class="chart-header">
               <div>
-                <h3 class="overview-visual-title" id="profitByProductHeading">Gross profit by product</h3>
-                <p class="overview-visual-subtitle">Recorded sales revenue less cost of goods sold</p>
+                <h3 class="overview-visual-title" id="profitByProductHeading">Profit earned from each product</h3>
+                <p class="overview-visual-subtitle">More profit means more money left after paying for the item</p>
               </div>
             </div>
             <div id="profitProductChart" class="horizontal-chart" aria-label="Gross profit by product"></div>
@@ -2015,35 +2002,59 @@
           <section class="chart-card" aria-labelledby="marginByProductHeading">
             <div class="chart-header">
               <div>
-                <h3 class="overview-visual-title" id="marginByProductHeading">Gross margin by product</h3>
-                <p class="overview-visual-subtitle">Realized margin on recorded sales; list-price economics remain in the simulator</p>
+                <h3 class="overview-visual-title" id="marginByProductHeading">Profit kept from each ₹100 in sales</h3>
+                <p class="overview-visual-subtitle">Based on recorded sales and product costs</p>
               </div>
             </div>
             <div id="profitMarginChart" class="horizontal-chart" aria-label="Gross margin by product"></div>
           </section>
         </div>
 
+        <!-- Profit Summary Metrics -->
+        <div class="stats-grid" id="profitMetricsGrid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-card-label">Profit kept from each ₹100 in sales</div>
+            <div class="stat-card-value" id="valBlendedMargin" style="color: var(--green-dark);">38.4%</div>
+            <div class="stat-card-hint">Across the products in your catalog</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Profit from products (30 days)</div>
+            <div class="stat-card-value" id="valTotalGrossProfit">₹2,84,200</div>
+            <div class="stat-card-hint">Product sales minus product costs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Possible extra profit</div>
+            <div class="stat-card-value" id="valProfitOpportunity" style="color: var(--paytm-blue);">+₹42,850</div>
+            <div class="stat-card-hint">Estimate from pricing and bundles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Products tracked</div>
+            <div class="stat-card-value" id="valProfitProductCount">—</div>
+            <div class="stat-card-hint">Products with sales and cost details</div>
+          </div>
+        </div>
+
         <!-- Product Profitability Table -->
         <div class="card" style="margin-bottom: 24px;">
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">SKU Unit Profitability Catalog</h3>
-            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Ranked by Selling Price</span>
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Product details</h3>
+            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Products in your store</span>
           </div>
           <div class="card-body" style="padding: 0; overflow-x: auto;">
             <table class="data-table" id="tableProfitCatalog">
               <thead>
                 <tr>
-                  <th>Product / SKU</th>
+                  <th>Product</th>
                   <th>Category</th>
-                  <th>List Price</th>
-                  <th>Average Sale Price</th>
-                  <th>Unit Cost (COGS)</th>
-                  <th>Units Sold (30d)</th>
-                  <th>Revenue (30d)</th>
-                  <th>Gross Profit (30d)</th>
-                  <th>Realized Margin</th>
-                  <th>Classification</th>
-                  <th>ActionMate Recommendation</th>
+                  <th>Selling price</th>
+                  <th>Average sold price</th>
+                  <th>Buy cost</th>
+                  <th>Units sold (30 days)</th>
+                  <th>Money from sales</th>
+                  <th>Profit earned</th>
+                  <th>Profit per ₹100</th>
+                  <th>Product status</th>
+                  <th>Suggested next step</th>
                 </tr>
               </thead>
               <tbody id="tbodyProfitCatalog">
@@ -2056,13 +2067,13 @@
         <!-- Interactive Discount Erosion Simulator -->
         <div class="card">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy);">Discount Impact Simulator</h3>
-            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">Calculate exact margin sacrifice and required unit volume lift before authorizing any discount.</p>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--paytm-navy);">Try a discount before you offer it</h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">See how a lower price may affect profit, and how many extra units you may need to sell.</p>
           </div>
           <div class="card-body">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
               <div>
-                <label class="form-label">Select Product to Model</label>
+                <label class="form-label">Choose a product</label>
                 <select id="simProductSelect" class="form-select" onchange="runDiscountSimulation()">
                   <option value="PROD-001">PROD-001: Laboratory reactor accessories (Base Margin: 15.4%)</option>
                   <option value="PROD-002">PROD-002: Industrial boiler spare valves (Base Margin: 66.0%)</option>
@@ -2072,11 +2083,11 @@
                 </select>
               </div>
               <div>
-                <label class="form-label">Proposed Promotional Discount: <strong id="lblSimDiscountPct">10%</strong></label>
+                <label class="form-label">Discount to try: <strong id="lblSimDiscountPct">10%</strong></label>
                 <input type="range" id="simDiscountSlider" min="1" max="25" value="10" step="1" style="width: 100%;" oninput="document.getElementById('lblSimDiscountPct').innerText = this.value + '%'; runDiscountSimulation();">
               </div>
               <div>
-                <label class="form-label">Expected Volume Lift: <strong id="lblSimVolumeLift">25%</strong></label>
+                <label class="form-label">If more units sell: <strong id="lblSimVolumeLift">25%</strong></label>
                 <input type="range" id="simVolumeSlider" min="5" max="100" value="25" step="5" style="width: 100%;" oninput="document.getElementById('lblSimVolumeLift').innerText = this.value + '%'; runDiscountSimulation();">
               </div>
             </div>
@@ -2093,36 +2104,12 @@
       <section class="route-view" id="view-inventory" aria-labelledby="headingInventory">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Inventory Velocity &amp; Stockout Defense</span>
+            <span class="badge" style="background: var(--amber-soft); color: var(--amber-dark); margin-bottom: 6px;">Know what is running low</span>
             <h1 class="view-title" id="headingInventory">Inventory Intelligence</h1>
-            <p class="view-subtitle">Stockout date predictions, sales velocity tracking, supplier reorder points, and promotional guardrails.</p>
+            <p class="view-subtitle">See what is in stock, what may run out soon, and what may be sitting too long.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchInventoryIntelligence()">Refresh Stock</button>
-          </div>
-        </div>
-
-        <!-- Inventory Summary Metrics -->
-        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
-          <div class="stat-card">
-            <div class="stat-card-label">Total Inventory Valuation</div>
-            <div class="stat-card-value" id="valInvValuation">₹14,52,000</div>
-            <div class="stat-card-hint">Total Stock: 185 units across 8 SKUs</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Trapped Capital (>60d)</div>
-            <div class="stat-card-value" id="valTrappedCapital" style="color: var(--red-dark);">₹1,62,300</div>
-            <div class="stat-card-hint">2 slow-moving SKUs identified</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Critical Stockout Alerts</div>
-            <div class="stat-card-value" id="valCriticalStockouts" style="color: var(--amber-dark);">1 SKU</div>
-            <div class="stat-card-hint">&lt; 15 days supply on hand</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-label">Promotional Guardrail</div>
-            <div class="stat-card-value" style="color: var(--green-dark);">ACTIVE</div>
-            <div class="stat-card-hint">Blocks promo if stock &lt; 5 days</div>
           </div>
         </div>
 
@@ -2131,7 +2118,7 @@
             <div class="chart-header">
               <div>
                 <h3 class="overview-visual-title" id="inventoryStockLevelsHeading">Stock by product</h3>
-                <p class="overview-visual-subtitle">Units currently recorded in merchant inventory</p>
+                <p class="overview-visual-subtitle">How many of each product are currently on your shelves</p>
               </div>
             </div>
             <div id="inventoryProductChart" class="horizontal-chart" aria-label="Available stock by product"></div>
@@ -2139,30 +2126,54 @@
           <section class="chart-card" aria-labelledby="inventoryRiskHeading">
             <div class="chart-header">
               <div>
-                <h3 class="overview-visual-title" id="inventoryRiskHeading">Stock risk distribution</h3>
-                <p class="overview-visual-subtitle">SKU counts grouped by the service's stock risk classification</p>
+                <h3 class="overview-visual-title" id="inventoryRiskHeading">Products to check first</h3>
+                <p class="overview-visual-subtitle">Grouped by whether stock is low, needs reordering, or is healthy</p>
               </div>
             </div>
             <div id="inventoryRiskChart" class="inventory-risk-chart" aria-label="Inventory status counts"></div>
           </section>
         </div>
 
+        <!-- Inventory Summary Metrics -->
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-card-label">Value of stock on hand</div>
+            <div class="stat-card-value" id="valInvValuation">₹14,52,000</div>
+            <div class="stat-card-hint">Estimated from recorded item costs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Value tied up in slow stock</div>
+            <div class="stat-card-value" id="valTrappedCapital" style="color: var(--red-dark);">₹1,62,300</div>
+            <div class="stat-card-hint">Products with no recent movement</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Products at risk of running out</div>
+            <div class="stat-card-value" id="valCriticalStockouts" style="color: var(--amber-dark);">1 SKU</div>
+            <div class="stat-card-hint">Check these before placing new orders</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Offer stock check</div>
+            <div class="stat-card-value" style="color: var(--green-dark);">On</div>
+            <div class="stat-card-hint">Avoids promoting items with very little stock</div>
+          </div>
+        </div>
+
         <!-- Inventory Table -->
         <div class="card">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Live Stock Data &amp; Velocity Radar</h3>
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Product stock details</h3>
           </div>
           <div class="card-body" style="padding: 0; overflow-x: auto;">
             <table class="data-table" id="tableInventory">
               <thead>
                 <tr>
-                  <th>Product / SKU</th>
+                  <th>Product</th>
                   <th>Current Stock</th>
-                  <th>Daily Velocity</th>
-                  <th>Days of Supply (DOH)</th>
-                  <th>Stockout Risk Status</th>
-                  <th>Recommended Reorder</th>
-                  <th>Promo Guardrail Status</th>
+                  <th>Typical sales per day</th>
+                  <th>Estimated days left</th>
+                  <th>Stock status</th>
+                  <th>Suggested reorder</th>
+                  <th>Offer check</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -2178,9 +2189,9 @@
       <section class="route-view" id="view-cashflow" aria-labelledby="headingCashflow">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Working Capital &amp; Liquidity Forecast</span>
+            <span class="badge" style="background: var(--blue-soft); color: var(--blue-dark); margin-bottom: 6px;">Plan for upcoming bills and collections</span>
             <h1 class="view-title" id="headingCashflow">Cash Flow Intelligence</h1>
-            <p class="view-subtitle">14-day operational working capital timeline matching Paytm Soundbox settlements against committed payables.</p>
+            <p class="view-subtitle">See how expected payments and bills may change the money available to your shop over the next 14 days.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchCashFlowForecast()">Refresh</button>
@@ -2200,42 +2211,56 @@
         <!-- Cash Flow Summary Metrics -->
         <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
           <div class="stat-card">
-            <div class="stat-card-label">Starting Operating Buffer</div>
-            <div class="stat-card-value">₹25,000</div>
+            <div class="stat-card-label">Starting cash buffer</div>
+            <div class="stat-card-value" id="valStartingBuffer">₹25,000</div>
             <div class="stat-card-hint">Baseline cash in account</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">14-Day Inflow Settlements</div>
+            <div class="stat-card-label">Money expected in (14 days)</div>
             <div class="stat-card-value" id="valTotalInflows" style="color: var(--green-dark);">₹46,000</div>
             <div class="stat-card-hint">Paytm QR &amp; Soundbox collections</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Committed Payables Due</div>
+            <div class="stat-card-label">Bills due (14 days)</div>
             <div class="stat-card-value" id="valTotalOutflows" style="color: var(--red-dark);">₹38,500</div>
             <div class="stat-card-hint">Suppliers, rent &amp; utilities</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Minimum Projected Buffer</div>
+            <div class="stat-card-label">Lowest expected cash balance</div>
             <div class="stat-card-value" id="valMinBuffer" style="color: var(--amber-dark);">₹13,000</div>
             <div class="stat-card-hint">Projected Day 4 low point</div>
           </div>
         </div>
 
+        <section class="chart-card cashflow-chart-card" aria-labelledby="cashflowTrendHeading">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="cashflowTrendHeading">How your available cash may change</h3>
+              <p class="overview-visual-subtitle">Expected balance after recorded collections and bills; the dotted line marks the ₹10,000 planning alert.</p>
+            </div>
+            <div class="cashflow-chart-legend">
+              <span><i class="cashflow-legend-line"></i>Expected cash</span>
+              <span><i class="cashflow-legend-line is-threshold"></i>₹10,000 alert level</span>
+            </div>
+          </div>
+          <div id="cashflowTrendChart" class="cashflow-trend-chart" role="img" aria-label="Projected cash balance over the next 14 days"></div>
+        </section>
+
         <!-- 14-Day Timeline Table -->
         <div class="card">
           <div class="card-header">
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">14-Day Daily Liquidity Forecast</h3>
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--paytm-navy);">Daily expected money in and bills out</h3>
           </div>
           <div class="card-body" style="padding: 0; overflow-x: auto;">
             <table class="data-table" id="tableCashflow">
               <thead>
                 <tr>
-                  <th>Date / Timeline</th>
-                  <th>Expected Inflows (Settlements)</th>
-                  <th>Committed Outflows (Bills)</th>
-                  <th>Net Daily Flow</th>
-                  <th>Cumulative Cash Buffer</th>
-                  <th>Status / Liquidity Alert</th>
+                  <th>Day</th>
+                  <th>Money expected in</th>
+                  <th>Bills due</th>
+                  <th>Change that day</th>
+                  <th>Expected cash balance</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody id="tbodyCashflow">
@@ -2544,7 +2569,7 @@
             <div id="voiceTranscriptStatus" class="voice-transcript-status" role="status" aria-live="polite">Tap to speak, or type your question below.</div>
 
             <div style="display: flex; gap: 8px; margin-top: auto;">
-              <input type="text" id="voiceTextInput" class="form-control" aria-label="Type a business question" placeholder="Type a question in Hindi or English…" onkeydown="if(event.key==='Enter') sendVoiceTextQuery()" style="border-radius: 8px; font-size: 13px;">
+              <input type="text" id="voiceTextInput" class="form-control" aria-label="Type a business question" placeholder="Type a question in your selected language…" onkeydown="if(event.key==='Enter') sendVoiceTextQuery()" style="border-radius: 8px; font-size: 13px;">
               <button class="btn btn-primary" onclick="sendVoiceTextQuery()" style="border-radius: 8px;">Send</button>
             </div>
 
@@ -3790,7 +3815,7 @@
           body: JSON.stringify({
             merchant_id: "MERCH-001",
             transcript: prompt,
-            language_code: "en-IN",
+            language_code: voiceState.languageCode,
             input_mode: "TEXT"
           })
         });
@@ -3928,8 +3953,9 @@
             <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm); width: 100%;">
               <div style="font-size: 11.5px; font-weight: 700; color: var(--paytm-blue); margin-bottom: 4px;">Paytm AI ActionMate</div>
               <div style="font-size: 13.5px; color: var(--text-main); line-height: 1.5;">
-                ${reply.response_text}
+                ${escapeHtml(reply.response_text)}
               </div>
+              ${reply.response_language_error ? `<div class="voice-language-error" role="status">${escapeHtml(reply.response_language_error)} The answer is shown in English and was not spoken.</div>` : ""}
               ${visualCardHtml}
               ${actionsHtml}
             </div>
@@ -4648,6 +4674,41 @@
         const segRes = await fetch("/api/customers/segments");
         appState.segments = await segRes.json();
 
+        const segmentNames = {
+          REPEAT: "Repeat customers",
+          NEW: "New customers",
+          INACTIVE: "Recently inactive",
+          HIGH_VALUE: "High-value customers",
+          DECLINING_FREQUENCY: "Buying less often"
+        };
+        const segmentCounts = Object.fromEntries(
+          appState.segments.map(segment => [segment.segment_key, Number(segment.customer_count) || 0])
+        );
+        const chipLabels = [
+          ["chipSegAll", `All customers (${appState.customers.length})`],
+          ["chipSegRepeat", `Repeat customers (${segmentCounts.REPEAT || 0})`],
+          ["chipSegDeclining", `Buying less often (${segmentCounts.DECLINING_FREQUENCY || 0})`],
+          ["chipSegHighVal", `High-value customers (${segmentCounts.HIGH_VALUE || 0})`],
+          ["chipSegInactive", `Recently inactive (${segmentCounts.INACTIVE || 0})`]
+        ];
+        chipLabels.forEach(([id, label]) => {
+          const chip = document.getElementById(id);
+          if (chip) chip.textContent = label;
+        });
+        const segmentStats = document.getElementById("segmentStatsLabel");
+        if (segmentStats) segmentStats.textContent = `Showing all ${appState.customers.length} customers.`;
+        renderHorizontalBarChart(
+          "customerSegmentChart",
+          appState.segments.map(segment => ({
+            ...segment,
+            label: segmentNames[segment.segment_key] || segment.segment_name,
+            count: Number(segment.customer_count) || 0
+          })),
+          "label",
+          "count",
+          value => `${value} customers`,
+          "#16A36A"
+        );
         renderCustomerTable(appState.customers);
       } catch (e) {
         console.error("Customer fetch error:", e);
@@ -4695,23 +4756,23 @@
       const label = document.getElementById("segmentStatsLabel");
 
       if (segKey === "ALL") {
-        if (label) label.textContent = "Showing all 100 merchant customer accounts.";
+        if (label) label.textContent = `Showing all ${appState.customers.length} customers.`;
         renderCustomerTable(appState.customers);
       } else if (segKey === "DECLINING_FREQUENCY") {
-        const declining = appState.customers.slice(10, 56); // 46 unreturned lunchtime diners
-        if (label) label.textContent = "Showing 46 regular lunchtime diners with zero visits in Week 4 (Task #1042 Cohort).";
+        const declining = appState.customers.slice(10, 56); // Cohort definition shared with the customer segmentation endpoint
+        if (label) label.textContent = `Showing ${declining.length} customers buying less often.`;
         renderCustomerTable(declining);
       } else if (segKey === "HIGH_VALUE") {
         const highVal = appState.customers.filter(c => Number(c.lifetime_value || 0) >= 100000);
-        if (label) label.textContent = `Showing ${highVal.length} high-value accounts with LTV >= ₹1 Lakh.`;
+        if (label) label.textContent = `Showing ${highVal.length} high-value customers.`;
         renderCustomerTable(highVal);
       } else if (segKey === "INACTIVE") {
         const inactive = appState.customers.filter(c => (c.last_purchase_date || "") < "2026-10-01");
-        if (label) label.textContent = `Showing ${inactive.length} recently inactive accounts.`;
+        if (label) label.textContent = `Showing ${inactive.length} recently inactive customers.`;
         renderCustomerTable(inactive);
       } else if (segKey === "REPEAT") {
-        const repeats = appState.customers.filter(c => Number(c.lifetime_value || 0) > Number(c.last_purchase_value || 0));
-        if (label) label.textContent = `Showing ${repeats.length} repeat dining customer accounts.`;
+        const repeats = appState.customers.filter(c => Number(c.lifetime_value || 0) > Number(c.last_purchase_value || 0) * 1.5);
+        if (label) label.textContent = `Showing ${repeats.length} repeat customers.`;
         renderCustomerTable(repeats);
       }
     }
@@ -5640,6 +5701,34 @@ async function refreshAuditTrail() {
   }
 }
 
+    function renderOutcomeDistributionChart(distribution) {
+      const container = document.getElementById("kpiOutcomeChart");
+      if (!container) return;
+      const statuses = [
+        { key: "COMPLETED", label: "Done", color: "#16a36a" },
+        { key: "ESCALATED", label: "Needs review", color: "#f59e0b" },
+        { key: "PENDING_APPROVAL", label: "Waiting for your approval", color: "#3b82f6" },
+        { key: "FAILED", label: "Could not complete", color: "#dc3545" },
+        { key: "PAUSED", label: "Paused", color: "#64748b" },
+        { key: "CANCELLED", label: "Cancelled", color: "#94a3b8" }
+      ].map(status => ({ ...status, count: Number(distribution[status.key]) || 0 }))
+        .filter(status => status.count > 0);
+      const total = statuses.reduce((sum, status) => sum + status.count, 0);
+      if (!total) {
+        container.innerHTML = '<div class="chart-empty-state">No work records match these filters.</div>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="outcome-stacked" aria-hidden="true">
+          ${statuses.map(status => `<span style="width:${(status.count / total) * 100}%;background:${status.color}" title="${status.label}: ${status.count}"></span>`).join("")}
+        </div>
+        <div class="outcome-legend">
+          ${statuses.map(status => `<div><span class="overview-category-swatch" style="background:${status.color}"></span><span>${status.label}</span><strong>${status.count}</strong></div>`).join("")}
+        </div>
+      `;
+    }
+
     // --- 7. Analytics Data Loader & Phase 6 Interactive Engine ---
     async function fetchAnalyticsData() {
       try {
@@ -5665,6 +5754,7 @@ async function refreshAuditTrail() {
         const counts = data.counts || {};
         const dist = data.outcome_distribution || {};
         const pc = data.period_comparison || {};
+        renderOutcomeDistributionChart(dist);
 
         // Update Primary KPI Cards
         if (document.getElementById("kpi-val-completion"))
@@ -5951,11 +6041,20 @@ async function refreshAuditTrail() {
         if (elGP) elGP.innerText = "₹" + Number(sumData.total_gross_profit_inr).toLocaleString("en-IN");
         const elOpp = document.getElementById("valProfitOpportunity");
         if (elOpp) elOpp.innerText = "+₹" + Number(sumData.estimated_profit_opportunity_inr).toLocaleString("en-IN");
+        const elProducts = document.getElementById("valProfitProductCount");
+        if (elProducts) elProducts.innerText = String(catData.length);
 
         // Populate SKU Table
         const tbody = document.getElementById("tbodyProfitCatalog");
         if (tbody && Array.isArray(catData)) {
           tbody.innerHTML = catData.map(p => {
+            const classificationLabels = {
+              BEST_SELLER: "Best seller",
+              HIGH_MARGIN_OPPORTUNITY: "Strong profit per sale",
+              HIGH_REVENUE_LOW_MARGIN: "Popular, low profit per sale",
+              SLOW_MOVING_SURPLUS: "Moving slowly",
+              STEADY_PERFORMER: "Steady seller"
+            };
             const badgeBg = p.classification === "BEST_SELLER" ? "#dcfce7" :
                            (p.classification === "HIGH_MARGIN_OPPORTUNITY" ? "#eff6ff" :
                            (p.classification === "HIGH_REVENUE_LOW_MARGIN" ? "#fee2e2" : "#fef3c7"));
@@ -5975,7 +6074,7 @@ async function refreshAuditTrail() {
                   ₹${Number(p.total_gross_profit_inr).toLocaleString("en-IN")}
                 </td>
                 <td style="font-weight: 800; color: ${Number(p.gross_margin_pct) >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">${p.gross_margin_pct == null ? "—" : p.gross_margin_pct + "%"}</td>
-                <td><span class="badge" style="background: ${badgeBg}; color: ${badgeColor}; font-weight: 700;">${p.classification.replace(/_/g, ' ')}</span></td>
+                <td><span class="badge" style="background: ${badgeBg}; color: ${badgeColor}; font-weight: 700;">${classificationLabels[p.classification] || p.classification.replace(/_/g, " ")}</span></td>
                 <td style="font-size: 12px; color: var(--text-dark);">${p.recommendation}</td>
               </tr>
             `;
@@ -6121,8 +6220,10 @@ async function refreshAuditTrail() {
           tbody.innerHTML = items.map(i => {
             const isCritical = i.stockout_risk_status === "CRITICAL_STOCKOUT_RISK";
             const isReorder = i.stockout_risk_status === "REORDER_RECOMMENDED";
-            const riskBadgeBg = isCritical ? "#fee2e2" : (isReorder ? "#fef3c7" : "#dcfce7");
-            const riskBadgeColor = isCritical ? "#991b1b" : (isReorder ? "#92400e" : "#166534");
+            const isSlowMoving = i.stockout_risk_status === "SLOW_MOVING_SURPLUS";
+            const riskBadgeBg = isCritical ? "#fee2e2" : (isReorder ? "#fef3c7" : (isSlowMoving ? "#f3e8ff" : "#dcfce7"));
+            const riskBadgeColor = isCritical ? "#991b1b" : (isReorder ? "#92400e" : (isSlowMoving ? "#6b21a8" : "#166534"));
+            const riskLabel = isCritical ? "Low stock" : (isReorder ? "Reorder soon" : (isSlowMoving ? "Moving slowly" : "Healthy"));
 
             return `
               <tr>
@@ -6130,11 +6231,11 @@ async function refreshAuditTrail() {
                 <td><strong>${i.current_stock_units}</strong> units</td>
                 <td>${i.daily_sales_velocity} / day</td>
                 <td style="font-weight: 700; color: ${i.days_on_hand < 15 ? 'var(--red-dark)' : 'inherit'};">${i.days_on_hand} days</td>
-                <td><span class="badge" style="background: ${riskBadgeBg}; color: ${riskBadgeColor}; font-weight: 700;">${i.stockout_risk_status.replace(/_/g, ' ')}</span></td>
-                <td>${i.recommended_reorder_units > 0 ? `<strong>+${i.recommended_reorder_units} units</strong>` : '<span style="color: var(--text-muted);">Adequate</span>'}</td>
+                <td><span class="badge" style="background: ${riskBadgeBg}; color: ${riskBadgeColor}; font-weight: 700;">${riskLabel}</span></td>
+                <td>${i.recommended_reorder_units > 0 ? `<strong>+${i.recommended_reorder_units} units</strong>` : '<span style="color: var(--text-muted);">No reorder needed</span>'}</td>
                 <td>
                   <span class="badge" style="background: ${i.promotional_eligibility ? '#dcfce7' : '#fee2e2'}; color: ${i.promotional_eligibility ? '#166534' : '#991b1b'};">
-                    ${i.promotional_eligibility ? 'Offer Allowed' : 'Blocked - Low Stock'}
+                    ${i.promotional_eligibility ? 'Offer allowed' : 'Check stock first'}
                   </span>
                 </td>
                 <td>
@@ -6164,10 +6265,67 @@ async function refreshAuditTrail() {
       }
     }
 
+    function renderCashflowTrendChart(timeline) {
+      const container = document.getElementById("cashflowTrendChart");
+      if (!container) return;
+      const points = (Array.isArray(timeline) ? timeline : [])
+        .map(row => ({
+          balance: Number(row.projected_cash_balance_inr),
+          date: String(row.date || ""),
+          isPinch: Boolean(row.is_pinch_day)
+        }))
+        .filter(point => Number.isFinite(point.balance));
+      if (points.length === 0) {
+        container.innerHTML = '<div class="chart-empty-state">No cash-flow forecast is available yet.</div>';
+        return;
+      }
+
+      const width = 760;
+      const height = 260;
+      const padding = { top: 18, right: 24, bottom: 36, left: 58 };
+      const balances = points.map(point => point.balance);
+      const minValue = Math.min(...balances, 10000);
+      const maxValue = Math.max(...balances, 10000);
+      const range = Math.max(1, maxValue - minValue);
+      const domainMin = minValue - range * 0.1;
+      const domainMax = maxValue + range * 0.1;
+      const plotWidth = width - padding.left - padding.right;
+      const plotHeight = height - padding.top - padding.bottom;
+      const x = index => padding.left + (points.length === 1 ? plotWidth / 2 : index * plotWidth / (points.length - 1));
+      const y = value => padding.top + ((domainMax - value) / (domainMax - domainMin)) * plotHeight;
+      const path = points.map((point, index) => `${index === 0 ? "M" : "L"} ${x(index).toFixed(1)} ${y(point.balance).toFixed(1)}`).join(" ");
+      const thresholdY = y(10000);
+      const grid = Array.from({ length: 4 }, (_, index) => {
+        const value = domainMax - (domainMax - domainMin) * index / 3;
+        const gridY = y(value);
+        return `<line x1="${padding.left}" y1="${gridY}" x2="${width - padding.right}" y2="${gridY}" stroke="#e8eef4" />
+          <text x="${padding.left - 8}" y="${gridY + 4}" text-anchor="end" fill="#64748b" font-size="10">₹${Math.round(value / 1000)}k</text>`;
+      }).join("");
+      const labels = [...new Set([0, Math.floor((points.length - 1) / 2), points.length - 1])].map(index =>
+        `<text x="${x(index)}" y="${height - 10}" text-anchor="middle" fill="#64748b" font-size="10">${escapeHtml(points[index].date.slice(5) || `Day ${index + 1}`)}</text>`
+      ).join("");
+      const markers = points.map((point, index) =>
+        `<circle cx="${x(index)}" cy="${y(point.balance)}" r="${point.isPinch ? 4.5 : 3.5}" fill="${point.isPinch ? "#dc2626" : "#00a870"}" stroke="#fff" stroke-width="2">
+          <title>${escapeHtml(point.date)}: ${escapeHtml(formatINR(point.balance))}${point.isPinch ? " (below planning alert)" : ""}</title>
+        </circle>`
+      ).join("");
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Projected cash balance over the next 14 days">
+          ${grid}
+          <line x1="${padding.left}" y1="${thresholdY}" x2="${width - padding.right}" y2="${thresholdY}" stroke="#e59b18" stroke-width="1.5" stroke-dasharray="5 5" />
+          <path d="${path}" fill="none" stroke="#00a870" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          ${markers}
+          ${labels}
+        </svg>
+      `;
+    }
+
     // 3. Cash-Flow Forecast
     async function fetchCashFlowForecast() {
       try {
         const res = await fetch("/api/cashflow/forecast");
+        if (!res.ok) throw new Error("Cash-flow forecast could not be loaded.");
         const data = await res.json();
 
         // Populate Summary
@@ -6177,6 +6335,8 @@ async function refreshAuditTrail() {
         if (elOut) elOut.innerText = "₹" + Number(data.total_committed_outflows_inr).toLocaleString("en-IN");
         const elMin = document.getElementById("valMinBuffer");
         if (elMin) elMin.innerText = "₹" + Number(data.minimum_projected_balance_inr).toLocaleString("en-IN");
+        const elStarting = document.getElementById("valStartingBuffer");
+        if (elStarting) elStarting.innerText = "₹" + Number(data.starting_operating_balance_inr).toLocaleString("en-IN");
 
         // Banner Alert
         const banner = document.getElementById("cashflowPinchBanner");
@@ -6188,10 +6348,10 @@ async function refreshAuditTrail() {
               <div style="display: flex; gap: 12px; align-items: flex-start;">
                 <span style="display:inline-block;width:24px;height:24px;background:#dc2626;border-radius:50%;"></span>
                 <div>
-                  <h4 style="font-size: 15px; font-weight: 800; color: #991b1b; margin-bottom: 4px;">${a.title}</h4>
-                  <p style="font-size: 13px; color: #7f1d1d; margin-bottom: 8px;">${a.message}</p>
+                  <h4 style="font-size: 15px; font-weight: 800; color: #991b1b; margin-bottom: 4px;">${escapeHtml(a.title)}</h4>
+                  <p style="font-size: 13px; color: #7f1d1d; margin-bottom: 8px;">${escapeHtml(a.message)}</p>
                   <div style="font-size: 12.5px; background: #fff; padding: 8px 12px; border-radius: 6px; border: 1px solid #fecaca; color: #991b1b;">
-                    <strong>ActionMate Strategy:</strong> ${a.recommended_action}
+                    <strong>Suggested next step:</strong> ${escapeHtml(a.recommended_action)}
                   </div>
                 </div>
               </div>
@@ -6201,24 +6361,26 @@ async function refreshAuditTrail() {
           }
         }
 
+        renderCashflowTrendChart(data.timeline);
+
         // Timeline Table
         const tbody = document.getElementById("tbodyCashflow");
         if (tbody && Array.isArray(data.timeline)) {
           tbody.innerHTML = data.timeline.map(row => {
-            const isPinch = row.is_pinch_point;
+            const isPinch = row.is_pinch_day;
             return `
               <tr style="${isPinch ? 'background: #fff1f2;' : ''}">
-                <td><strong>Day ${row.day}</strong><div style="font-size: 11.5px; color: var(--text-muted);">${row.date}</div></td>
-                <td style="color: var(--green-dark); font-weight: 600;">+₹${Number(row.expected_inflow_inr).toLocaleString("en-IN")}</td>
-                <td style="color: var(--red-dark); font-weight: 600;">-₹${Number(row.committed_outflow_inr).toLocaleString("en-IN")}</td>
-                <td style="font-weight: 700; color: ${row.net_daily_flow_inr >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">
-                  ${row.net_daily_flow_inr >= 0 ? '+' : ''}₹${Number(row.net_daily_flow_inr).toLocaleString("en-IN")}
+                <td><strong>Day ${Number(row.day_offset) + 1}</strong><div style="font-size: 11.5px; color: var(--text-muted);">${escapeHtml(row.date)}</div></td>
+                <td style="color: var(--green-dark); font-weight: 600;">+₹${Number(row.expected_inflows_inr).toLocaleString("en-IN")}</td>
+                <td style="color: var(--red-dark); font-weight: 600;">-₹${Number(row.committed_outflows_inr).toLocaleString("en-IN")}</td>
+                <td style="font-weight: 700; color: ${row.net_daily_cashflow_inr >= 0 ? 'var(--green-dark)' : 'var(--red-dark)'};">
+                  ${row.net_daily_cashflow_inr >= 0 ? '+' : ''}₹${Number(row.net_daily_cashflow_inr).toLocaleString("en-IN")}
                 </td>
                 <td style="font-weight: 800; color: ${isPinch ? 'var(--red-dark)' : 'var(--paytm-navy)'};">
-                  ₹${Number(row.projected_cumulative_balance_inr).toLocaleString("en-IN")}
+                  ₹${Number(row.projected_cash_balance_inr).toLocaleString("en-IN")}
                 </td>
                 <td>
-                  ${isPinch ? '<span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 800;">LIQUIDITY PINCH</span>' : '<span class="badge" style="background: #dcfce7; color: #166534;">Healthy Buffer</span>'}
+                  ${isPinch ? '<span class="badge" style="background: #fee2e2; color: #991b1b; font-weight: 800;">Check cash buffer</span>' : '<span class="badge" style="background: #dcfce7; color: #166534;">On track</span>'}
                 </td>
               </tr>
             `;
@@ -6839,7 +7001,9 @@ async function refreshAuditTrail() {
         updateVoiceStatus("COMPLETED", "#10b981");
         appendAiResponse(data);
 
-        if (data.audio_base64) {
+        if (data.response_language_error) {
+          setVoiceTranscriptStatus(`${data.response_language_error} The answer is shown in English and was not spoken.`);
+        } else if (data.audio_base64) {
           playAudioFromBase64(data.audio_base64);
           setVoiceTranscriptStatus("Answer ready. Playing the spoken reply.");
         } else if (data.speech_error) {
@@ -6911,6 +7075,13 @@ async function refreshAuditTrail() {
       response.style.cssText = "font-size: 13.5px; color: var(--text-dark); line-height: 1.5; white-space: pre-wrap;";
       response.textContent = data.response_text || "I couldn't prepare an answer.";
       bubble.append(header, response);
+      if (data.response_language_error) {
+        const languageError = document.createElement("div");
+        languageError.className = "voice-language-error";
+        languageError.setAttribute("role", "status");
+        languageError.textContent = `${data.response_language_error} The answer is shown in English and was not spoken.`;
+        bubble.appendChild(languageError);
+      }
       if (data.audio_base64) {
         const replay = document.createElement("button");
         replay.className = "btn btn-secondary btn-sm";
