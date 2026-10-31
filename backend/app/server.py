@@ -451,8 +451,23 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(logs).encode('utf-8'))
             return
 
-        # 10. Executive KPIs & Revenue Command Center
+        # 10. Executive KPIs & Revenue Command Center (Dynamic 6-KPI Engine)
         elif path == "/api/analytics/kpis":
+            qs = parse_qs(parsed.query)
+            start_d = qs.get("start_date", [None])[0]
+            end_d = qs.get("end_date", [None])[0]
+            st = qs.get("status", [None])[0]
+            cmp = qs.get("campaign_id", [None])[0]
+            merch = qs.get("merchant_id", ["MERCH-001"])[0]
+
+            kpi_calc = KPIService.calculate_kpis(
+                merchant_id=merch,
+                start_date=start_d,
+                end_date=end_d,
+                status_filter=st,
+                campaign_filter=cmp
+            )
+
             conn = get_connection()
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM customers")
@@ -487,7 +502,8 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             net_return = max(0.0, recovered_revenue - operating_cost)
             roi_multiple = round(recovered_revenue / operating_cost, 2) if operating_cost > 0 and recovered_revenue > 0 else 6.38
 
-            kpis = {
+            resp_payload = {**kpi_calc}
+            resp_payload.update({
                 "total_customers_monitored": cust_count,
                 "active_opportunities_count": opp_count,
                 "potential_opportunity_value_inr": potential_revenue,
@@ -505,9 +521,9 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
                 "approval_compliance": "100%",
                 "cost_per_task": "₹3.10",
                 "attribution_methodology": "Strict closed-loop verified invoice ledger attribution."
-            }
+            })
             self._set_headers(200)
-            self.wfile.write(json.dumps(kpis).encode('utf-8'))
+            self.wfile.write(json.dumps(resp_payload).encode('utf-8'))
             return
 
         # 11. Closed-Loop ROI & Revenue Engine
