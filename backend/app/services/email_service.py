@@ -25,15 +25,14 @@ def generate_email_mime(customer_name: str, recipient_email: str, discount_code:
     # Plain text version
     plain_text = f"""Hi {customer_name},
 
-We missed you at {store_name}!
-As a valued patron, here is an exclusive discount code for you:
+We missed seeing you at {store_name}!
+Here are the details of your grocery offer:
 
 PROMO CODE: {discount_code}
 OFFER: ₹{int(discount_amount)} OFF on orders above ₹{int(min_order)}
-VALIDITY: This weekend only (Till Sunday midnight)
-HOW TO REDEEM: Simply scan our Paytm Soundbox QR code at Counter 1 or 2 when paying.
+VALIDITY: Please check the offer dates before visiting.
+HOW TO REDEEM: Show the code at the counter when paying.
 
-Sharma Sweets & Cafe, Connaught Place, New Delhi.
 To unsubscribe, reply with 'STOP'.
 """
 
@@ -65,7 +64,7 @@ To unsubscribe, reply with 'STOP'.
     <div class="body-content">
       <h2 style="font-size: 18px; margin-top: 0;">Hi {customer_name},</h2>
       <p style="font-size: 14.5px; line-height: 1.6; color: #334155;">
-        We noticed you haven't visited us for lunch recently! Our team prepared a special weekend treat just for you.
+        We noticed you haven't visited {store_name} recently. Here is a grocery offer for your next eligible basket.
       </p>
       <div class="coupon-card">
         <div class="coupon-code">{discount_code}</div>
@@ -73,11 +72,11 @@ To unsubscribe, reply with 'STOP'.
         <p style="font-size: 12px; color: #64748B; margin-bottom: 0;">Scan Paytm QR code at our counter to auto-apply</p>
       </div>
       <p style="font-size: 13.5px; color: #64748B;">
-        Valid until this Sunday midnight. Cannot be combined with other offers.
+        Please check the offer dates and terms at the store. Cannot be combined with other offers.
       </p>
     </div>
     <div class="footer">
-      Sharma Sweets & Cafe, Connaught Place, New Delhi · Powered by DealPilot AI<br>
+      {store_name} · Powered by Paytm AI ActionMate<br>
       You are receiving this because you transacted with us previously. <a href="#unsubscribe" style="color: #64748B;">Unsubscribe</a>
     </div>
   </div>

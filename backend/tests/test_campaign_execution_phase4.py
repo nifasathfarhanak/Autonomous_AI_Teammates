@@ -80,18 +80,18 @@ class TestCampaignExecutionPhase4(unittest.TestCase):
 
         self.assertIsNotNone(rec)
         self.assertIn("Recovery Campaign", rec.campaign_name)
-        self.assertIn("24%", rec.reason_for_recommendation)
+        self.assertIn("24.0%", rec.reason_for_recommendation)
         self.assertIn("repeat", rec.reason_for_recommendation.lower())
         self.assertTrue(rec.target_customer_segment.startswith("DECLINING_FREQUENCY"))
-        self.assertIn("4 days", rec.suggested_campaign_duration)
+        self.assertIn("7 days", rec.suggested_campaign_duration)
         self.assertIn("Soundbox", rec.recommended_communication_channel)
         self.assertIn("SMS", rec.recommended_communication_channel)
         self.assertTrue(rec.is_demo)
 
         # Confirm offer structure
-        self.assertEqual(rec.offer_details["discount_code"], "RET50")
+        self.assertEqual(rec.offer_details["discount_code"], "GROCERY50")
         self.assertEqual(rec.offer_details["discount_amount_inr"], 50.0)
-        self.assertEqual(rec.offer_details["min_order_inr"], 249.0)
+        self.assertEqual(rec.offer_details["min_order_inr"], 499.0)
 
         # Confirm no hallucinated revenue guarantees
         self.assertNotIn("guaranteed revenue", rec.expected_operational_outcome.lower())

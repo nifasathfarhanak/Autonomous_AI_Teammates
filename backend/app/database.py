@@ -967,66 +967,79 @@ def init_db():
     conn.close()
 
 def _seed_100_customers(cur):
-    """Internal helper to seed 100 enterprise accounts."""
+    """Seeds 100 fictional neighborhood grocery customers."""
     primary_customers = [
-        ("CUST-1001", "MERCH-001", "Arun Kumar", "arun.kumar@biotechlabs.in", "BioTech Research Labs", "+91 98711-23091",
-         "2026-08-19", 85000.0, 245000.0, "Laboratory reactor accessories & thermal units", "2026-08-19",
-         "UNANSWERED", 65000.0, "en", 0),
-        ("CUST-1002", "MERCH-001", "Ananya Roy", "ananya.roy@delhicatering.com", "Delhi Fine Confectionery", "+91 98102-44120",
-         "2026-10-02", 42000.0, 186000.0, "Festive gourmet corporate sweet gift hampers", "2026-10-14",
-         "UNANSWERED", 52000.0, "en", 0),
-        ("CUST-1003", "MERCH-001", "Rajesh Sharma", "rajesh.sharma@apexinfra.org", "Apex Engineering Infra", "+91 98230-11980",
-         "2026-07-10", 112000.0, 390000.0, "Industrial boiler spare components & valves", "2026-08-04",
-         "SENT", 94000.0, "hi", 0),
-        ("CUST-1004", "MERCH-001", "Priya Venkatesh", "priya.v@chennaimetalworks.com", "Chennai Precision Metalworks", "+91 94440-88219",
-         "2026-09-28", 34000.0, 98000.0, "Custom CNC precision brass fittings (500 units)", "2026-10-18",
+        ("CUST-1001", "MERCH-001", "Arun Kumar", "arun.kumar@example.test", "Kumar Household", "+91 98711-23091",
+         "2026-10-25", 680.0, 12800.0, "Toned milk and wheat flour", "2026-10-25",
+         "UNANSWERED", 650.0, "en", 0),
+        ("CUST-1002", "MERCH-001", "Ananya Roy", "ananya.roy@example.test", "Roy Household", "+91 98102-44120",
+         "2026-10-24", 920.0, 18400.0, "Basmati rice and cooking oil", "2026-10-24",
+         "UNANSWERED", 520.0, "en", 0),
+        ("CUST-1003", "MERCH-001", "Rajesh Sharma", "rajesh.sharma@example.test", "Sharma Household", "+91 98230-11980",
+         "2026-10-18", 540.0, 22100.0, "Toor dal and basmati rice", "2026-10-18",
+         "SENT", 940.0, "hi", 0),
+        ("CUST-1004", "MERCH-001", "Priya Venkatesh", "priya.v@example.test", "Venkatesh Household", "+91 94440-88219",
+         "2026-10-20", 410.0, 9600.0, "Fresh tomatoes and onions", "2026-10-20",
          "NONE", 0.0, "ta", 0),
-        ("CUST-1005", "MERCH-001", "Vikram Patel", "vpatel@gujaratchemicals.co.in", "Gujarat Specialty Polymers", "+91 98250-77341",
-         "2026-06-15", 145000.0, 480000.0, "High-density polymer drums & chemical valves", "2026-07-20",
-         "EXPIRED", 120000.0, "gu", 0),
-        ("CUST-1006", "MERCH-001", "Kavita Reddy", "kavita.reddy@hyderabadfoodtech.in", "Hyderabad Foodtech Ventures", "+91 99890-55412",
-         "2026-09-12", 28000.0, 74000.0, "Commercial food packaging machines (Grade 304)", "2026-10-01",
-         "UNANSWERED", 48000.0, "te", 0),
-        ("CUST-1007", "MERCH-001", "Amit Banerjee", "amit.b@kolkatapharma.net", "Kolkata Allied Pharmaceuticals", "+91 98310-99234",
-         "2026-08-30", 67000.0, 210000.0, "Cleanroom sterilization packs & filters", "2026-09-22",
-         "SENT", 58000.0, "bn", 0),
-        ("CUST-1008", "MERCH-001", "Sunita Deshmukh", "sunita.d@puneauto.co.in", "Pune Automotive Die Castings", "+91 98220-33418",
-         "2026-07-22", 95000.0, 310000.0, "Precision automotive gasket sheets & seals", "2026-08-28",
+        ("CUST-1005", "MERCH-001", "Vikram Patel", "vikram.patel@example.test", "Patel Household", "+91 98250-77341",
+         "2026-10-01", 760.0, 14200.0, "Sunflower oil and wheat flour", "2026-10-01",
+         "EXPIRED", 1200.0, "gu", 0),
+        ("CUST-1006", "MERCH-001", "Kavita Reddy", "kavita.reddy@example.test", "Reddy Household", "+91 99890-55412",
+         "2026-10-22", 350.0, 7350.0, "Toned milk and biscuits", "2026-10-22",
+         "UNANSWERED", 480.0, "te", 0),
+        ("CUST-1007", "MERCH-001", "Amit Banerjee", "amit.b@example.test", "Banerjee Household", "+91 98310-99234",
+         "2026-09-04", 285.0, 18900.0, "Premium breakfast cereal", "2026-09-04",
+         "SENT", 580.0, "bn", 0),
+        ("CUST-1008", "MERCH-001", "Sunita Deshmukh", "sunita.d@example.test", "Deshmukh Household", "+91 98220-33418",
+         "2026-10-23", 625.0, 17600.0, "Fresh produce and cooking oil", "2026-10-23",
          "NONE", 0.0, "mr", 0),
-        ("CUST-1009", "MERCH-001", "Rohan Mehta", "rohan@delhidistributors.in", "North India FMCG Distributors", "+91 98118-77123",
-         "2026-10-08", 54000.0, 160000.0, "Festive gourmet corporate sweet gift hampers", "2026-10-21",
-         "UNANSWERED", 36000.0, "en", 0),
-        ("CUST-1010", "MERCH-001", "Sneha Joshi", "sneha.j@mumbaicorporategifts.com", "Mumbai Corporate Hospitality", "+91 98201-66789",
-         "2026-09-05", 78000.0, 290000.0, "Festive gourmet corporate sweet gift hampers", "2026-09-29",
-         "UNANSWERED", 75000.0, "en", 0),
+        ("CUST-1009", "MERCH-001", "Rohan Mehta", "rohan.mehta@example.test", "Mehta Household", "+91 98118-77123",
+         "2026-10-21", 480.0, 12300.0, "Toor dal and fresh tomatoes", "2026-10-21",
+         "UNANSWERED", 360.0, "en", 0),
+        ("CUST-1010", "MERCH-001", "Sneha Joshi", "sneha.joshi@example.test", "Joshi Household", "+91 98201-66789",
+         "2026-10-17", 720.0, 15400.0, "Rice, flour and cooking oil", "2026-10-17",
+         "UNANSWERED", 750.0, "en", 0),
     ]
 
     for c in primary_customers:
         cur.execute("""
-        INSERT OR REPLACE INTO customers (customer_id, merchant_id, customer_name, email, company, phone,
+        INSERT INTO customers (customer_id, merchant_id, customer_name, email, company, phone,
                                last_purchase_date, last_purchase_value, lifetime_value,
                                interested_product, last_interaction_date, quotation_status,
                                quotation_value, preferred_language, is_unsubscribed)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(customer_id) DO UPDATE SET
+            merchant_id = excluded.merchant_id,
+            customer_name = excluded.customer_name,
+            email = excluded.email,
+            company = excluded.company,
+            phone = excluded.phone,
+            last_purchase_date = excluded.last_purchase_date,
+            last_purchase_value = excluded.last_purchase_value,
+            lifetime_value = excluded.lifetime_value,
+            interested_product = excluded.interested_product,
+            last_interaction_date = excluded.last_interaction_date,
+            quotation_status = excluded.quotation_status,
+            quotation_value = excluded.quotation_value,
+            preferred_language = excluded.preferred_language,
+            is_unsubscribed = excluded.is_unsubscribed
         """, c)
 
     first_names = ["Siddharth", "Meenakshi", "Girish", "Deepa", "Manish", "Shweta", "Naveen", "Archana",
                    "Harish", "Bhavna", "Alok", "Pallavi", "Vivek", "Rashmi", "Chetan", "Sandhya", "Pranav", "Nandini"]
     last_names = ["Nair", "Iyer", "Kulkarni", "Aggarwal", "Sengupta", "Verma", "Pillai", "Choudhury",
                   "Bhattacharya", "Trivedi", "Rao", "Shetty", "Menon", "Jain", "Bhatia", "Gowda"]
-    companies = ["Southern Precision Tools", "Bangalore Biotech Systems", "Universal Packaging Corp",
-                 "Himalaya Pharma Equipment", "Deccan Automation Solutions", "Maruti Die Works",
-                 "Godavari Agro Processors", "Western Engineering Works", "Zenith Cleanroom Tech",
-                 "Sterling Instruments & Labs", "Matrix Industrial Supply", "Supreme Polymer Products"]
+    companies = ["Nair Household", "Iyer Household", "Kulkarni Household", "Aggarwal Household",
+                 "Sengupta Household", "Verma Household", "Pillai Household", "Choudhury Household"]
     products_pool = [
-        "Laboratory reactor accessories & thermal units",
-        "Industrial boiler spare components & valves",
-        "Commercial food packaging machines (Grade 304)",
-        "Cleanroom sterilization packs & filters",
-        "Custom CNC precision brass fittings (500 units)",
-        "High-density polymer drums & chemical valves",
-        "Festive gourmet corporate sweet gift hampers",
-        "Precision automotive gasket sheets & seals"
+        "Toned milk and wheat flour",
+        "Basmati rice and cooking oil",
+        "Toor dal and basmati rice",
+        "Fresh tomatoes and onions",
+        "Sunflower oil and wheat flour",
+        "Toned milk and biscuits",
+        "Premium breakfast cereal",
+        "Fresh produce and cooking oil"
     ]
     langs = ["en", "hi", "kn", "ta", "te", "bn", "mr", "gu"]
 
@@ -1057,15 +1070,15 @@ def _seed_100_customers(cur):
         last_pur_dt = (ref_date - timedelta(days=days_ago + random.randint(10, 40))).strftime("%Y-%m-%d")
 
         if is_high_value:
-            ltv = float(random.randint(210000, 650000))
-            last_pur_val = float(random.randint(75000, 180000))
+            ltv = float(random.randint(12000, 36000))
+            last_pur_val = float(random.randint(450, 1400))
         else:
-            ltv = float(random.randint(45000, 195000))
-            last_pur_val = float(random.randint(15000, 60000))
+            ltv = float(random.randint(1800, 16000))
+            last_pur_val = float(random.randint(120, 850))
 
         if has_quote:
             q_status = "UNANSWERED" if random.random() > 0.3 else "SENT"
-            q_val = float(random.randint(35000, 110000))
+            q_val = float(random.randint(300, 1800))
         else:
             q_status = "NONE"
             q_val = 0.0
@@ -1079,12 +1092,118 @@ def _seed_100_customers(cur):
             phone = ""
 
         cur.execute("""
-        INSERT OR REPLACE INTO customers (customer_id, merchant_id, customer_name, email, company, phone,
+        INSERT INTO customers (customer_id, merchant_id, customer_name, email, company, phone,
                                last_purchase_date, last_purchase_value, lifetime_value,
                                interested_product, last_interaction_date, quotation_status,
                                quotation_value, preferred_language, is_unsubscribed)
         VALUES (?, 'MERCH-001', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(customer_id) DO UPDATE SET
+            merchant_id = excluded.merchant_id,
+            customer_name = excluded.customer_name,
+            email = excluded.email,
+            company = excluded.company,
+            phone = excluded.phone,
+            last_purchase_date = excluded.last_purchase_date,
+            last_purchase_value = excluded.last_purchase_value,
+            lifetime_value = excluded.lifetime_value,
+            interested_product = excluded.interested_product,
+            last_interaction_date = excluded.last_interaction_date,
+            quotation_status = excluded.quotation_status,
+            quotation_value = excluded.quotation_value,
+            preferred_language = excluded.preferred_language,
+            is_unsubscribed = excluded.is_unsubscribed
         """, (cid, name, email, comp, phone, last_pur_dt, last_pur_val, ltv, prod, last_int_dt, q_status, q_val, lang, unsub))
+
+def _migrate_primary_grocery_demo(cur):
+    """Refresh only the app's known seeded records when switching the primary demo to grocery."""
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS demo_seed_state (
+        seed_name TEXT PRIMARY KEY,
+        version INTEGER NOT NULL
+    )
+    """)
+    cur.execute("SELECT version FROM demo_seed_state WHERE seed_name = 'primary_grocery'")
+    row = cur.fetchone()
+    if row and row[0] >= 3:
+        return
+
+    _seed_100_customers(cur)
+
+    cur.execute("""
+    DELETE FROM order_items
+    WHERE order_id IN (
+        SELECT order_id FROM orders
+        WHERE order_id LIKE 'ORD-DEMO-%'
+           OR order_id LIKE 'ORD-GROCERY-%'
+           OR order_id = 'ORD-CUST-1001-01'
+    )
+    """)
+    cur.execute("""
+    DELETE FROM orders
+    WHERE order_id LIKE 'ORD-DEMO-%'
+       OR order_id LIKE 'ORD-GROCERY-%'
+       OR order_id = 'ORD-CUST-1001-01'
+    """)
+    cur.execute("DELETE FROM customers WHERE merchant_id = 'MERCH-001' AND customer_id LIKE 'CUST-WALKIN-%'")
+    cur.execute("DELETE FROM quotations WHERE quotation_id IN ('QUOT-1001', 'QUOT-1002', 'QUOT-1003', 'QUOT-1004')")
+    cur.execute("DELETE FROM customer_interactions WHERE interaction_id IN ('INT-1001', 'INT-1002', 'INT-1003', 'INT-1004')")
+    cur.execute("DELETE FROM merchant_inventory WHERE merchant_id = 'MERCH-001' AND inventory_id LIKE 'INV-00%'")
+    cur.execute("DELETE FROM merchant_expenses WHERE merchant_id = 'MERCH-001' AND expense_id LIKE 'EXP-00%'")
+    cur.execute("DELETE FROM merchant_settlements WHERE merchant_id = 'MERCH-001' AND settlement_id LIKE 'SETTL-00%'")
+    cur.execute("DELETE FROM business_opportunities WHERE merchant_id = 'MERCH-001' AND opportunity_id LIKE 'OPP-00%'")
+
+    cur.execute("""
+    UPDATE workflows
+    SET title = 'Bring back regular grocery shoppers',
+        detected_leakage_inr = 20900.0,
+        target_cohort_count = 46,
+        discount_code = 'GROCERY50',
+        discount_amount_inr = 50.0,
+        min_order_inr = 499.0,
+        max_liability_cap_inr = 3600.0,
+        anomaly_payload = ?,
+        strategy_payload = ?,
+        messages_payload = ?,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = 'WF-REC-1042'
+    """, (
+        json.dumps({
+            "event_type": "TELEMETRY_ANOMALY_REPEAT_PURCHASE_DROP",
+            "soundbox_device_id": "SB-4G-DEL-9842",
+            "drop_percentage": 18.4,
+            "revenue_leakage_inr": 20900.0,
+            "missing_patrons_count": 46,
+            "target_dormant_cohort_size": 46,
+            "period": "Recent grocery visits"
+        }),
+        json.dumps({
+            "discount_code": "GROCERY50",
+            "discount_amount_inr": 50.0,
+            "min_order_inr": 499.0,
+            "max_liability_cap_inr": 3600.0,
+            "expected_redemption_rate_pct": 18.2,
+            "expected_gross_sales_inr": 28500.0
+        }),
+        json.dumps({
+            "en": "Hi [Customer Name]! We miss you at Sharma Family Grocery. Enjoy ₹50 off your next grocery basket above ₹499 with code GROCERY50.",
+            "hi": "नमस्ते [ग्राहक का नाम]! शर्मा फैमिली ग्रोसरी में आपकी कमी महसूस हुई। ₹499 से अधिक की अगली खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।"
+        })
+    ))
+    cur.execute("""
+    UPDATE recovery_campaigns
+    SET title = CASE campaign_id
+        WHEN 'CAMP-2026-SEP-01' THEN 'Grocery basket repeat-visit offer'
+        WHEN 'CAMP-2026-AUG-15' THEN 'Neighborhood pantry essentials offer'
+        ELSE title
+    END
+    WHERE merchant_id = 'MERCH-001'
+      AND campaign_id IN ('CAMP-2026-SEP-01', 'CAMP-2026-AUG-15')
+    """)
+    cur.execute("""
+    INSERT INTO demo_seed_state (seed_name, version)
+    VALUES ('primary_grocery', 3)
+    ON CONFLICT(seed_name) DO UPDATE SET version = excluded.version
+    """)
 
 def seed_enterprise_data(conn):
     """Seeds 100 enterprise customers across 4 distinct B2B sectors,
@@ -1092,20 +1211,30 @@ def seed_enterprise_data(conn):
     cur = conn.cursor()
 
     # Seed Merchant Profile
-    cur.execute("SELECT id FROM merchants WHERE id = 'MERCH-001'")
-    if not cur.fetchone():
-        cur.execute("""
-        INSERT INTO merchants (id, store_name, owner_name, email, phone, city, soundbox_device_id, soundbox_status, currency)
-        VALUES ('MERCH-001', 'Sharma Commercial & Industrial Supplies', 'Ramesh Sharma', 'ramesh@sharmasupplies.in', '+91 98110-23456', 'Connaught Place, New Delhi', 'SB-4G-DEL-9842', 'ONLINE', 'INR')
-        """)
+    cur.execute("""
+    INSERT INTO merchants (id, store_name, owner_name, email, phone, city, soundbox_device_id, soundbox_status, currency)
+    VALUES ('MERCH-001', 'Sharma Family Grocery', 'Ramesh Sharma', 'ramesh@example.test', '+91 98110-23456', 'Connaught Place, New Delhi', 'SB-4G-DEL-9842', 'ONLINE', 'INR')
+    ON CONFLICT(id) DO UPDATE SET
+        store_name = excluded.store_name,
+        owner_name = excluded.owner_name,
+        email = excluded.email,
+        phone = excluded.phone,
+        city = excluded.city,
+        soundbox_device_id = excluded.soundbox_device_id,
+        soundbox_status = excluded.soundbox_status,
+        currency = excluded.currency
+    """)
 
     # Seed Users
-    cur.execute("SELECT id FROM users WHERE id = 'USER-001'")
-    if not cur.fetchone():
-        cur.execute("""
-        INSERT INTO users (id, merchant_id, email, full_name, role)
-        VALUES ('USER-001', 'MERCH-001', 'ramesh@sharmasupplies.in', 'Ramesh Sharma', 'OWNER')
-        """)
+    cur.execute("""
+    INSERT INTO users (id, merchant_id, email, full_name, role)
+    VALUES ('USER-001', 'MERCH-001', 'ramesh@example.test', 'Ramesh Sharma', 'OWNER')
+    ON CONFLICT(id) DO UPDATE SET
+        merchant_id = excluded.merchant_id,
+        email = excluded.email,
+        full_name = excluded.full_name,
+        role = excluded.role
+    """)
 
     # Seed AI Agents
     agents = [
@@ -1130,14 +1259,15 @@ def seed_enterprise_data(conn):
 
     # Seed Products Catalog
     products = [
-        ("PROD-001", "MERCH-001", "LAB-RCT-01", "Laboratory reactor accessories & thermal units", "Biotech & Laboratory", 65000.0),
-        ("PROD-002", "MERCH-001", "IND-BLR-02", "Industrial boiler spare components & valves", "Industrial Engineering", 94000.0),
-        ("PROD-003", "MERCH-001", "PKG-FOD-03", "Commercial food packaging machines (Grade 304)", "Food & Confectionery", 48000.0),
-        ("PROD-004", "MERCH-001", "MED-STR-04", "Cleanroom sterilization packs & filters", "Medical & Pharma", 58000.0),
-        ("PROD-005", "MERCH-001", "CNC-BRS-05", "Custom CNC precision brass fittings (500 units)", "Industrial Engineering", 34000.0),
-        ("PROD-006", "MERCH-001", "POL-DRM-06", "High-density polymer drums & chemical valves", "Chemicals", 120000.0),
-        ("PROD-007", "MERCH-001", "FST-HAM-07", "Festive gourmet corporate sweet gift hampers", "Food & Confectionery", 75000.0),
-        ("PROD-008", "MERCH-001", "AUT-GSK-08", "Precision automotive gasket sheets & seals", "Automotive", 45000.0),
+        ("PROD-001", "MERCH-001", "GRC-ATTA-5K", "Whole Wheat Atta (5 kg)", "Staples", 275.0),
+        ("PROD-002", "MERCH-001", "GRC-RICE-1K", "Basmati Rice (1 kg)", "Staples", 145.0),
+        ("PROD-003", "MERCH-001", "GRC-MILK-1L", "Toned Milk (1 litre)", "Dairy", 60.0),
+        ("PROD-004", "MERCH-001", "GRC-DAL-1K", "Toor Dal (1 kg)", "Staples", 180.0),
+        ("PROD-005", "MERCH-001", "GRC-OIL-1L", "Sunflower Oil (1 litre)", "Cooking Essentials", 155.0),
+        ("PROD-006", "MERCH-001", "GRC-TOM-1K", "Fresh Tomatoes (1 kg)", "Fresh Produce", 40.0),
+        ("PROD-007", "MERCH-001", "GRC-CEREAL-500", "Premium Breakfast Cereal (500 g)", "Packaged Foods", 220.0),
+        ("PROD-008", "MERCH-001", "GRC-DETERGENT-1K", "Laundry Detergent (1 kg)", "Home Care", 135.0),
+        ("PROD-009", "MERCH-001", "GRC-BANANA-EA", "Banana (each)", "Fresh Produce", 5.0),
     ]
     for p in products:
         cur.execute("""
@@ -1146,7 +1276,7 @@ def seed_enterprise_data(conn):
         """, p)
 
     # Seed customers if not already present
-    cur.execute("SELECT COUNT(*) FROM customers")
+    cur.execute("SELECT COUNT(*) FROM customers WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] < 100:
         _seed_100_customers(cur)
 
@@ -1159,7 +1289,7 @@ def seed_enterprise_data(conn):
     integrations = [
         ("INT-001", "Sarvam AI Indic Sovereign Platform", "CONNECTED", "api.sarvam.ai (Mayura, 105B, Bulbul, Saaras)",
          json.dumps({"models": ["sarvam-105b", "mayura:v1", "bulbul:v1", "saaras:v2"], "languages": 8, "health": "OPERATIONAL"})),
-        ("INT-002", "Gmail API OAuth Gateway", "CONFIGURED_DEMO_ADAPTER", "offers@sharmasupplies.in",
+        ("INT-002", "Gmail API OAuth Gateway", "CONFIGURED_DEMO_ADAPTER", "offers@sharmafamilygrocery.example.test",
          json.dumps({"provider": "Gmail API", "mode": "DEMO_EMAIL_ADAPTER", "status": "READY_FOR_RFC822_DISPATCH"})),
         ("INT-003", "CSV Data Ingestion Engine", "CONNECTED", "Local Workspace File System",
          json.dumps({"supported_formats": [".csv", ".tsv"], "max_batch_size": 5000}))
@@ -1296,6 +1426,8 @@ def seed_enterprise_data(conn):
 
     conn.commit()
 
+    _migrate_primary_grocery_demo(cur)
+
     # Seed Sales Transactions, Order Items, Quotations, and Interactions
     try:
         from .services.sales_intelligence_service import seed_sales_transactions
@@ -1322,17 +1454,18 @@ def _seed_phase8_data(conn):
     today = datetime.now(timezone.utc)
 
     # 1. Seed Inventory (8 SKUs)
-    cur.execute("SELECT COUNT(*) FROM merchant_inventory")
+    cur.execute("SELECT COUNT(*) FROM merchant_inventory WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] == 0:
         inventory_items = [
-            ("INV-001", "MERCH-001", "PROD-001", "Laboratory reactor accessories & thermal units", "Laboratory Equipment", 14, 5, 8, 4, 55000.0, 85000.0, 18),
-            ("INV-002", "MERCH-001", "PROD-002", "Industrial boiler spare components & valves", "Thermal Equipment", 28, 10, 15, 3, 32000.0, 48000.0, 25),
-            ("INV-003", "MERCH-001", "PROD-003", "Commercial food packaging machines (Grade 304)", "Machinery", 6, 3, 5, 5, 85000.0, 125000.0, 14),
-            ("INV-004", "MERCH-001", "PROD-004", "Cleanroom sterilization packs & filters", "Sterilization", 65, 20, 30, 2, 1800.0, 3200.0, 15),
-            ("INV-005", "MERCH-001", "PROD-005", "Custom CNC precision brass fittings (500 units)", "Precision Hardware", 19, 4, 6, 6, 42000.0, 58000.0, 95),
-            ("INV-006", "MERCH-001", "PROD-006", "High-density polymer drums & chemical valves", "General Supplies", 4, 6, 10, 3, 4200.0, 7500.0, 8),
-            ("INV-007", "MERCH-001", "PROD-007", "Festive gourmet corporate sweet gift hampers", "Corporate Gifts", 45, 15, 25, 2, 650.0, 1200.0, 12),
-            ("INV-008", "MERCH-001", "PROD-008", "Precision automotive gasket sheets & seals", "Automotive Seals", 9, 3, 5, 7, 58000.0, 75000.0, 82)
+            ("INV-001", "MERCH-001", "PROD-001", "Whole Wheat Atta (5 kg)", "Staples", 42, 12, 20, 2, 230.0, 275.0, 12),
+            ("INV-002", "MERCH-001", "PROD-002", "Basmati Rice (1 kg)", "Staples", 65, 15, 25, 3, 105.0, 145.0, 20),
+            ("INV-003", "MERCH-001", "PROD-003", "Toned Milk (1 litre)", "Dairy", 8, 15, 25, 1, 54.0, 60.0, 1),
+            ("INV-004", "MERCH-001", "PROD-004", "Toor Dal (1 kg)", "Staples", 21, 8, 12, 4, 145.0, 180.0, 25),
+            ("INV-005", "MERCH-001", "PROD-005", "Sunflower Oil (1 litre)", "Cooking Essentials", 32, 10, 15, 3, 128.0, 155.0, 17),
+            ("INV-006", "MERCH-001", "PROD-006", "Fresh Tomatoes (1 kg)", "Fresh Produce", 6, 12, 20, 1, 28.0, 40.0, 1),
+            ("INV-007", "MERCH-001", "PROD-007", "Premium Breakfast Cereal (500 g)", "Packaged Foods", 48, 8, 12, 7, 160.0, 220.0, 95),
+            ("INV-008", "MERCH-001", "PROD-008", "Laundry Detergent (1 kg)", "Home Care", 25, 8, 12, 4, 95.0, 135.0, 31),
+            ("INV-009", "MERCH-001", "PROD-009", "Banana (each)", "Fresh Produce", 80, 20, 30, 1, 3.5, 5.0, 1)
         ]
         for item in inventory_items:
             cur.execute("""
@@ -1344,13 +1477,13 @@ def _seed_phase8_data(conn):
             """, (*item, (today - timedelta(days=item[11])).strftime("%Y-%m-%d")))
 
     # 2. Seed Operational Expenses
-    cur.execute("SELECT COUNT(*) FROM merchant_expenses")
+    cur.execute("SELECT COUNT(*) FROM merchant_expenses WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] == 0:
         expenses = [
-            ("EXP-001", "MERCH-001", "SUPPLIER_INVOICE", "Kavita Glassware & Scientific Ltd", "Procurement invoice for borosilicate reactors", 22000.0, (today + timedelta(days=3)).strftime("%Y-%m-%d"), "PENDING"),
-            ("EXP-002", "MERCH-001", "UTILITIES", "Jaipur Vidyut Vitran Nigam", "Warehouse commercial electricity bill", 8000.0, (today + timedelta(days=5)).strftime("%Y-%m-%d"), "PENDING"),
-            ("EXP-003", "MERCH-001", "EQUIPMENT_MAINTENANCE", "Precision Calibration Services", "Scale and sensor calibration retainer", 6500.0, (today + timedelta(days=8)).strftime("%Y-%m-%d"), "PENDING"),
-            ("EXP-004", "MERCH-001", "RENT", "Connaught Commercial Properties", "Showroom and sales office commercial lease", 45000.0, (today + timedelta(days=15)).strftime("%Y-%m-%d"), "SCHEDULED")
+            ("EXP-001", "MERCH-001", "SUPPLIER_INVOICE", "Shree Balaji Wholesale Foods", "Weekly staples and packaged-goods restock", 22000.0, (today + timedelta(days=3)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-002", "MERCH-001", "SUPPLIER_INVOICE", "Fresh Basket Produce Market", "Fresh produce and dairy supplier invoice", 8000.0, (today + timedelta(days=5)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-003", "MERCH-001", "UTILITIES", "BSES Rajdhani Power", "Monthly shop electricity bill", 5200.0, (today + timedelta(days=8)).strftime("%Y-%m-%d"), "PENDING"),
+            ("EXP-004", "MERCH-001", "RENT", "Connaught Market Properties", "Neighborhood shop monthly rent", 25000.0, (today + timedelta(days=15)).strftime("%Y-%m-%d"), "SCHEDULED")
         ]
         for exp in expenses:
             cur.execute("""
@@ -1360,7 +1493,7 @@ def _seed_phase8_data(conn):
             """, exp)
 
     # 3. Seed Inflow Settlements
-    cur.execute("SELECT COUNT(*) FROM merchant_settlements")
+    cur.execute("SELECT COUNT(*) FROM merchant_settlements WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] == 0:
         settlements = [
             ("SETTL-001", "MERCH-001", (today + timedelta(days=1)).strftime("%Y-%m-%d"), 18500.0, "PAYTM_SOUNDBOX", "PENDING", 18500.0, 0.0),
@@ -1394,38 +1527,38 @@ def _seed_phase8_data(conn):
             """, g)
 
     # 5. Seed Proactive Business Opportunities
-    cur.execute("SELECT COUNT(*) FROM business_opportunities")
+    cur.execute("SELECT COUNT(*) FROM business_opportunities WHERE merchant_id = 'MERCH-001'")
     if cur.fetchone()[0] == 0:
         opportunities = [
-            ("OPP-001", "MERCH-001", "PROFITABILITY", "High-Revenue SKU Has Margin Dilution (PROD-008)",
-             "Autoclaves generate ₹75k sales but unit margin is 22.7%, below the 25% merchant floor.",
-             json.dumps({"product_id": "PROD-008", "selling_price": 75000.0, "unit_cost": 58000.0, "margin_pct": 22.7, "floor_pct": 25.0}),
-             34000.0, "Renegotiate supplier procurement PO or bundle with high-margin Reagents (40.9% margin)",
-             0.0, 34000.0, "HIGH", 0.92, "CATEGORY_A", "Supplier contract margin recalculation"),
-            ("OPP-002", "MERCH-001", "INVENTORY", "Imminent Stockout on Top Performer (PROD-006)",
-             "Magnetic Stirrers are down to 4 units with a 3-day lead time. Estimated stockout in 2 days.",
-             json.dumps({"product_id": "PROD-006", "current_stock": 4, "daily_velocity": 2.0, "lead_time_days": 3}),
-             15000.0, "Trigger supplier reorder for 20 units immediately to prevent ₹15k in lost sales.",
-             0.0, 15000.0, "HIGH", 0.95, "CATEGORY_A", "Inventory PO tracking"),
-            ("OPP-003", "MERCH-001", "INVENTORY", "Slow-Moving Capital Trapped in Ovens (PROD-005)",
-             "19 units of Industrial Ovens have been in stock for 95 days. ₹798,000 working capital is trapped.",
-             json.dumps({"product_id": "PROD-005", "stock_units": 19, "age_days": 95, "trapped_capital_inr": 798000.0}),
-             110000.0, "Create a bundled equipment package with high-demand consumables to release liquidity.",
-             1200.0, 110000.0, "MEDIUM", 0.88, "CATEGORY_B", "Inventory clearance velocity measurement"),
+            ("OPP-001", "MERCH-001", "PROFITABILITY", "Toned milk is selling below the margin floor (PROD-003)",
+             "Toned Milk sells for ₹60 against a ₹54 supplier cost, leaving a 10% gross margin below the shop's 25% guardrail.",
+             json.dumps({"product_id": "PROD-003", "selling_price": 60.0, "unit_cost": 54.0, "margin_pct": 10.0, "floor_pct": 25.0}),
+             7200.0, "Compare supplier rates or review the shelf price before running a milk promotion.",
+             0.0, 7200.0, "HIGH", 0.92, "CATEGORY_A", "Verify supplier invoice and realized unit margin"),
+            ("OPP-002", "MERCH-001", "INVENTORY", "Fresh tomatoes may run out before the next delivery (PROD-006)",
+             "Only 6 kg remain against a 12 kg safety stock, and the supplier lead time is one day.",
+             json.dumps({"product_id": "PROD-006", "current_stock": 6, "daily_velocity": 10.0, "lead_time_days": 1}),
+             1200.0, "Review today's sales and place a small tomato reorder with the produce supplier.",
+             0.0, 1200.0, "HIGH", 0.95, "CATEGORY_A", "Confirm supplier order and check tomorrow's stock"),
+            ("OPP-003", "MERCH-001", "INVENTORY", "Slow-moving breakfast cereal is tying up shelf cash (PROD-007)",
+             "48 cereal packs have been on the shelf for 95 days, tying up about ₹7,680 at cost.",
+             json.dumps({"product_id": "PROD-007", "stock_units": 48, "age_days": 95, "trapped_capital_inr": 7680.0}),
+             7680.0, "Test a small, margin-safe bundle with a fast-moving breakfast staple; review sell-through before expanding.",
+             0.0, 7680.0, "MEDIUM", 0.88, "CATEGORY_B", "Compare 14-day cereal sell-through before and after the bundle"),
             ("OPP-004", "MERCH-001", "CASH_FLOW", "Upcoming Cash-Flow Pinch Window (Days 3-5)",
-             "Committed supplier payments (₹22,000) and power utility (₹8,000) will absorb 96% of early inflows.",
-             json.dumps({"committed_outflows": 30000.0, "expected_inflows_early": 31300.0, "liquidity_buffer": 1300.0}),
+             "Two grocery supplier invoices and the electricity bill are due before the next scheduled Paytm settlements.",
+             json.dumps({"committed_outflows": 35200.0, "expected_inflows_early": 55300.0, "liquidity_buffer": 20100.0}),
              30000.0, "Review upcoming supplier payment schedule or prioritize Soundbox cash collections.",
              0.0, 30000.0, "HIGH", 0.90, "CATEGORY_A", "Settlement and bank statement reconciliation"),
-            ("OPP-005", "MERCH-001", "CUSTOMER_RETENTION", "Repeat Lunch Customer Dormancy (46 Patrons)",
-             "Repeat customer orders dropped from 41% to 24% over 4 weeks, creating ₹20,900 revenue leakage.",
-             json.dumps({"week_1_pct": 41.0, "week_4_pct": 24.0, "unreturned_patrons": 46, "revenue_leakage": 20900.0}),
-             20900.0, "Execute approved WhatsApp, SMS & Soundbox reactivation sprint with code RET50.",
+            ("OPP-005", "MERCH-001", "CUSTOMER_RETENTION", "Regular grocery visits have slowed (46 shoppers)",
+             "Repeat-basket share moved from 41% to 24% over four weeks in the simulated receipts. This is a signal to investigate, not proof of cause.",
+             json.dumps({"week_1_pct": 41.0, "week_4_pct": 24.0, "at_risk_shoppers": 46, "estimated_revenue_at_risk_inr": 20900.0}),
+             20900.0, "Review the at-risk shopper list and, after owner approval, test a ₹50 offer on baskets above ₹499.",
              133.30, 20900.0, "HIGH", 0.94, "CATEGORY_B", "Closed-loop 7-point execution verification"),
-            ("OPP-006", "MERCH-001", "CUSTOMER_RETENTION", "12 High-Value Accounts Inactive for > 45 Days",
-             "12 enterprise accounts with historical LTV > ₹150k have had zero interaction in the last 45 days.",
-             json.dumps({"inactive_vip_count": 12, "combined_ltv_inr": 1850000.0}),
-             48000.0, "Dispatch personalized relationship-manager check-in without discounting.",
+            ("OPP-006", "MERCH-001", "CUSTOMER_RETENTION", "12 regular shoppers have not returned recently",
+             "Twelve tracked household profiles have no recent purchase recorded. Confirm the list before sending any outreach.",
+             json.dumps({"inactive_regular_count": 12, "combined_ltv_inr": 186000.0}),
+             4800.0, "Ask the owner to review the inactive shopper list; consider a personal, no-discount check-in.",
              0.0, 48000.0, "MEDIUM", 0.85, "CATEGORY_B", "Customer re-order tracking")
         ]
         for opp in opportunities:
@@ -1450,7 +1583,7 @@ def _seed_phase8_data(conn):
             campaign_expenditure_inr, net_incremental_profit_inr, incremental_roi_multiple,
             causal_confidence_score, outcome_status, disclaimer
         ) VALUES (
-            'EXP-DEMO-001', 'CAMP-REC-1042', 'MERCH-001', 'Weekend Lunch Rush Recovery: Treatment vs Holdout',
+            'EXP-DEMO-001', 'CAMP-REC-1042', 'MERCH-001', 'Grocery repeat-visit offer: treatment vs holdout',
             7, 43, 7, 10, 0, 23.3, 0.0, 23.3, 8, 20900.0, 8420.0, 133.30, 8286.70, 62.16, 0.88,
             'SIMULATED_DEMO',
             'SIMULATED OUTCOME: Randomized holdout comparison simulates 85% treatment / 15% holdout. True causal impact requires merchant-wide field experimentation.'
@@ -1726,7 +1859,7 @@ def reset_database():
         "verifications", "task_escalations",
         "merchant_inventory", "merchant_expenses", "merchant_settlements", "merchant_guardrails",
         "decision_simulations", "outcome_experiments", "business_opportunities",
-        "voice_sessions", "voice_interactions", "bazaar_participating_merchants",
+        "voice_sessions", "voice_interactions", "demo_seed_state", "bazaar_participating_merchants",
         "bazaar_demand_signals", "bazaar_opportunity_matches"
     ]
     for t in tables:

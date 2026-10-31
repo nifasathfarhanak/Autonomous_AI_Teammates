@@ -8,7 +8,7 @@ strictly categorizing knowledge into:
 Never presents assumptions as confirmed facts.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from ..schemas import EpistemicReportSchema
 
 class ReasoningEngine:
@@ -20,42 +20,62 @@ class ReasoningEngine:
         repeat_analysis: Dict[str, Any],
         merchant_profile: Dict[str, Any],
         customer_segments: List[Dict[str, Any]],
-        product_performance: List[Dict[str, Any]]
+        product_performance: List[Dict[str, Any]],
+        sales_summary: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """Synthesizes business context into findings and an epistemic report."""
 
-        drop_pct = sales_drop.get("sales_percentage_difference", -27.2)
-        diff_inr = sales_drop.get("sales_difference_inr", 112000.0)
-        current_repeat_pct = repeat_analysis.get("week_4_pct", 24.0)
-        prev_repeat_pct = repeat_analysis.get("week_3_pct", 37.0)
-        repeat_drop_pts = repeat_analysis.get("drop_percentage_points", -13.0)
-        at_risk_count = repeat_analysis.get("unreturned_regular_patrons", 46)
-        leakage_inr = repeat_analysis.get("revenue_at_risk_inr", 20900.0)
-        soundbox_id = merchant_profile.get("soundbox_device_id", "SB-4G-DEL-9842")
+        sales_summary = sales_summary or {}
+        drop_pct = float(sales_drop.get("sales_percentage_difference", 0.0) or 0.0)
+        diff_inr = abs(float(sales_drop.get("sales_difference_inr", 0.0) or 0.0))
+        current_repeat_pct = float(repeat_analysis.get("week_4_pct", 0.0) or 0.0)
+        prev_repeat_pct = float(repeat_analysis.get("week_3_pct", 0.0) or 0.0)
+        repeat_drop_pts = float(repeat_analysis.get("drop_percentage_points", 0.0) or 0.0)
+        at_risk_count = int(repeat_analysis.get("unreturned_regular_patrons", 0) or 0)
+        leakage_inr = float(repeat_analysis.get("revenue_at_risk_inr", 0.0) or 0.0)
+        soundbox_id = merchant_profile.get("soundbox_device_id", "Not connected")
+        store_name = merchant_profile.get("store_name", "your store")
+        category = str(merchant_profile.get("category", "")).lower()
+        is_grocery = "grocery" in category
+        discount_code = "GROCERY50" if is_grocery else "LOCAL50"
+        min_order_inr = 499.0 if is_grocery else 249.0
+        sales_last_week = float(sales_summary.get("last_week_total_k", 0.0) or 0.0) * 1000
+        sales_this_week = float(sales_summary.get("this_week_total_k", 0.0) or 0.0) * 1000
+        sales_change = "fell" if drop_pct < 0 else "rose"
 
         # 1. Confirmed Data (strictly grounded facts from SQLite database)
         confirmed_data = [
-            f"Gross weekly sales fell from ₹412,000 (last week) to ₹300,000 (this week), a decline of {drop_pct}% (-₹{int(diff_inr):,}).",
-            f"Repeat customer order share dropped from {prev_repeat_pct}% (Week 3) to {current_repeat_pct}% (Week 4), falling by {abs(repeat_drop_pts)} percentage points (-35.1% relative change).",
-            f"46 previously loyal regular diners did not transact during their habitual Thursday-Sunday lunch window (12:00 PM - 03:00 PM).",
-            f"Direct estimated gross revenue leakage from dormant regulars is ₹{int(leakage_inr):,}.",
-            f"Soundbox device {soundbox_id} maintains 100% operational uptime with zero recorded transaction gateway errors.",
-            "Historical transaction baseline confirms regular patrons average 2.4 visits per week with an average order value of ₹385."
+            f"Completed receipts for {store_name} show sales {sales_change} from ₹{sales_last_week:,.0f} last week "
+            f"to ₹{sales_this_week:,.0f} this week ({drop_pct:+.1f}%; change of ₹{diff_inr:,.0f}).",
+            f"Recorded repeat-order share changed from {prev_repeat_pct:.1f}% to {current_repeat_pct:.1f}% "
+            f"({repeat_drop_pts:+.1f} percentage points).",
+            f"{at_risk_count} named customers had repeat orders in the prior three weeks but none in the latest week.",
+            (
+                f"The seeded demo opportunity estimates ₹{leakage_inr:,.0f} at risk; this is not confirmed lost revenue or profit."
+                if leakage_inr else "No revenue-at-risk estimate is recorded for this merchant."
+            ),
+            f"Merchant profile lists Soundbox {soundbox_id}; device status is {merchant_profile.get('soundbox_status', 'unknown')}.",
+            f"These figures come from completed order records for {store_name}; they do not include unrecorded cash sales."
         ]
 
         # 2. AI Interpretation (grounded analytical deductions)
         ai_interpretation = [
-            "The steep volume drop began Thursday afternoon during the lunch hour window and intensified over the weekend (-31.0% Thu, -37.7% Fri, -41.4% Sat, -43.9% Sun).",
-            "This pattern indicates localized habit disruption during lunchtime dining (e.g., competing promotions, temporary corporate closures, or price sensitivity) rather than permanent churn.",
-            "Because these 46 patrons transacted regularly across Weeks 1-3, high-affinity targeted re-engagement with an immediate incentive has high probability of recovering visit cadence."
+            (
+                "A lower repeat-order share suggests some regular shoppers may be visiting less often, "
+                "but the records do not establish the cause."
+                if repeat_drop_pts < 0 else
+                "Repeat-order share did not decline in the compared weeks."
+            ),
+            "The sales pattern is a signal to investigate, not proof of competitor activity, customer churn, or a specific cause.",
+            "A small, owner-approved offer can be tested against a holdout group before expanding it."
         ]
 
         # 3. Recommendations (actionable proposals)
         recommendations = [
-            "Launch targeted 'Lunch Rush Patron Recovery Campaign' focused strictly on the 46 unreturned regular diners (expanded to 240 relevant re-engagement patrons).",
-            "Incentive structure: ₹50 discount on orders above ₹249 using code RET50 on Paytm Soundbox QR.",
-            "Enforce a mandatory merchant budget liability cap of ₹3,600 (72 maximum coupon redemptions).",
-            "Broadcast an audio announcement over Soundbox 4G device SB-4G-DEL-9842 in English and Hindi during peak counter hours.",
+            f"Review the {at_risk_count} customers with prior repeat orders and no receipt in the latest week before outreach.",
+            f"Consider testing ₹50 off baskets above ₹{min_order_inr:,.0f} with code {discount_code}; verify product margin and stock first.",
+            "Keep the ₹3,600 campaign liability cap and require owner approval before any customer message is sent.",
+            f"Use the merchant's selected language for any Soundbox or customer-facing message for {store_name}.",
             "Require merchant cryptographic HMAC approval before any promotional dispatch can execute."
         ]
 
@@ -63,7 +83,7 @@ class ReasoningEngine:
         unknown_information = [
             "Competitor pricing actions or promotions launched near Connaught Place during this week are not captured in internal telemetry.",
             "Weather or road accessibility disruptions affecting footfall on Friday and Saturday are unverified.",
-            "Individual customer intent and dining location choices outside this merchant's register cannot be confirmed."
+            "Individual customer intent and purchases at other stores cannot be confirmed from this merchant's receipts."
         ]
 
         epistemic_report = EpistemicReportSchema(
@@ -74,32 +94,32 @@ class ReasoningEngine:
         )
 
         concise_explanation = (
-            f"Sales have declined by {abs(drop_pct)}% (-₹{int(diff_inr):,}) this week, driven by a sharp drop in repeat-customer orders "
-            f"from {prev_repeat_pct}% to {current_repeat_pct}%. An estimated 46 regular diners did not return during Thursday-Sunday lunch hours, "
-            f"causing ₹{int(leakage_inr):,} in gross revenue leakage. ActionMate recommends a capped ₹50 recovery coupon (RET50) "
-            f"for 240 patrons, requiring merchant HMAC approval."
+            f"Recorded sales {sales_change} by {abs(drop_pct):.1f}% (₹{diff_inr:,.0f}) and repeat-order share moved "
+            f"from {prev_repeat_pct:.1f}% to {current_repeat_pct:.1f}%. {at_risk_count} prior repeat customers have no receipt "
+            f"in the latest week. The estimated ₹{leakage_inr:,.0f} at-risk amount is not confirmed lost profit. "
+            f"ActionMate proposes reviewing a capped {discount_code} offer; owner approval is required."
         )
 
         return {
-            "sales_drop_detected": True,
-            "drop_severity": "HIGH",
+            "sales_drop_detected": bool(sales_drop.get("is_drop_detected", False)),
+            "drop_severity": sales_drop.get("drop_severity", "NONE"),
             "sales_drop_pct": drop_pct,
             "revenue_leakage_inr": leakage_inr,
             "missing_patrons_count": at_risk_count,
-            "target_cohort_size": 240,
+            "target_cohort_size": at_risk_count,
             "telemetry_source": f"Paytm Soundbox 4G Telemetry ({soundbox_id})",
             "explanation": concise_explanation,
             "epistemic_report": epistemic_report.dict(),
             "recommendation": {
-                "campaign_name": "Lunch Rush Patron Recovery Campaign",
-                "discount_code": "RET50",
+                "campaign_name": f"{'Grocery' if is_grocery else 'Local'} Repeat-Customer Recovery",
+                "discount_code": discount_code,
                 "discount_amount_inr": 50.0,
-                "min_order_inr": 249.0,
+                "min_order_inr": min_order_inr,
                 "max_liability_cap_inr": 3600.0,
-                "expected_redemption_rate_pct": 18.2,
-                "expected_redemptions": 44,
-                "expected_gross_sales_inr": 16940.0,
-                "expected_net_margin_inr": 14644.0,
-                "projected_roi_multiple": 6.38
+                "expected_redemption_rate_pct": None,
+                "expected_redemptions": None,
+                "expected_gross_sales_inr": None,
+                "expected_net_margin_inr": None,
+                "projected_roi_multiple": None
             }
         }

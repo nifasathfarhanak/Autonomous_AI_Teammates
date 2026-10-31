@@ -10,6 +10,7 @@ from ..database import get_connection
 from .guardrails_service import GuardrailsService
 from .profit_intelligence_service import ProfitIntelligenceService
 from .inventory_intelligence_service import InventoryIntelligenceService
+from .sales_intelligence_service import calculate_sales_summary
 
 class DecisionTwinService:
     """Simulates business strategies, models financial trade-offs, and recommends optimal moves."""
@@ -27,8 +28,14 @@ class DecisionTwinService:
 
         # Fetch baseline product profitability and inventory parameters
         catalog = ProfitIntelligenceService.get_product_profitability_catalog(merchant_id)
-        prod_fast = catalog[0] # PROD-001
-        prod_slow = next((p for p in catalog if p["classification"] == "SLOW_MOVING_SURPLUS"), catalog[4])
+        prod_fast = max(catalog, key=lambda product: product["units_sold_period"])
+        prod_slow = max(catalog, key=lambda product: product["stock_age_days"])
+        average_basket_inr = calculate_sales_summary(merchant_id).aov_inr
+        observed_margin_pct = ProfitIntelligenceService.calculate_profit_summary(merchant_id)["blended_gross_margin_pct"]
+        fast_daily_velocity = max(prod_fast["units_sold_period"] / 30.0, 0.1)
+        fast_days_on_hand = prod_fast["stock_units"] / fast_daily_velocity
+        slow_daily_velocity = max(prod_slow["units_sold_period"] / 30.0, 0.1)
+        slow_days_on_hand = prod_slow["stock_units"] / slow_daily_velocity
 
         cost_per_msg = 3.10 # Combined WhatsApp / SMS / Soundbox cost
 
@@ -37,9 +44,10 @@ class DecisionTwinService:
         # -------------------------------------------------------------
         conv_rate_a = 0.12 # 12% conversion
         orders_a = int(round(audience_size * conv_rate_a)) # ~5 orders
-        aov_a = 2500.0
+        aov_a = average_basket_inr
         rev_a = round(orders_a * aov_a, 2)
-        base_margin_a = 0.353 # 35.3%
+        base_margin_a = observed_margin_pct / 100.0
+        base_margin_pct = observed_margin_pct
         gp_a = round(rev_a * base_margin_a, 2)
         mktg_cost_a = round(audience_size * cost_per_msg, 2) # ₹133.30
         disc_cost_a = 0.0
@@ -49,8 +57,8 @@ class DecisionTwinService:
         eval_a = GuardrailsService.evaluate_campaign_guardrails({
             "discount_pct": 0.0,
             "total_budget_inr": mktg_cost_a,
-            "estimated_margin_pct": 35.3,
-            "target_sku_days_on_hand": 18.0
+            "estimated_margin_pct": base_margin_pct,
+            "target_sku_days_on_hand": fast_days_on_hand
         }, merchant_id)
 
         strat_a = {
@@ -65,7 +73,7 @@ class DecisionTwinService:
             "estimated_orders": orders_a,
             "estimated_revenue_inr": rev_a,
             "estimated_gross_profit_inr": gp_a,
-            "estimated_margin_pct": 35.3,
+            "estimated_margin_pct": base_margin_pct,
             "marketing_cost_inr": mktg_cost_a,
             "discount_cost_inr": disc_cost_a,
             "net_contribution_inr": net_contrib_a,
@@ -85,15 +93,15 @@ class DecisionTwinService:
         # -------------------------------------------------------------
         conv_rate_b = 0.233 # 23.3% conversion
         orders_b = int(round(audience_size * conv_rate_b)) # ~10 orders
-        aov_b = 2090.0
-        rev_b = round(orders_b * aov_b, 2) # ~₹20,900
+        aov_b = average_basket_inr
+        rev_b = round(orders_b * aov_b, 2)
         disc_per_order = 50.0
-        disc_pct_b = round((disc_per_order / aov_b) * 100.0, 1) # ~2.4%
-        disc_cost_b = round(orders_b * disc_per_order, 2) # ₹500
+        disc_pct_b = round((disc_per_order / aov_b) * 100.0, 1) if aov_b else 0.0
+        disc_cost_b = round(orders_b * disc_per_order, 2)
         mktg_cost_b = round(audience_size * cost_per_msg, 2) # ₹133.30
-        post_margin_b = 32.9 # Gross margin after ₹50 discount
-        gp_b = round(rev_b * (post_margin_b / 100.0), 2)
-        net_contrib_b = round(gp_b - mktg_cost_b - disc_cost_b, 2) # ~₹6,242
+        post_margin_b = max(0.0, base_margin_pct - disc_pct_b)
+        gp_b = round(rev_b * base_margin_pct / 100.0 - disc_cost_b, 2)
+        net_contrib_b = round(gp_b - mktg_cost_b, 2)
         roi_b = round(net_contrib_b / (mktg_cost_b + disc_cost_b), 2)
 
         eval_b = GuardrailsService.evaluate_campaign_guardrails({
@@ -105,12 +113,12 @@ class DecisionTwinService:
 
         strat_b = {
             "scenario_key": "STRATEGY_B_DISCOUNT",
-            "strategy_name": "Targeted Promo Sprint (RET50 with ₹249 Min Order)",
-            "strategy_description": "₹50 discount on orders above ₹249 with code RET50 on Soundbox QR. Maximizes customer winback with tight liability cap.",
+            "strategy_name": "Grocery Basket Offer (GROCERY50 above ₹499)",
+            "strategy_description": "Test ₹50 off grocery baskets above ₹499. Margin estimate starts from recorded product costs and average basket value.",
             "target_segment": "DECLINING_FREQUENCY",
             "audience_count": audience_size,
             "discount_pct": disc_pct_b,
-            "offer_details": {"discount_code": "RET50", "discount_amount_inr": 50.0, "min_order_inr": 249.0},
+            "offer_details": {"discount_code": "GROCERY50", "discount_amount_inr": 50.0, "min_order_inr": 499.0},
             "estimated_conversion_rate_pct": 23.3,
             "estimated_orders": orders_b,
             "estimated_revenue_inr": rev_b,
@@ -126,7 +134,7 @@ class DecisionTwinService:
             "confidence_level": 0.94,
             "guardrails_passed": eval_b["passed"],
             "guardrail_violations": eval_b["violations"],
-            "pros": ["Highest re-engagement volume (10 orders)", "Strong net contribution (₹6,242)", "Tested spec figures"],
+            "pros": ["Keeps the offer within the ₹3,600 liability cap", "Uses the recorded average basket and gross margin as a baseline"],
             "cons": ["Direct discount cost of ₹500"]
         }
 
@@ -135,14 +143,14 @@ class DecisionTwinService:
         # -------------------------------------------------------------
         conv_rate_c = 0.18 # 18% conversion
         orders_c = int(round(audience_size * conv_rate_c)) # ~8 orders
-        aov_c = 3200.0
-        rev_c = round(orders_c * aov_c, 2) # ~₹25,600
-        disc_cost_c = round(orders_c * 100.0, 2) # ₹800 credit
+        aov_c = average_basket_inr
+        rev_c = round(orders_c * aov_c, 2)
+        disc_cost_c = round(orders_c * 30.0, 2)
         disc_pct_c = round((disc_cost_c / rev_c) * 100.0, 1) if rev_c > 0 else 3.1
         mktg_cost_c = round(audience_size * cost_per_msg, 2)
-        margin_c = 34.0
-        gp_c = round(rev_c * (margin_c / 100.0), 2)
-        net_contrib_c = round(gp_c - mktg_cost_c - disc_cost_c, 2) # ~₹7,770
+        margin_c = max(0.0, base_margin_pct - (30.0 / aov_c * 100.0)) if aov_c else 0.0
+        gp_c = round(rev_c * base_margin_pct / 100.0 - disc_cost_c, 2)
+        net_contrib_c = round(gp_c - mktg_cost_c, 2)
         roi_c = round(net_contrib_c / (mktg_cost_c + disc_cost_c), 2)
 
         eval_c = GuardrailsService.evaluate_campaign_guardrails({
@@ -155,11 +163,11 @@ class DecisionTwinService:
         strat_c = {
             "scenario_key": "STRATEGY_C_LOYALTY",
             "strategy_name": "VIP Tier Loyalty Credit (Next-Order Voucher)",
-            "strategy_description": "₹100 store credit applied automatically to the customer's next Soundbox transaction. Fosters long-term retention.",
+            "strategy_description": "Test ₹30 store credit on a future grocery visit; compare redemption and gross profit with a holdout.",
             "target_segment": "LOYAL_REPEAT_AND_VIP",
             "audience_count": audience_size,
             "discount_pct": disc_pct_c,
-            "offer_details": {"reward_type": "STORE_CREDIT", "credit_amount_inr": 100.0, "validity_days": 30},
+            "offer_details": {"reward_type": "STORE_CREDIT", "credit_amount_inr": 30.0, "validity_days": 30},
             "estimated_conversion_rate_pct": 18.0,
             "estimated_orders": orders_c,
             "estimated_revenue_inr": rev_c,
@@ -184,27 +192,27 @@ class DecisionTwinService:
         # -------------------------------------------------------------
         conv_rate_d = 0.16 # 16% conversion
         orders_d = int(round(audience_size * conv_rate_d)) # ~7 orders
-        bundle_price_d = 5200.0 # Fast mover + Slow mover bundle
-        rev_d = round(orders_d * bundle_price_d, 2) # ~₹36,400
-        disc_cost_d = round(orders_d * 300.0, 2) # ₹300 bundle savings
-        disc_pct_d = 5.7 # 5.7% discount
+        bundle_price_d = max(average_basket_inr, prod_fast["selling_price_inr"] + prod_slow["selling_price_inr"])
+        rev_d = round(orders_d * bundle_price_d, 2)
+        disc_cost_d = round(orders_d * bundle_price_d * 0.05, 2)
+        disc_pct_d = 5.0
         mktg_cost_d = round(audience_size * cost_per_msg, 2)
-        margin_d = 31.5 # Blended gross margin
-        gp_d = round(rev_d * (margin_d / 100.0), 2)
-        net_contrib_d = round(gp_d - mktg_cost_d - disc_cost_d, 2) # ~₹9,232
+        margin_d = max(0.0, base_margin_pct - disc_pct_d)
+        gp_d = round(rev_d * base_margin_pct / 100.0 - disc_cost_d, 2)
+        net_contrib_d = round(gp_d - mktg_cost_d, 2)
         roi_d = round(net_contrib_d / (mktg_cost_d + disc_cost_d), 2)
 
         eval_d = GuardrailsService.evaluate_campaign_guardrails({
             "discount_pct": disc_pct_d,
             "total_budget_inr": mktg_cost_d + disc_cost_d,
             "estimated_margin_pct": margin_d,
-            "target_sku_days_on_hand": 95.0 # Slow-mover has 95 days
+            "target_sku_days_on_hand": slow_days_on_hand
         }, merchant_id)
 
         strat_d = {
             "scenario_key": "STRATEGY_D_BUNDLE",
             "strategy_name": "Inventory Clearance Bundle (Fast + Slow SKU)",
-            "strategy_description": "Bundle high-demand consumables with aging CNC fittings (95 days in stock). Liquidates trapped inventory while keeping 31.5% margin.",
+            "strategy_description": f"Test a basket pairing {prod_fast['product_name']} with aging {prod_slow['product_name']}. Validate stock, cost, and margin before approval.",
             "target_segment": "ALL_ELIGIBLE_ACCOUNTS",
             "audience_count": audience_size,
             "discount_pct": disc_pct_d,
@@ -224,7 +232,7 @@ class DecisionTwinService:
             "confidence_level": 0.88,
             "guardrails_passed": eval_d["passed"],
             "guardrail_violations": eval_d["violations"],
-            "pros": ["Releases ₹42,000+ in trapped working capital", "Highest net contribution (₹9,232)", "Clears shelf space"],
+            "pros": ["Uses current fast- and slow-moving grocery SKUs", "Can help test a way to move aged stock without a storewide discount"],
             "cons": ["Higher purchase price ticket may filter low-budget buyers"]
         }
 
@@ -285,4 +293,3 @@ class DecisionTwinService:
             ),
             "epistemic_disclaimer": "SIMULATION ESTIMATES: Projected revenues and gross margins are calculated deterministically from merchant unit costs, target audience size, and historical price elasticity. True conversion depends on customer execution timing."
         }
-

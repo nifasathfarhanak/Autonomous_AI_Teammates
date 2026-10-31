@@ -59,9 +59,9 @@ class TestSalesIntelligencePhase2(unittest.TestCase):
         """Validates demo merchant profile adheres to specifications with DEMO flag."""
         profile = get_merchant_profile("MERCH-001")
         self.assertEqual(profile.id, "MERCH-001")
-        self.assertEqual(profile.store_name, "Sharma Commercial & Industrial Supplies")
+        self.assertEqual(profile.store_name, "Sharma Family Grocery")
         self.assertEqual(profile.owner_name, "Ramesh Sharma")
-        self.assertEqual(profile.category, "Industrial, Commercial & Food Supplies")
+        self.assertEqual(profile.category, "Neighborhood Grocery")
         self.assertEqual(profile.soundbox_device_id, "SB-4G-DEL-9842")
         self.assertEqual(profile.soundbox_status, "ONLINE")
         self.assertIn("DEMO", profile.gstin_demo)
@@ -110,7 +110,7 @@ class TestSalesIntelligencePhase2(unittest.TestCase):
         self.assertEqual(drop.sales_percentage_difference, -27.2)
         self.assertEqual(drop.repeat_purchase_change_pts, -13.0)
         self.assertGreaterEqual(len(drop.supporting_evidence), 5)
-        self.assertIn("Thursday through Sunday", drop.explanation)
+        self.assertIn("do not establish why", drop.explanation)
 
     def test_05_customer_segmentation(self):
         """Verifies customer segmentation groups into Repeat, New, Inactive, High-Value, and Declining."""
@@ -184,7 +184,7 @@ class TestSalesIntelligencePhase2(unittest.TestCase):
         c = conn.cursor()
         c.execute("SELECT COUNT(*) FROM orders")
         order_count = c.fetchone()[0]
-        self.assertEqual(order_count, 57)
+        self.assertEqual(order_count, 901)
 
         c.execute("SELECT COUNT(*) FROM order_items")
         items_count = c.fetchone()[0]
@@ -193,7 +193,7 @@ class TestSalesIntelligencePhase2(unittest.TestCase):
         # Re-running seed_sales_transactions idempotently preserves row count
         seed_sales_transactions(conn)
         c.execute("SELECT COUNT(*) FROM orders")
-        self.assertEqual(c.fetchone()[0], 57)
+        self.assertEqual(c.fetchone()[0], 901)
         conn.close()
 
 if __name__ == "__main__":

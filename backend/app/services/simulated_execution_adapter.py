@@ -13,6 +13,7 @@ from typing import Dict, Any, List, Optional
 from ..database import get_connection
 from ..schemas import SimulatedExecutionResultSchema
 from .campaign_service import CampaignService, DND_PREFIXES
+from .sales_intelligence_service import get_merchant_profile
 from ..fsm import record_audit
 
 class ExecutionAdapterError(Exception):
@@ -53,6 +54,7 @@ class SimulatedCampaignExecutionAdapter:
             merchant_id=draft.merchant_id,
             segment_key=draft.target_customer_segment
         )
+        merchant_name = get_merchant_profile(draft.merchant_id).store_name
 
         if audience.eligible_count == 0:
             CampaignService.log_campaign_activity(
@@ -91,7 +93,7 @@ class SimulatedCampaignExecutionAdapter:
             # Personalize message for this recipient
             msg = CampaignService.render_personalized_message(
                 customer_data=cust,
-                merchant_name="Sharma Commercial & Industrial Supplies",
+                merchant_name=merchant_name,
                 offer_details=draft.offer_details if draft.offer_configured else None
             )
 
@@ -208,7 +210,7 @@ class SimulatedCampaignExecutionAdapter:
         try:
             from .audit_service import AuditService
             AuditService.log_audit_event(
-                merchant_id="MERCH-001",
+                merchant_id=draft.merchant_id,
                 task_id="WF-REC-1042",
                 actor_id="SimulatedCampaignExecutionAdapter",
                 action="SIMULATED_CAMPAIGN_DISPATCH",

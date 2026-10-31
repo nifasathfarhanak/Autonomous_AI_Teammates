@@ -13,7 +13,8 @@ from ..schemas import (
     PersonalizedMessageSchema, CampaignDraftSchema, SchemaValidationError
 )
 from .sales_intelligence_service import (
-    detect_sales_drop, calculate_repeat_analysis, get_merchant_profile
+    detect_sales_drop, calculate_repeat_analysis, get_merchant_profile,
+    calculate_sales_summary, get_declining_frequency_customers
 )
 
 # Known demo DND phone prefixes for simulation
@@ -43,43 +44,54 @@ class CampaignService:
         """Formulates an evidence-based re-engagement campaign based on sales and repeat drop."""
         sales_drop = detect_sales_drop(merchant_id)
         repeat_analysis = calculate_repeat_analysis(merchant_id)
+        sales_summary = calculate_sales_summary(merchant_id)
         profile = get_merchant_profile(merchant_id)
 
-        drop_pct = sales_drop.sales_percentage_difference  # -27.2%
-        repeat_drop_pts = repeat_analysis.drop_percentage_points  # -13.0 pts
-        leakage_inr = repeat_analysis.revenue_at_risk_inr  # ₹20,900
-        at_risk_patrons = repeat_analysis.unreturned_regular_patrons  # 46
+        drop_pct = sales_drop.sales_percentage_difference
+        repeat_drop_pts = repeat_analysis.drop_percentage_points
+        leakage_inr = repeat_analysis.revenue_at_risk_inr
+        at_risk_patrons = repeat_analysis.unreturned_regular_patrons
+        sales_difference = abs(sales_drop.sales_difference_inr)
 
-        campaign_name = "Lunch Rush Repeat Diner Recovery Campaign"
+        is_grocery = "grocery" in profile.store_name.lower()
+        basket_name = "grocery basket" if is_grocery else "purchase"
+        campaign_name = f"{profile.store_name} Repeat-Customer Recovery Campaign"
         business_objective = (
-            f"Re-engage {at_risk_patrons} absent regular lunch patrons and broader cohort to reverse "
-            f"the weekly {drop_pct}% sales drop (-₹112,000 net change)."
+            f"Invite up to {at_risk_patrons} regular customers to return after the simulated repeat-order share fell. "
+            f"Weekly sales are down {abs(drop_pct):.1f}% (₹{sales_difference:,.0f} below the previous week)."
         )
         reason = (
-            f"Telemetry indicates weekly repeat order share plummeted from 37% to 24% ({repeat_drop_pts} percentage points), "
-            f"concentrated in the Thursday through Sunday lunch window, resulting in ₹{int(leakage_inr):,} gross revenue leakage. "
-            f"Soundbox device {profile.soundbox_device_id} had zero gateway issues, indicating footfall attrition."
+            f"Simulated receipt records show repeat-basket share moving from {repeat_analysis.week_3_pct}% "
+            f"to {repeat_analysis.week_4_pct}% ({repeat_drop_pts} percentage points) "
+            f"and weekly sales moving from ₹{sales_summary.last_week_total_k * 1000:,.0f} to "
+            f"₹{sales_summary.this_week_total_k * 1000:,.0f}. The estimated ₹{int(leakage_inr):,} at-risk amount "
+            f"is not confirmed lost profit. Soundbox {profile.soundbox_device_id} is online."
         )
-        target_segment = "DECLINING_FREQUENCY (Unreturned Thursday-Sunday Lunch Diners)"
-        duration = "4 days (Thursday 11:00 AM IST to Sunday 11:59 PM IST)"
+        target_segment = "DECLINING_FREQUENCY"
+        duration = "7 days, after owner approval"
         channel = "Multi-Channel: WhatsApp, SMS & In-Store Soundbox 4.0 Audio Prompt"
-        promo_approach = "Margin-safe incentive: ₹50 discount on minimum orders of ₹249 (Code: RET50), strictly capped at ₹3,600 maximum merchant liability."
+        discount_code = "GROCERY50" if is_grocery else "LOCAL50"
+        minimum_basket = 499.0 if is_grocery else 249.0
+        promo_approach = (
+            f"Test ₹50 off a {basket_name} above ₹{minimum_basket:,.0f} (Code: {discount_code}), "
+            "capped at ₹3,600. Check product margins and stock before approval."
+        )
         outcome = (
-            "Recovers regular visiting cadence while bounding promotional expenditure. "
-            "Based on historical baseline, targets 44 redemptions generating ₹16,940 gross sales at 6.38x ROI."
+            f"The simulated target cohort contains up to {at_risk_patrons} customers. Track eligible deliveries, redemptions, sales, and gross profit "
+            "against a holdout before claiming the offer improved results."
         )
         risks = (
-            "Assumes unreturned patrons experienced habit disruption/pricing sensitivity rather than permanent relocation; "
-            "prevents runaway discount budget via strict ₹3,600 hard ceiling and HMAC authorization signature."
+            "The records show a change but do not explain why shoppers returned less. A discount may reduce margin; "
+            "the ₹3,600 cap and owner approval remain required."
         )
 
         offer_details = {
-            "discount_code": "RET50",
+            "discount_code": discount_code,
             "discount_amount_inr": 50.0,
-            "min_order_inr": 249.0,
+            "min_order_inr": minimum_basket,
             "max_liability_cap_inr": 3600.0,
-            "max_redemptions": 72,
-            "projected_roi_multiple": 6.38
+            "max_redemptions": int(3600.0 / 50.0),
+            "projected_roi_multiple": None
         }
 
         return CampaignRecommendationSchema(
@@ -114,19 +126,14 @@ class CampaignService:
         if segment_key in ("EMPTY_AUDIENCE", "NO_CUSTOMERS"):
             candidate_customers = []
         elif segment_key == "DECLINING_FREQUENCY":
-            cur.execute("""
-            SELECT * FROM customers
-            WHERE merchant_id = ?
-            ORDER BY lifetime_value DESC
-            LIMIT ?
-            """, (merchant_id, max_limit))
-            all_rows = [dict(r) for r in cur.fetchall()]
-            # Isolate the 46 unreturned regular diners cohort
-            candidate_customers = all_rows[10:56] if len(all_rows) >= 56 else all_rows
+            conn.close()
+            candidate_customers = get_declining_frequency_customers(merchant_id, max_limit)
+            conn = None
         elif segment_key == "REPEAT":
             cur.execute("""
             SELECT * FROM customers
-            WHERE merchant_id = ? AND lifetime_value > last_purchase_value * 1.5
+            WHERE merchant_id = ? AND customer_id NOT LIKE 'CUST-WALKIN-%'
+              AND lifetime_value > last_purchase_value * 1.5
             ORDER BY lifetime_value DESC
             LIMIT ?
             """, (merchant_id, max_limit))
@@ -134,7 +141,8 @@ class CampaignService:
         elif segment_key == "INACTIVE":
             cur.execute("""
             SELECT * FROM customers
-            WHERE merchant_id = ? AND last_purchase_date < '2026-10-01'
+            WHERE merchant_id = ? AND customer_id NOT LIKE 'CUST-WALKIN-%'
+              AND last_purchase_date < '2026-10-01'
             ORDER BY lifetime_value DESC
             LIMIT ?
             """, (merchant_id, max_limit))
@@ -142,13 +150,14 @@ class CampaignService:
         else:
             cur.execute("""
             SELECT * FROM customers
-            WHERE merchant_id = ?
+            WHERE merchant_id = ? AND customer_id NOT LIKE 'CUST-WALKIN-%'
             ORDER BY lifetime_value DESC
             LIMIT ?
             """, (merchant_id, max_limit))
             candidate_customers = [dict(r) for r in cur.fetchall()]
 
-        conn.close()
+        if conn:
+            conn.close()
 
         eligible_customers = []
         excluded_customers = []
@@ -203,7 +212,7 @@ class CampaignService:
     @staticmethod
     def render_personalized_message(
         customer_data: Dict[str, Any],
-        merchant_name: str = "Sharma Commercial & Industrial Supplies",
+        merchant_name: str = "Sharma Family Grocery",
         offer_details: Optional[Dict[str, Any]] = None
     ) -> PersonalizedMessageSchema:
         """Renders customer-specific marketing copy.
@@ -212,13 +221,13 @@ class CampaignService:
         Never hallucinates unconfigured discounts.
         """
         cname = customer_data.get("customer_name", "Valued Patron")
-        prod = customer_data.get("interested_product", "Quality Industrial Supplies & Food Products")
+        prod = customer_data.get("interested_product", "everyday grocery essentials")
         cid = customer_data.get("customer_id", None)
 
         if offer_details and offer_details.get("discount_code"):
-            code = offer_details.get("discount_code", "RET50")
+            code = offer_details.get("discount_code", "GROCERY50")
             amt = int(offer_details.get("discount_amount_inr", 50))
-            min_ord = int(offer_details.get("min_order_inr", 249))
+            min_ord = int(offer_details.get("min_order_inr", 499))
 
             subject = f"Exclusive ₹{amt} OFF this weekend at {merchant_name} [Code: {code}]"
             body_en = (
@@ -269,27 +278,27 @@ class CampaignService:
         """Persists a new campaign draft in SQLite."""
         campaign_id = params.get("campaign_id") or f"CAMP-DRAFT-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
         merchant_id = params.get("merchant_id", "MERCH-001")
-        name = params.get("campaign_name", "Lunch Rush Repeat Diner Recovery")
+        name = params.get("campaign_name", "Neighborhood Grocery Repeat-Basket Recovery")
         objective = params.get("business_objective", "Recover declining repeat customer volume")
         reason = params.get("reason_for_recommendation", "Sales drop detection confirmed repeat order plunge")
         segment = params.get("target_customer_segment", "DECLINING_FREQUENCY")
-        duration = params.get("suggested_duration", "4 days (Thu-Sun)")
+        duration = params.get("suggested_duration", "7 days, after owner approval")
         channel = params.get("communication_channel", "WhatsApp, SMS, Soundbox Audio")
-        approach = params.get("promotional_approach", "₹50 discount on orders above ₹249 with code RET50")
-        outcome = params.get("expected_operational_outcome", "44 redemptions, ₹16,940 gross sales")
+        approach = params.get("promotional_approach", "₹50 off grocery baskets above ₹499 with code GROCERY50")
+        outcome = params.get("expected_operational_outcome", "Measure redemptions, basket sales, and gross profit against a holdout.")
         risks = params.get("risks_and_assumptions", "Liability capped at ₹3,600")
         has_offer = bool(params.get("offer_configured", True))
         offer_details = params.get("offer_details", {
-            "discount_code": "RET50",
+            "discount_code": "GROCERY50",
             "discount_amount_inr": 50.0,
-            "min_order_inr": 249.0,
+            "min_order_inr": 499.0,
             "max_liability_cap_inr": 3600.0
         }) if has_offer else None
 
         messages = params.get("messages", {
-            "en": "Hi [Customer Name]! Enjoy ₹50 OFF on orders > ₹249 with code RET50 on Soundbox QR this weekend!",
-            "hi": "नमस्ते [ग्राहक का नाम]! कोड RET50 के साथ ₹249 से ऊपर के ऑर्डर पर ₹50 की छूट पाएं!",
-            "soundbox_voice": "Paytm offer shuru hai. Code RET50 lagayein."
+            "en": "Hi [Customer Name]! Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.",
+            "hi": "नमस्ते [ग्राहक का नाम]! ₹499 से अधिक की किराने की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।",
+            "soundbox_voice": "Paytm offer: ₹499 se zyada ki grocery khareed par GROCERY50 code se ₹50 ki chhoot."
         })
 
         audience = params.get("audience_summary", {

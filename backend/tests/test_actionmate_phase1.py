@@ -55,10 +55,10 @@ class TestActionMatePhase1(unittest.TestCase):
         self.assertEqual(summary["last_week_total_k"], 412)
         self.assertEqual(summary["this_week_total_k"], 300)
         self.assertEqual(summary["overall_drop_pct"], -27.2)
-        self.assertEqual(summary["repeat_purchase_drop_pct"], -18.4)
+        self.assertEqual(summary["repeat_purchase_drop_pct"], -13.0)
         self.assertEqual(summary["revenue_leakage_inr"], 20900.0)
         self.assertEqual(summary["missing_patrons_count"], 46)
-        self.assertEqual(summary["target_cohort_size"], 240)
+        self.assertEqual(summary["target_cohort_size"], 46)
 
         # Check daily numbers match presentation
         breakdown = summary["daily_breakdown"]
@@ -66,6 +66,10 @@ class TestActionMatePhase1(unittest.TestCase):
         self.assertEqual(breakdown[0], {"day": "Mon", "last_week": 52, "this_week": 51, "change_pct": -1.9})
         self.assertEqual(breakdown[3], {"day": "Thu", "last_week": 58, "this_week": 40, "change_pct": -31.0})
         self.assertEqual(breakdown[6], {"day": "Sun", "last_week": 66, "this_week": 37, "change_pct": -43.9})
+
+        api_summary = json.loads(get_response_body(DummyHandler("/api/sales/summary")))
+        self.assertEqual(api_summary["repeat_purchase_trend"]["current_repeat_rate_pct"], 24.0)
+        self.assertEqual(api_summary["repeat_purchase_trend"]["historical_repeat_rate_pct"], 37.0)
 
     def test_02_task_plan_generation_from_prompt(self):
         """Verifies submitting merchant natural-language request generates Task #1042 with 7-step plan."""
@@ -87,11 +91,11 @@ class TestActionMatePhase1(unittest.TestCase):
 
         # Incentive economics verification
         rec = task["recommendation"]
-        self.assertEqual(rec["discount_code"], "RET50")
+        self.assertEqual(rec["discount_code"], "GROCERY50")
         self.assertEqual(rec["discount_amount_inr"], 50.0)
-        self.assertEqual(rec["min_order_inr"], 249.0)
+        self.assertEqual(rec["min_order_inr"], 499.0)
         self.assertEqual(rec["max_liability_cap_inr"], 3600.0)
-        self.assertEqual(rec["projected_roi_multiple"], 6.38)
+        self.assertIsNone(rec["projected_roi_multiple"])
 
     def test_03_spa_route_serving(self):
         """Verifies all application and public routes serve index.html with 200 OK."""

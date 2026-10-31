@@ -6,6 +6,7 @@ estimation, churn-risk scoring, and segment-tailored strategy recommendations.
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from ..database import get_connection
+from .sales_intelligence_service import get_declining_frequency_customers, get_merchant_profile
 
 class CustomerValueService:
     """Computes customer RFM metrics, CLV projections, and tailored retention strategies."""
@@ -22,19 +23,27 @@ class CustomerValueService:
             last_purchase_date, last_purchase_value, lifetime_value as total_historical_ltv,
             interested_product, last_interaction_date, preferred_language, is_unsubscribed
         FROM customers
-        WHERE merchant_id = ?
+        WHERE merchant_id = ? AND customer_id NOT LIKE 'CUST-WALKIN-%'
         ORDER BY lifetime_value DESC
         """, (merchant_id,))
         rows = cur.fetchall()
 
         # Count actual orders per customer from orders table
         cur.execute("""
-        SELECT customer_id, COUNT(*) as order_count, AVG(order_value) as avg_order_val
-        FROM orders
-        GROUP BY customer_id
-        """)
+        SELECT o.customer_id, COUNT(*) as order_count, AVG(o.order_value) as avg_order_val
+        FROM orders o
+        JOIN customers c ON c.customer_id = o.customer_id
+        WHERE c.merchant_id = ? AND UPPER(o.status) = 'COMPLETED'
+        GROUP BY o.customer_id
+        """, (merchant_id,))
         order_map = {r["customer_id"]: {"count": r["order_count"], "aov": r["avg_order_val"]} for r in cur.fetchall()}
         conn.close()
+        declining_customer_ids = {
+            customer["customer_id"]
+            for customer in get_declining_frequency_customers(merchant_id)
+        }
+        is_grocery = "grocery" in get_merchant_profile(merchant_id).store_name.lower()
+        retention_offer = "GROCERY50 grocery-basket offer" if is_grocery else "a margin-safe repeat-customer offer"
 
         now = datetime(2026, 10, 31, tzinfo=timezone.utc)
         directory = []
@@ -73,14 +82,14 @@ class CustomerValueService:
                 segment = "AT_RISK_VIP"
                 churn_risk = "HIGH"
                 strategy = "Executive call from merchant owner. Investigate service quality or competitors."
+            elif cid in declining_customer_ids:
+                segment = "DECLINING_FREQUENCY"
+                churn_risk = "MEDIUM"
+                strategy = f"Review recent receipts and consider a {retention_offer} after checking margin and stock."
             elif order_count >= 3 and recency_days <= 30:
                 segment = "LOYAL_REPEAT"
                 churn_risk = "LOW"
                 strategy = "Loyalty rewards, preview access to new catalogs, Soundbox voice greeting."
-            elif order_count >= 2 and recency_days > 45:
-                segment = "DECLINING_FREQUENCY"
-                churn_risk = "MEDIUM"
-                strategy = "Targeted winback promotion (e.g., RET50 with minimum order requirement)."
             elif order_count == 1 and recency_days <= 30:
                 segment = "NEW_CUSTOMER"
                 churn_risk = "LOW"

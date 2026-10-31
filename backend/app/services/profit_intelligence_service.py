@@ -28,7 +28,7 @@ class ProfitIntelligenceService:
             COALESCE(inv.stock_age_days, 20) as stock_age_days
         FROM products p
         LEFT JOIN merchant_inventory inv ON p.product_id = inv.product_id AND inv.merchant_id = ?
-        WHERE p.merchant_id = ? OR p.merchant_id = 'MERCH-001'
+        WHERE p.merchant_id = ?
         ORDER BY p.unit_price DESC
         """, (merchant_id, merchant_id))
         rows = cur.fetchall()
@@ -38,9 +38,17 @@ class ProfitIntelligenceService:
         SELECT oi.product_id, SUM(oi.quantity) as total_units_sold, SUM(oi.total_price) as total_revenue
         FROM order_items oi
         JOIN orders o ON o.order_id = oi.order_id
-        WHERE o.status = 'COMPLETED' AND date(o.order_date) >= date('now', '-30 days')
+        JOIN customers c ON c.customer_id = o.customer_id
+        WHERE UPPER(o.status) = 'COMPLETED'
+          AND c.merchant_id = ?
+          AND substr(o.order_date, 1, 10) >= date(
+              (SELECT MAX(substr(o2.order_date, 1, 10))
+               FROM orders o2
+               JOIN customers c2 ON c2.customer_id = o2.customer_id
+               WHERE c2.merchant_id = ?), '-29 days'
+          )
         GROUP BY oi.product_id
-        """)
+        """, (merchant_id, merchant_id))
         sales_map = {r["product_id"]: {"units": r["total_units_sold"], "revenue": r["total_revenue"]} for r in cur.fetchall()}
         conn.close()
 

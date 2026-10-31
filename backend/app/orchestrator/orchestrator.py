@@ -75,17 +75,18 @@ class ActionMateOrchestrator:
         product_performance = res_prods.data if res_prods.status == "SUCCESS" else []
 
         # 4. State: ANALYSING (epistemic reasoning & synthesis)
-        transition_task_state(t_id, STATE_ANALYSING, transitioned_by="ActionMateOrchestrator", reason="Synthesizing confirmed facts and isolating unreturned diner cohort")
+        transition_task_state(t_id, STATE_ANALYSING, transitioned_by="ActionMateOrchestrator", reason="Synthesizing confirmed facts and identifying customers with no recent receipts")
         findings = ReasoningEngine.evaluate(
             sales_drop=sales_drop,
             repeat_analysis=repeat_analysis,
             merchant_profile=merchant_profile,
             customer_segments=customer_segments,
-            product_performance=product_performance
+            product_performance=product_performance,
+            sales_summary=res_sales.data if res_sales.status == "SUCCESS" else {}
         )
 
         # 5. State: PLANNING (generating structured 10-step plan)
-        transition_task_state(t_id, STATE_PLANNING, transitioned_by="ActionMateOrchestrator", reason="Formulating 10-step recovery plan and binding tool parameters")
+        transition_task_state(t_id, STATE_PLANNING, transitioned_by="ActionMateOrchestrator", reason="Formulating the action plan and binding parameters to merchant records")
         plan_steps = TaskPlanner.generate_plan(
             merchant_id=merchant_id,
             target_cohort_size=findings.get("target_cohort_size", 240),

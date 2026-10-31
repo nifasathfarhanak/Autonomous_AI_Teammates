@@ -30,13 +30,16 @@ ActionMate does not simply respond with conversational suggestions. It autonomou
 1. **Understands Intent:** Decodes the request into a structured re-engagement workflow.
 2. **Retrieves Business Context:** Pulls store profile, catalog, and device telemetry (Paytm Soundbox 4G).
 3. **Analyzes Sales Trends:** Detects the ₹112,000 (-27.2%) sales drop from Last Week (₹412k) to This Week (₹300k).
-4. **Diagnoses Repeat Decline:** Flags repeat-purchase collapse from 41% down to 24% (-17 percentage points).
-5. **Formulates Campaign:** Designs a targeted reactivation sprint with code `RET50` (₹50 discount on orders > ₹249).
-6. **Filters Audience:** Evaluates 46 candidate customers, deterministically suppressing DND opt-outs and invalid contacts to isolate 43 eligible recipients.
+4. **Diagnoses Repeat Decline:** Flags repeat-order share moving from 37% to 24% (-13 percentage points) in the latest two weeks.
+5. **Formulates Campaign:** Recommends a grocery basket test with code `GROCERY50` (₹50 off baskets above ₹499), subject to margin and stock checks.
+6. **Filters Audience:** Finds regular grocery shoppers from receipt history and excludes opted-out or invalid contacts before approval.
 7. **Personalizes Copy:** Drafts native English, Indic Hindi, and Soundbox Audio voice scripts.
 8. **Enforces Governance:** Blocks Category C financial actions (refunds/bank changes) and mandates merchant HMAC approval for Category B outbound messages.
 9. **Executes & Logs:** Dispatches simulated multi-channel promotions with recipient logging and idempotency keys.
 10. **Verifies Outcomes:** Runs a 7-point cryptographic verification engine before declaring completion.
+
+### What business data powers the grocery demo?
+The primary merchant uses synthetic grocery-shop records stored in SQLite—not live merchant or Paytm transaction data. The seed contains 800 itemized receipts across four weeks plus 100 historical baseline receipts, named shopper profiles, product costs and prices, and inventory levels. Sales totals, average basket size, repeat-order shares, the 46-shopper at-risk cohort, product profitability, and stock recommendations are calculated from those records. The outreach audience applies consent and contactability rules (43 eligible contacts and 3 excluded in the seeded scenario). Campaign dispatch and outcome examples are simulations; they are not evidence of live delivery or verified real-world lift.
 
 ---
 
@@ -155,8 +158,8 @@ http://127.0.0.1:8000/app/overview
 ### 3. Demo Walkthrough: 20-Step Journey
 1. **Open AI Assistant (`/app/assistant`):** Select or type: *"My sales have dropped this week. Help me bring customers back."*
 2. **View AI Plan & Reasoning:** Observe the 10-step plan, intent classification, and sales analysis showing the -27.2% decline.
-3. **Review Sales Dashboard (`/app/sales`):** View the daily comparison chart (Last Week: ₹412k vs This Week: ₹300k) and repeat-purchase trend (41% → 24%).
-4. **Inspect Campaign Draft (`/app/campaigns`):** Review the recommended campaign, Indic multilingual copy (English, Hindi, Soundbox Voice), offer `RET50`, and audience segmentation (43 eligible, 3 DND/invalid excluded).
+3. **Review Sales Dashboard (`/app/sales`):** View the daily comparison chart (Last Week: ₹412k vs This Week: ₹300k) and repeat-purchase trend (37% → 24%).
+4. **Inspect Campaign Draft (`/app/campaigns`):** Review the recommended grocery campaign, Indic multilingual copy (English, Hindi, Soundbox Voice), offer `GROCERY50`, and the receipt-based audience with contact exclusions.
 5. **Approve Campaign (`/app/approvals`):** Review campaign parameters and click **"Approve & Execute Campaign"** to generate the HMAC-SHA256 signature.
 6. **Watch Real-Time Verification:** Watch the execution adapter dispatch simulated messages, record recipient logs, and execute the 7-point verification audit.
 7. **Inspect Audit Ledger (`/app/activity`):** Verify the cryptographic chained ledger blocks with SHA-256 hashes.
@@ -215,9 +218,9 @@ Phase 8 elevates ActionMate into a complete **Business Growth & Profitability Pl
 ### 5. ActionMate Decision Twin Lab (`/app/decision-twin`) — *FLAGSHIP INNOVATION*
 - **Multi-Strategy Simulation:** Simulates and compares 4 competing business strategies before spending ₹1 of merchant budget:
   - **Strategy A: Consultative Reminder (0% Discount):** 100% margin preservation, 12% conversion, lowest spend.
-  - **Strategy B: Targeted Promo Sprint (RET50):** ₹50 discount on orders > ₹249, 23.3% conversion, ₹20,900 revenue.
+  - **Strategy B: Grocery Basket Offer (GROCERY50):** Test ₹50 off baskets above ₹499; estimates use recorded average basket and product costs.
   - **Strategy C: VIP Loyalty Voucher:** ₹100 next-order store credit, protects current transaction price.
-  - **Strategy D: Inventory Clearance Bundle:** Fast-moving consumable + aging CNC fittings, releases ₹42,000+ trapped working capital while preserving 31.5% margin.
+  - **Strategy D: Inventory Clearance Bundle:** Pair a fast-moving grocery staple with aging breakfast cereal to test sell-through and release tied-up shelf cash.
 - **Interactive Recalculation:** Merchant can adjust Audience Size, Discount Cap, Margin Floor, and Budget sliders to watch the Decision Twin dynamically recompute financial trade-offs in real time.
 
 ### 6. No-Regret Business Guardrails (`/app/guardrails`)

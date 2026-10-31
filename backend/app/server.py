@@ -66,58 +66,74 @@ from .orchestrator import (
 )
 
 def get_sales_weekly_summary():
-    """Returns the weekly sales comparison and repeat purchase trend.
-    Incorporates the illustrative demo data from the Paytm AI ActionMate specification.
-    """
+    """Returns the weekly sales and repeat trends derived from completed receipt records."""
+    sales = calculate_sales_summary("MERCH-001")
+    repeat = calculate_repeat_analysis("MERCH-001")
+    profile = get_merchant_profile("MERCH-001")
+    sales_drop = detect_sales_drop("MERCH-001")
     daily = [
-        {"day": "Mon", "last_week": 52, "this_week": 51, "change_pct": -1.9},
-        {"day": "Tue", "last_week": 55, "this_week": 49, "change_pct": -10.9},
-        {"day": "Wed", "last_week": 50, "this_week": 44, "change_pct": -12.0},
-        {"day": "Thu", "last_week": 58, "this_week": 40, "change_pct": -31.0},
-        {"day": "Fri", "last_week": 61, "this_week": 38, "change_pct": -37.7},
-        {"day": "Sat", "last_week": 70, "this_week": 41, "change_pct": -41.4},
-        {"day": "Sun", "last_week": 66, "this_week": 37, "change_pct": -43.9}
+        {
+            "day": row["day"],
+            "last_week": row["last_week"],
+            "this_week": row["this_week"],
+            "change_pct": row["change_pct"]
+        }
+        for row in sales.daily_breakdown
     ]
-    last_week_total = sum(d["last_week"] for d in daily)
-    this_week_total = sum(d["this_week"] for d in daily)
-    overall_drop_pct = round(((this_week_total - last_week_total) / last_week_total) * 100, 1)
 
     return {
         "status": "SUCCESS",
-        "is_mock": True,
-        "label": "Paytm AI ActionMate Illustrative Demo Data",
+        "is_mock": sales.is_demo,
+        "data_source": "SQLite simulated grocery receipts",
+        "label": "Paytm AI ActionMate Grocery Demo Data",
         "unit": "INR_THOUSANDS",
         "unit_symbol": "₹k",
         "currency": "INR",
-        "store_name": "Sharma Commercial & Industrial Supplies",
-        "owner_name": "Ramesh Sharma",
-        "soundbox_device_id": "SB-4G-DEL-9842",
-        "soundbox_status": "ONLINE",
-        "last_week_total_k": last_week_total,
-        "this_week_total_k": this_week_total,
-        "overall_drop_pct": overall_drop_pct,
-        "repeat_purchase_drop_pct": -18.4,
-        "revenue_leakage_inr": 20900.0,
-        "missing_patrons_count": 46,
-        "target_cohort_size": 240,
+        "store_name": profile.store_name,
+        "owner_name": profile.owner_name,
+        "soundbox_device_id": profile.soundbox_device_id,
+        "soundbox_status": profile.soundbox_status,
+        "last_week_total_k": sales.last_week_total_k,
+        "this_week_total_k": sales.this_week_total_k,
+        "overall_drop_pct": sales.overall_drop_pct,
+        "repeat_purchase_drop_pct": repeat.drop_percentage_points,
+        "revenue_leakage_inr": repeat.revenue_at_risk_inr,
+        "missing_patrons_count": repeat.unreturned_regular_patrons,
+        "target_cohort_size": repeat.unreturned_regular_patrons,
         "daily_breakdown": daily,
         "repeat_purchase_trend": {
-            "cohort_name": "Thursday & Friday Lunch Window Regulars",
-            "historical_repeat_rate_pct": 68.5,
-            "current_repeat_rate_pct": 50.1,
-            "drop_percentage": 18.4,
-            "unreturned_regular_patrons": 46,
-            "revenue_at_risk_inr": 20900.0,
-            "telemetry_source": "Paytm Soundbox 4G Telemetry (SB-4G-DEL-9842)"
+            "cohort_name": repeat.cohort_name,
+            "historical_repeat_rate_pct": repeat.week_3_pct,
+            "current_repeat_rate_pct": repeat.week_4_pct,
+            "drop_percentage": repeat.drop_percentage_points,
+            "unreturned_regular_patrons": repeat.unreturned_regular_patrons,
+            "revenue_at_risk_inr": repeat.revenue_at_risk_inr,
+            "telemetry_source": f"Paytm Soundbox 4G Telemetry ({profile.soundbox_device_id})"
         },
-        "ai_insight": "A noticeable volume drop began Thursday afternoon. High-frequency regular diners dropped by 18.4% (46 patrons), accounting for ₹20,900 in estimated gross revenue leakage."
+        "ai_insight": sales_drop.explanation
     }
+
+def _actionmate_message_samples(profile, offer):
+    sample = CampaignService.render_personalized_message(
+        {"customer_name": "Shopper", "interested_product": "everyday essentials"},
+        profile.store_name,
+        offer
+    )
+    return {"en": sample.body_en, "hi": sample.body_hi}
 
 def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: str = "My sales have dropped this week. Help me bring customers back."):
     wf = get_workflow(workflow_id)
     roi = get_roi_summary(workflow_id)
     if not wf:
         return None
+    profile = get_merchant_profile(wf.get("merchant_id", "MERCH-001"))
+    sales = calculate_sales_summary(profile.id)
+    repeat = calculate_repeat_analysis(profile.id)
+    sales_drop = detect_sales_drop(profile.id)
+    campaign = CampaignService.recommend_campaign_for_sales_drop(profile.id)
+    audience = CampaignService.evaluate_campaign_audience(profile.id, "DECLINING_FREQUENCY")
+    offer = campaign.offer_details
+    target_count = repeat.unreturned_regular_patrons
 
     conn = get_connection()
     cur = conn.cursor()
@@ -138,8 +154,8 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED",
             "agent": "RevenueIntelligenceAgent",
             "tool": "tool_analyze_weekly_sales",
-            "summary": "Analysed 7-day transaction feed from Soundbox SB-4G-DEL-9842. Identified 18.4% repeat order drop.",
-            "metrics": {"drop_pct": 18.4, "leakage_inr": 20900.0}
+            "summary": f"Compared completed receipts for the latest week with the previous week ({sales_drop.sales_percentage_difference:+.1f}%).",
+            "metrics": {"drop_pct": sales_drop.sales_percentage_difference, "revenue_at_risk_inr": repeat.revenue_at_risk_inr}
         },
         {
             "step": 2,
@@ -148,8 +164,8 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED",
             "agent": "RevenueIntelligenceAgent",
             "tool": "tool_analyze_repeat_cohorts",
-            "summary": "Isolated 46 dormant regular lunchtime patrons. Total re-engagement cohort: 240 patrons.",
-            "metrics": {"dormant_regulars": 46, "cohort_size": 240}
+            "summary": f"Found {target_count} named customers with repeat orders in the prior three weeks and none in the latest week.",
+            "metrics": {"dormant_regulars": target_count, "cohort_size": audience.total_evaluated, "eligible_count": audience.eligible_count}
         },
         {
             "step": 3,
@@ -158,8 +174,8 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED",
             "agent": "RecoveryStrategyAgent",
             "tool": "tool_recommend_campaign",
-            "summary": "Formulated margin-safe incentive: ₹50 discount on orders above ₹249 (Code: RET50). Capped at ₹3,600.",
-            "metrics": {"discount_code": "RET50", "discount_inr": 50.0, "min_order_inr": 249.0, "cap_inr": 3600.0}
+            "summary": f"Drafted ₹{offer['discount_amount_inr']:,.0f} off baskets above ₹{offer['min_order_inr']:,.0f} with code {offer['discount_code']}.",
+            "metrics": {"discount_code": offer["discount_code"], "discount_inr": offer["discount_amount_inr"], "min_order_inr": offer["min_order_inr"], "cap_inr": offer["max_liability_cap_inr"]}
         },
         {
             "step": 4,
@@ -178,7 +194,7 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED" if is_approved else "PENDING_APPROVAL",
             "agent": "HumanOperator",
             "tool": "merchant_sign_off",
-            "summary": f"Approved by {appr_row['approved_by']} (HMAC: {appr_row['auth_signature'][:12]}...)" if appr_row else "Mandatory sign-off required before sending offers to 240 customers.",
+            "summary": f"Approved by {appr_row['approved_by']} (HMAC: {appr_row['auth_signature'][:12]}...)" if appr_row else f"Owner approval is required before sending an offer to up to {audience.eligible_count} customers.",
             "metrics": {"budget_cap_inr": 3600.0, "requires_signature": True, "is_approved": is_approved}
         },
         {
@@ -188,8 +204,8 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED" if is_executed else ("READY_FOR_EXECUTION" if is_approved else "QUEUED"),
             "agent": "ExecutionFollowupAgent",
             "tool": "tool_execute_simulated_dispatch",
-            "summary": "Simulated dispatch of 240 messages with RFC-822 deliverability headers and active DND filters." if is_executed else "Will dispatch outreach immediately upon merchant approval.",
-            "metrics": {"dispatched_count": 240 if is_executed else 0, "status": "DEMO_DISPATCH_RECORDED" if is_executed else "PENDING"}
+            "summary": f"Simulated dispatch of {audience.eligible_count} eligible messages." if is_executed else "No customer messages will be sent until the owner approves.",
+            "metrics": {"dispatched_count": audience.eligible_count if is_executed else 0, "status": "DEMO_DISPATCH_RECORDED" if is_executed else "PENDING"}
         },
         {
             "step": 7,
@@ -198,46 +214,43 @@ def get_actionmate_task_details(workflow_id: str = "WF-REC-1042", user_prompt: s
             "status": "COMPLETED" if is_completed else "QUEUED",
             "agent": "RevenueAttributionService",
             "tool": "tool_verify_pos_outcomes",
-            "summary": f"Verified 44 coupon redemptions at Soundbox QR. Gross: ₹16,940 | Net Profit: ₹14,644 | ROI: {roi.get('roi_multiple', 6.38)}x." if is_completed else "Awaiting redemption telemetry from Soundbox SB-4G-DEL-9842.",
-            "metrics": {"redeemed": roi.get("total_redeemed", 0), "roi_multiple": roi.get("roi_multiple", 0.0), "is_verified": roi.get("is_verified", False)}
+            "summary": f"Recorded campaign outcome: {roi.get('total_redeemed', 0)} redemptions." if is_completed else f"Awaiting campaign outcomes from Soundbox {profile.soundbox_device_id}.",
+            "metrics": {"redeemed": roi.get("total_redeemed", 0), "roi_multiple": roi.get("roi_multiple"), "is_verified": roi.get("is_verified", False)}
         }
     ]
 
     return {
         "task_id": workflow_id,
-        "title": wf.get("title", "Recover 240 Dormant Repeat Diners"),
+        "title": wf.get("title", campaign.campaign_name),
         "prompt": user_prompt,
         "current_state": current_state,
         "is_approved": is_approved,
         "is_executed": is_executed,
         "is_completed": is_completed,
         "merchant": {
-            "id": "MERCH-001",
-            "store_name": "Sharma Commercial & Industrial Supplies",
-            "owner_name": "Ramesh Sharma",
-            "device_id": "SB-4G-DEL-9842",
-            "device_status": "ONLINE"
+            "id": profile.id,
+            "store_name": profile.store_name,
+            "owner_name": profile.owner_name,
+            "device_id": profile.soundbox_device_id,
+            "device_status": profile.soundbox_status
         },
         "findings": {
-            "sales_drop_pct": 18.4,
-            "revenue_leakage_inr": wf.get("detected_leakage_inr", 20900.0),
-            "missing_patrons_count": 46,
-            "target_cohort_size": wf.get("target_cohort_count", 240),
-            "telemetry_source": "Paytm Soundbox 4G Telemetry (SB-4G-DEL-9842)",
-            "observation": "Repeat-purchase frequency dropped significantly during Thursday and Friday lunch hours."
+            "sales_drop_pct": sales_drop.sales_percentage_difference,
+            "revenue_leakage_inr": repeat.revenue_at_risk_inr,
+            "missing_patrons_count": target_count,
+            "target_cohort_size": audience.total_evaluated,
+            "telemetry_source": f"Paytm Soundbox 4G Telemetry ({profile.soundbox_device_id})",
+            "observation": sales_drop.explanation
         },
         "recommendation": {
-            "discount_code": wf.get("discount_code", "RET50"),
-            "discount_amount_inr": wf.get("discount_amount_inr", 50.0),
-            "min_order_inr": wf.get("min_order_inr", 249.0),
-            "max_liability_cap_inr": wf.get("max_liability_cap_inr", 3600.0),
-            "expected_redemption_rate_pct": 18.2,
-            "expected_redemption_count": 44,
-            "expected_gross_sales_inr": 16940.0,
-            "expected_net_margin_inr": 14644.0,
-            "projected_roi_multiple": 6.38
+            **offer,
+            "expected_redemption_rate_pct": None,
+            "expected_redemption_count": None,
+            "expected_gross_sales_inr": None,
+            "expected_net_margin_inr": None,
+            "projected_roi_multiple": None
         },
-        "messages": wf.get("messages_payload", {}),
+        "messages": _actionmate_message_samples(profile, offer),
         "approval": {
             "is_required": True,
             "status": "APPROVED" if is_approved else "PENDING_APPROVAL",
@@ -296,7 +309,7 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
                 "is_demo": mode.lower() == "demo",
                 "label": "Demonstration Sandbox" if mode.lower() == "demo" else "Live Production",
                 "active_merchant_id": "MERCH-001",
-                "active_merchant_name": "Sharma Commercial & Industrial Supplies"
+                "active_merchant_name": get_merchant_profile("MERCH-001").store_name
             }).encode('utf-8'))
             return
 
@@ -695,13 +708,15 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
 
         # 16. Email MIME Preview
         elif path == "/api/emails/preview":
+            profile = get_merchant_profile("MERCH-001")
+            offer = CampaignService.recommend_campaign_for_sales_drop("MERCH-001").offer_details
             sample = generate_email_mime(
-                customer_name="Arun Kumar",
-                recipient_email="arun.kumar@biotechlabs.in",
-                discount_code="RET50",
-                discount_amount=50.0,
-                min_order=249.0,
-                store_name="Sharma Commercial Supplies"
+                customer_name="Ananya Roy",
+                recipient_email="ananya.roy@example.test",
+                discount_code=offer["discount_code"],
+                discount_amount=offer["discount_amount_inr"],
+                min_order=offer["min_order_inr"],
+                store_name=profile.store_name
             )
             self._set_headers(200)
             self.wfile.write(json.dumps(sample).encode('utf-8'))
@@ -749,24 +764,23 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             task = orchestrator.get_task(task_id)
             if task:
                 task_data = task.dict()
-                # Attach convenience fields for Phase 1 UI compatibility
-                task_data["title"] = "Recover 240 Dormant Repeat Diners"
+                # Attach merchant-specific convenience fields for the UI.
+                profile = get_merchant_profile(task.merchant_id)
+                recommendation = task.findings.get("recommendation", {})
+                task_data["title"] = recommendation.get("campaign_name", "Review recent business trends")
                 task_data["prompt"] = task.original_request
                 task_data["is_approved"] = task.current_state in (STATE_APPROVED, STATE_EXECUTING, STATE_VERIFYING, STATE_COMPLETED)
                 task_data["is_executed"] = task.current_state in (STATE_VERIFYING, STATE_COMPLETED)
                 task_data["is_completed"] = task.current_state == STATE_COMPLETED
                 task_data["merchant"] = {
-                    "id": "MERCH-001",
-                    "store_name": "Sharma Commercial & Industrial Supplies",
-                    "owner_name": "Ramesh Sharma",
-                    "device_id": "SB-4G-DEL-9842",
-                    "device_status": "ONLINE"
+                    "id": profile.id,
+                    "store_name": profile.store_name,
+                    "owner_name": profile.owner_name,
+                    "device_id": profile.soundbox_device_id,
+                    "device_status": profile.soundbox_status
                 }
-                task_data["recommendation"] = task.findings.get("recommendation", {})
-                task_data["messages"] = {
-                    "en": "Hi [Customer Name]! We miss you at Sharma Supplies. Enjoy ₹50 OFF on your next order above ₹249 this weekend with code RET50 on Paytm Soundbox / QR. Valid till Sunday midnight!",
-                    "hi": "नमस्ते [ग्राहक का नाम]! शर्मा सप्लाइज में आपकी कमी महसूस हुई। इस वीकेंड पेटीएम QR पर कोड RET50 के साथ ₹249 से ऊपर के ऑर्डर पर ₹50 की छूट पाएं। रविवार मध्यरात्रि तक वैध!"
-                }
+                task_data["recommendation"] = recommendation
+                task_data["messages"] = _actionmate_message_samples(profile, recommendation)
                 task_data["approval"] = {
                     "is_required": True,
                     "status": "APPROVED" if task_data["is_approved"] else "PENDING_APPROVAL"
@@ -808,9 +822,10 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             return
 
         elif path in ("/api/sales/summary", "/api/sales/trends"):
-            summary = calculate_sales_summary("MERCH-001")
+            summary = calculate_sales_summary("MERCH-001").dict()
+            summary.update(get_sales_weekly_summary())
             self._set_headers(200)
-            self.wfile.write(json.dumps(summary.dict()).encode('utf-8'))
+            self.wfile.write(json.dumps(summary).encode('utf-8'))
             return
 
         # 21. Phase 2 Data API: Repeat Purchase Analysis (4-Week 41%, 39%, 37%, 24%)
@@ -1564,24 +1579,23 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
             task_obj = orchestrator.create_task_from_request(user_request=prompt, merchant_id=merchant_id, task_id=task_id)
             task = task_obj.dict()
 
-            # Attach convenience fields for backwards compatibility with Phase 1 tests
-            task["title"] = "Recover 240 Dormant Repeat Diners"
+            # Attach merchant-specific convenience fields for the UI.
+            profile = get_merchant_profile(merchant_id)
+            recommendation = task_obj.findings.get("recommendation", {})
+            task["title"] = recommendation.get("campaign_name", "Review recent business trends")
             task["prompt"] = prompt
             task["is_approved"] = False
             task["is_executed"] = False
             task["is_completed"] = False
             task["merchant"] = {
-                "id": "MERCH-001",
-                "store_name": "Sharma Commercial & Industrial Supplies",
-                "owner_name": "Ramesh Sharma",
-                "device_id": "SB-4G-DEL-9842",
-                "device_status": "ONLINE"
+                "id": profile.id,
+                "store_name": profile.store_name,
+                "owner_name": profile.owner_name,
+                "device_id": profile.soundbox_device_id,
+                "device_status": profile.soundbox_status
             }
-            task["recommendation"] = task_obj.findings.get("recommendation", {})
-            task["messages"] = {
-                "en": "Hi [Customer Name]! We miss you at Sharma Supplies. Enjoy ₹50 OFF on your next order above ₹249 this weekend with code RET50 on Paytm Soundbox / QR. Valid till Sunday midnight!",
-                "hi": "नमस्ते [ग्राहक का नाम]! शर्मा सप्लाइज में आपकी कमी महसूस हुई। इस वीकेंड पेटीएम QR पर कोड RET50 के साथ ₹249 से ऊपर के ऑर्डर पर ₹50 की छूट पाएं। रविवार मध्यरात्रि तक वैध!"
-            }
+            task["recommendation"] = recommendation
+            task["messages"] = _actionmate_message_samples(profile, recommendation)
             task["approval"] = {
                 "is_required": True,
                 "status": "PENDING_APPROVAL"
@@ -1744,8 +1758,9 @@ class DealPilotRequestHandler(BaseHTTPRequestHandler):
 
         # 21. Phase 4: Personalized Message Preview Generation
         elif path == "/api/campaigns/preview-message":
-            cust_data = data.get("customer", {"customer_name": "Arun Kumar", "interested_product": "Industrial valves"})
-            merchant_name = data.get("merchant_name", "Sharma Commercial & Industrial Supplies")
+            profile = get_merchant_profile(data.get("merchant_id", "MERCH-001"))
+            cust_data = data.get("customer", {"customer_name": "Ananya Roy", "interested_product": "Basmati rice"})
+            merchant_name = data.get("merchant_name", profile.store_name)
             offer = data.get("offer_details", None)
             msg = CampaignService.render_personalized_message(cust_data, merchant_name, offer)
             self._set_headers(200)

@@ -314,18 +314,19 @@ class VoiceCopilotService:
                     "trapped_inventory_units": 74
                 }
             else:
-                drop_data = detect_sales_drop("MERCH-001")
-                summary = calculate_sales_summary("MERCH-001")
-                pct = drop_data.get("percentage_drop", 18.2)
+                drop_data = detect_sales_drop(merchant_id)
+                summary = calculate_sales_summary(merchant_id)
+                pct = drop_data.sales_percentage_difference
+                current_week_sales = summary.this_week_total_k * 1000.0
                 text = (
-                    f"रमेश जी, इस हफ़्ते आपकी कुल बिक्री ₹{summary.get('current_week_sales_inr', 75000):,.0f} रही, जिसमें वीकेंड पर {pct:.1f}% की गिरावट दर्ज हुई है। दोपहर के लंच ऑर्डर्स में रिपीट ग्राहक 41% से घटकर 24% रह गए हैं।"
+                    f"रमेश जी, इस हफ़्ते आपकी किराने की बिक्री ₹{current_week_sales:,.0f} रही, जो पिछले हफ़्ते से {abs(pct):.1f}% कम है। दोहराए गए खरीदारी ऑर्डर 37% से घटकर 24% हुए हैं।"
                     if is_hindi else
-                    f"Ramesh ji, weekly sales stood at ₹{summary.get('current_week_sales_inr', 75000):,.0f}, showing an {pct:.1f}% weekend decline. Repeat lunch customer orders fell from 41% to 24%."
+                    f"Ramesh ji, grocery sales were ₹{current_week_sales:,.0f} this week, down {abs(pct):.1f}% from last week. Repeat-basket share moved from 37% to 24% in the simulated records; the data does not show why."
                 )
                 payload = {
                     "sales_drop_pct": pct,
-                    "current_week_sales": summary.get("current_week_sales_inr"),
-                    "repeat_customer_drop": "41% -> 24%"
+                    "current_week_sales": current_week_sales,
+                    "repeat_customer_drop": "37% -> 24%"
                 }
             actions = ["View Sales Trend", "Open Bazaar Demand Pulse", "Recommend Re-engagement Campaign"]
             return {"text": text, "payload": payload, "actions": actions}
@@ -445,7 +446,7 @@ class VoiceCopilotService:
             text = (
                 f"कस्टमर इनसाइट: आपके पास कुल {total} पंजीकृत ग्राहक हैं, जिनमें से {at_risk} ग्राहक डॉरमेंट या रिस्क पर हैं। इन्हें टारगेट करके तुरंत री-एंगेजमेंट ऑफर भेजा जा सकता है।"
                 if is_hindi else
-                f"Customer Insights: You have {total} tracked customer profiles, of which {at_risk} are flagged as Dormant or At-Risk. Re-engaging this cohort with a personalized ₹50 incentive can recover estimated ₹20,900 in gross revenue."
+                f"Customer Insights: You have {total} tracked customer profiles, of which {at_risk} are flagged as Dormant or At-Risk. A ₹50 offer on baskets above ₹499 could be tested with owner approval; ₹20,900 is a simulated revenue-at-risk estimate, not guaranteed recovery."
             )
             payload = {
                 "total_customers": total,

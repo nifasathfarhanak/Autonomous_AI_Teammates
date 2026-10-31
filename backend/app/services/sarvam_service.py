@@ -20,18 +20,18 @@ LANGUAGE_NAMES = {
 }
 
 INDIC_TEMPLATES = {
-    "en": "Hi [Customer Name]! We miss you at Sharma Sweets. Enjoy ₹{discount} OFF on your next order above ₹{min_order} this weekend with code {code} on Paytm Soundbox / QR. Valid till Sunday midnight!",
-    "hi": "नमस्ते [ग्राहक का नाम]! शर्मा स्वीट्स में आपकी कमी महसूस हुई। इस वीकेंड पेटीएम QR पर कोड {code} के साथ ₹{min_order} से ऊपर के ऑर्डर पर ₹{discount} की छूट पाएं। रविवार मध्यरात्रि तक वैध!",
-    "ta": "வணக்கம் [வாடிக்கையாளர் பெயர்]! சர்மா ஸ்வீட்ஸில் இந்த வார இறுதியில் ₹{min_order}க்கு மேல் ஆர்டர் செய்தால் {code} கூப்பன் மூலம் ₹{discount} தள்ளுபடி பெறுங்கள்! ஞாயிறு வரை செல்லும்.",
-    "te": "నమస్కారం [కస్టమర్ పేరు]! శర్మ స్వీట్స్‌లో ఈ వారాంతంలో ₹{min_order} పైన ఆర్డర్‌లపై {code} కోడ్‌తో ₹{discount} తగ్గింపు పొందండి. ఆదివారం వరకు చెల్లుబాటు అవుతుంది!",
-    "bn": "নমস্কার [গ্রাহকের নাম]! শর্মা সুইটসে এই উইকএন্ডে ₹{min_order}-এর বেশি অর্டারে {code} কোড দিয়ে ₹{discount} ছাড় পান। রবিবার পর্যন্ত বৈধ!",
-    "mr": "नमस्कार [ग्राहकाचे नाव]! शर्मा स्वीट्समध्ये या वीकेंडला कोड {code} वापरून ₹{min_order} वरील ऑर्डरवर ₹{discount} सवलत मिळवा. रविवारपर्यंत वैध!",
-    "gu": "નમસ્તે [ગ્રાહકનું નામ]! શર્મા સ્વીટ્સમાં આ વીકેન્ડ પર ₹{min_order}થી વધુના ઓર્ડર પર {code} કોડ સાથે ₹{discount} ડિસ્કાઉન્ટ મેળવો!"
+    "en": "Hi [Customer Name]! Visit your neighborhood grocery shop and get ₹{discount} off a basket above ₹{min_order} with code {code}. Please check the offer dates.",
+    "hi": "नमस्ते [ग्राहक का नाम]! अपनी नज़दीकी किराना दुकान पर ₹{min_order} से अधिक की खरीद पर {code} कोड से ₹{discount} की छूट पाएं। कृपया ऑफ़र की तारीख़ देखें।",
+    "ta": "வணக்கம் [வாடிக்கையாளர் பெயர்]! அருகிலுள்ள மளிகைக் கடையில் ₹{min_order}க்கு மேற்பட்ட வாங்குதலுக்கு {code} குறியீட்டைப் பயன்படுத்தி ₹{discount} தள்ளுபடி பெறுங்கள். சலுகை தேதிகளைச் சரிபார்க்கவும்.",
+    "te": "నమస్కారం [కస్టమర్ పేరు]! మీ దగ్గరలోని కిరాణా దుకాణంలో ₹{min_order} కంటే ఎక్కువ కొనుగోలుపై {code} కోడ్‌తో ₹{discount} తగ్గింపు పొందండి. ఆఫర్ తేదీలను చూడండి.",
+    "bn": "নমস্কার [গ্রাহকের নাম]! কাছের মুদির দোকানে ₹{min_order}-এর বেশি কেনাকাটায় {code} কোডে ₹{discount} ছাড় পান। অফারের তারিখ দেখে নিন।",
+    "mr": "नमस्कार [ग्राहकाचे नाव]! जवळच्या किराणा दुकानात ₹{min_order} पेक्षा जास्त खरेदीवर {code} कोड वापरून ₹{discount} सूट मिळवा. ऑफरच्या तारखा तपासा.",
+    "gu": "નમસ્તે [ગ્રાહકનું નામ]! નજીકની કરિયાણાની દુકાનમાં ₹{min_order}થી વધુની ખરીદી પર {code} કોડથી ₹{discount}ની છૂટ મેળવો. ઓફરની તારીખ તપાસો."
 }
 
 SOUNDBOX_SCRIPTS = {
-    "en": "Paytm Soundbox: Sales dropped 18 percent this week. 240 customers identified for 50 rupee re-engagement offer. Press approve to send.",
-    "hi": "पेटीएम साउंडबॉक्स: इस हफ्ते 240 ग्राहक कम आए हैं। उन्हें 50 रुपये की छूट का मैसेज भेजने के लिए अप्रूव दबाएं।"
+    "en": "Paytm Soundbox: Simulated grocery sales are down 27.2 percent week over week. Review the evidence and approve any offer before sending.",
+    "hi": "पेटीएम साउंडबॉक्स: सिमुलेटेड किराना बिक्री पिछले हफ्ते से 27.2 प्रतिशत कम है। डेटा देखें और संदेश भेजने से पहले ऑफ़र को मंज़ूरी दें।"
 }
 
 def translate_indic_live(text: str, target_lang: str) -> Optional[str]:

@@ -208,12 +208,12 @@ class TestOrchestratorPhase3(unittest.TestCase):
 
         # 2. AI Interpretation contains behavioral deduction
         interpretation = " ".join(epistemic.ai_interpretation)
-        self.assertIn("habit disruption", interpretation)
-        self.assertIn("lunch", interpretation.lower())
+        self.assertIn("do not establish the cause", interpretation)
+        self.assertIn("holdout", interpretation.lower())
 
         # 3. Recommendations contain RET50 and budget cap
         recommendations = " ".join(epistemic.recommendations)
-        self.assertIn("RET50", recommendations)
+        self.assertIn("GROCERY50", recommendations)
         self.assertIn("₹3,600", recommendations)
 
         # 4. Unknown Information contains explicit boundaries
@@ -240,7 +240,7 @@ class TestOrchestratorPhase3(unittest.TestCase):
         self.assertEqual(loaded_task.task_id, task_id)
         self.assertEqual(loaded_task.current_state, STATE_READY_FOR_APPROVAL)
         self.assertEqual(len(loaded_task.plan), 10)
-        self.assertEqual(loaded_task.findings["recommendation"]["discount_code"], "RET50")
+        self.assertEqual(loaded_task.findings["recommendation"]["discount_code"], "GROCERY50")
         self.assertEqual(len(loaded_task.epistemic_report.confirmed_data), 6)
 
     def test_10_end_to_end_request_to_execution_and_verification(self):
@@ -278,4 +278,3 @@ class TestOrchestratorPhase3(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

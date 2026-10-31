@@ -135,22 +135,22 @@ class TaskReportingService:
                 "data_mode": "Fictional Demo Merchant Data (DEMO)"
             },
             sales_findings={
-                "weekly_sales_trend": "Decline from ₹412k (Last Week) to ₹310k (This Week) — 24.8% drop",
-                "repeat_customer_trend": "Repeat orders plummeted from 41% to 24% over 4 weeks",
-                "anomalous_window": "Thursday & Friday Lunch rush (12:00 PM - 3:00 PM)",
-                "identified_revenue_leakage": "₹20,900 estimated gross leakage"
+                "weekly_sales_trend": "Simulated grocery sales declined from ₹412k last week to ₹300k this week (-27.2%)",
+                "repeat_customer_trend": "Simulated repeat-basket share moved from 37% to 24%",
+                "anomalous_window": "The larger sales decline appears from Thursday through Sunday; the cause is unknown",
+                "identified_revenue_leakage": "₹20,900 estimated sales at risk; not confirmed lost profit"
             },
             ai_interpretation={
                 "detected_intent": task.get("detected_intent", "SALES_DROP_RECOVERY"),
-                "root_cause": "Dormancy among previously frequent lunch-hour patrons (46 missing patrons)",
+                "root_cause": "Cause is not established by the simulated receipts; 46 regular shoppers are flagged for review",
                 "strategy_selected": "Targeted WhatsApp & Soundbox QR Re-engagement Campaign",
                 "autonomy_category": "CATEGORY_B (Requires Human Approval for Outbound Messages)"
             },
             recommended_campaign={
-                "campaign_name": draft.get("campaign_name", "Weekend Lunch Rush Repeat Diner Recovery"),
+                "campaign_name": draft.get("campaign_name", "Neighborhood Grocery Repeat-Basket Recovery"),
                 "objective": draft.get("business_objective", "Recover declining repeat customer volume"),
                 "target_segment": draft.get("target_customer_segment", "DECLINING_FREQUENCY"),
-                "promotional_offer": "₹50 discount on orders above ₹249 with code RET50",
+                "promotional_offer": "Test ₹50 off grocery baskets above ₹499 with code GROCERY50",
                 "max_liability_cap_inr": 3600.0,
                 "channels": ["WhatsApp", "SMS", "Paytm Soundbox Voice Announcement"]
             },

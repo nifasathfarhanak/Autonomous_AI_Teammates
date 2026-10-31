@@ -203,13 +203,15 @@ class GovernanceService:
         chash = GovernanceService.calculate_content_hash(
             draft.campaign_name, en_msg, hi_msg, draft.offer_details, draft.target_customer_segment
         )
+        from .sales_intelligence_service import get_merchant_profile
+        merchant_name = get_merchant_profile(draft.merchant_id).store_name
 
         return ApprovalRequestSchema(
             approval_id=f"APPR-REQ-{campaign_id}",
             task_id="WF-REC-1042",
             campaign_id=campaign_id,
             merchant_id=draft.merchant_id,
-            merchant_name="Sharma Commercial & Industrial Supplies",
+            merchant_name=merchant_name,
             campaign_name=draft.campaign_name,
             campaign_purpose=draft.business_objective,
             reason_for_recommendation=draft.reason_for_recommendation,
@@ -218,16 +220,16 @@ class GovernanceService:
             promotional_message=draft.messages or {},
             campaign_settings={
                 "max_liability_budget_inr": (draft.offer_details or {}).get("max_liability_cap_inr", 3600.0),
-                "discount_code": (draft.offer_details or {}).get("discount_code", "RET50"),
+                "discount_code": (draft.offer_details or {}).get("discount_code", "GROCERY50"),
                 "discount_amount_inr": (draft.offer_details or {}).get("discount_amount_inr", 50.0),
-                "min_order_inr": (draft.offer_details or {}).get("min_order_inr", 249.0),
+                "min_order_inr": (draft.offer_details or {}).get("min_order_inr", 499.0),
                 "channels": ["SMS", "WhatsApp", "Paytm Soundbox Voice Announcement"]
             },
             execution_mode="SIMULATED_DEMO",
             risks_and_assumptions=draft.risks_and_assumptions,
             ai_recommendation={
-                "strategy": "Weekend Lunch Rush Recovery",
-                "target_cohort": "Declining repeat frequency lunch patrons",
+                "strategy": "Grocery repeat-basket recovery",
+                "target_cohort": "Regular neighborhood grocery shoppers",
                 "soundbox_integration": "Audio banner broadcast & QR code telemetry"
             },
             current_status=draft.status,

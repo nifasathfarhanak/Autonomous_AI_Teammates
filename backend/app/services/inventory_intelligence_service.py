@@ -29,11 +29,21 @@ class InventoryIntelligenceService:
 
         # Calculate sales velocity over last 14 days from order_items
         cur.execute("""
-        SELECT product_id, SUM(quantity) as total_units_sold
-        FROM order_items
-        GROUP BY product_id
-        """)
-        sales_map = {r["product_id"]: max(1, r["total_units_sold"]) for r in cur.fetchall()}
+        SELECT oi.product_id, SUM(oi.quantity) as total_units_sold
+        FROM order_items oi
+        JOIN orders o ON o.order_id = oi.order_id
+        JOIN customers c ON c.customer_id = o.customer_id
+        WHERE c.merchant_id = ?
+          AND UPPER(o.status) = 'COMPLETED'
+          AND substr(o.order_date, 1, 10) >= date(
+              (SELECT MAX(substr(o2.order_date, 1, 10))
+               FROM orders o2
+               JOIN customers c2 ON c2.customer_id = o2.customer_id
+               WHERE c2.merchant_id = ?), '-13 days'
+          )
+        GROUP BY oi.product_id
+        """, (merchant_id, merchant_id))
+        sales_map = {r["product_id"]: int(r["total_units_sold"] or 0) for r in cur.fetchall()}
         conn.close()
 
         today = datetime.now(timezone.utc)
@@ -161,4 +171,3 @@ class InventoryIntelligenceService:
             "days_on_hand": sku["days_on_hand"],
             "stock_units": sku["current_stock_units"]
         }
-
