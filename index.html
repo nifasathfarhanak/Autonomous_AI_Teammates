@@ -1127,7 +1127,7 @@
           <div>
             <div class="view-eyebrow">Outreach Orchestration &amp; Execution</div>
             <h2 class="view-title" id="headingCampaigns">Marketing &amp; Recovery Campaigns</h2>
-            <p class="view-description">Autonomous customer re-engagement campaigns grounded in sales drop diagnostics, deterministic audience exclusions, and simulated multi-channel dispatch.</p>
+            <p class="view-description">Choose which customers to reach, review their offer, and track what happens next.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="recalculateCampaignAudience()">
@@ -1144,11 +1144,11 @@
           <div style="display: flex; align-items: center; gap: 12px;">
             
             <div>
-              <strong style="color: var(--paytm-navy); font-size: 13.5px;">SANDBOX SIMULATION ACTIVE:</strong>
-              <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">All outbound dispatches are executed via an internal sandbox adapter. No real SMS or Soundbox broadcasts are sent to live mobile numbers.</span>
+              <strong style="color: var(--paytm-navy); font-size: 13.5px;">DEMO MODE:</strong>
+              <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">Messages are simulated. No live SMS or Soundbox broadcasts are sent.</span>
             </div>
           </div>
-          <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SANDBOX VERIFIED</span>
+          <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); font-weight: 700;">SAFE TO PREVIEW</span>
         </div>
 
         <!-- Active Campaign Overview Card -->
@@ -1180,7 +1180,7 @@
           <!-- Campaign KPIs Grid -->
           <div class="kpi-grid-4" style="margin-bottom: 16px;">
             <div class="kpi-card">
-              <div class="kpi-title">Target Cohort</div>
+              <div class="kpi-title">Customers selected</div>
               <div class="kpi-metric" id="kpiTargetCohort">240 Diners</div>
               <div class="kpi-subtext" id="kpiCohortSub">Declining frequency lapse</div>
             </div>
@@ -1190,7 +1190,7 @@
               <div class="kpi-subtext" id="kpiOfferSub">Min order &gt; ₹249</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-title">Max Liability Cap</div>
+              <div class="kpi-title">Offer budget limit</div>
               <div class="kpi-metric" id="kpiLiabilityCap">₹3,600</div>
               <div class="kpi-subtext">Hard safety ceiling</div>
             </div>
@@ -1208,8 +1208,8 @@
           <div class="card">
             <div class="card-header">
               <div>
-                <div class="card-title">Customer Targeting &amp; Eligibility Evaluation</div>
-                <div class="card-subtitle">Deterministic filter rules applied to demo merchant database</div>
+                <div class="card-title">Choose who should receive the offer</div>
+                <div class="card-subtitle">Customers who opted out or have invalid contact details are left out.</div>
               </div>
               <select id="campaignSegmentSelect" class="form-input" style="width: auto; padding: 4px 10px; font-size: 12.5px;" onchange="recalculateCampaignAudience()">
                 <option value="DECLINING_FREQUENCY" selected>Declining Frequency (Target)</option>
@@ -1233,6 +1233,16 @@
                   <div id="targetExcludedCount" style="font-size: 22px; font-weight: 800; color: #be123c;">3</div>
                 </div>
               </div>
+
+              <section class="chart-card" aria-labelledby="campaignAudienceChartHeading" style="margin-bottom: 16px;">
+                <div class="chart-header">
+                  <div>
+                    <h3 class="overview-visual-title" id="campaignAudienceChartHeading">Who can receive this offer?</h3>
+                    <p class="overview-visual-subtitle">Eligible customers compared with customers left out for safety</p>
+                  </div>
+                </div>
+                <div id="campaignAudienceChart" class="horizontal-chart" role="img" aria-label="Eligible and excluded campaign customers"></div>
+              </section>
 
               <!-- Exclusion Rules Badges -->
               <div style="font-size: 12.5px; font-weight: 600; color: var(--paytm-navy); margin-bottom: 8px;">Deterministic Exclusion Rule Breakdown:</div>
@@ -1357,7 +1367,7 @@
           <div>
             <div class="view-eyebrow">Human-in-the-Loop Governance &amp; Permission Control</div>
             <h2 class="view-title" id="headingApprovals">Merchant Approvals Center</h2>
-            <p class="view-description">Strict human oversight for customer communications and outreach dispatches. The frontend is never the authority; all actions are cryptographically validated by the backend policy engine.</p>
+            <p class="view-description">Review each offer before it is sent. Nothing goes out until you approve it.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="fetchApprovalDetails()">
@@ -1371,9 +1381,9 @@
           <div style="display: flex; align-items: center; gap: 12px;">
             
             <div>
-              <strong style="color: var(--paytm-navy); font-size: 13.5px;">ACTION RISK POLICY ENFORCED:</strong>
+              <strong style="color: var(--paytm-navy); font-size: 13.5px;">HOW YOUR STORE IS PROTECTED:</strong>
               <span style="color: var(--text-body); font-size: 13px; margin-left: 6px;">
-                Category A (Automatic lookups) permitted &bull; Category B (Outreach dispatches) requires merchant approval &bull; Category C (Refunds/Financial changes) strictly blocked.
+                Looking up information is allowed &bull; sending offers needs your approval &bull; refunds and financial changes are blocked.
               </span>
             </div>
           </div>
@@ -1504,6 +1514,11 @@
             </div>
             <span class="badge" id="apprLedgerCountBadge" style="background: var(--bg-subtle);">0 decisions recorded</span>
           </div>
+          <div class="card-body">
+            <h3 class="overview-visual-title">Offer review status</h3>
+            <p class="overview-visual-subtitle">The current offer and any decisions already recorded</p>
+            <div id="approvalDecisionChart" class="horizontal-chart" role="img" aria-label="Current offer status and past approval decisions"></div>
+          </div>
           <div class="table-responsive">
             <table class="data-table">
               <thead>
@@ -1535,9 +1550,9 @@
       <section class="route-view" id="view-activity" aria-labelledby="headingActivity">
         <div class="view-header-row">
           <div>
-            <div class="view-eyebrow">Cryptographic Audit Trail &amp; Governance Ledger</div>
-            <h2 class="view-title" id="headingActivity">Activity Log &amp; Tamper-Evident Ledger</h2>
-            <p class="view-description">Every merchant request, data lookup, AI plan, approval decision, edit, and simulated execution is cryptographically chained with  hashes.</p>
+            <div class="view-eyebrow">Business activity and secure records</div>
+            <h2 class="view-title" id="headingActivity">Store Activity &amp; Secure Records</h2>
+            <p class="view-description">See what ActionMate and your team did, when it happened, and whether the records are intact.</p>
           </div>
           <div class="view-actions-row">
             <button class="btn btn-secondary btn-sm" onclick="verifyLedgerIntegrityDirect()">
@@ -1562,6 +1577,16 @@
         </div>
 
         <!-- View Mode Selector -->
+        <section class="chart-card" aria-labelledby="activityActionChartHeading" style="margin-bottom: 20px;">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="activityActionChartHeading">Recent store activity</h3>
+              <p class="overview-visual-subtitle">Actions recorded in the verified activity ledger</p>
+            </div>
+          </div>
+          <div id="activityActionChart" class="horizontal-chart" role="img" aria-label="Counts of recent store actions"></div>
+        </section>
+
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
           <button class="btn btn-secondary btn-sm active" id="btnViewModeTimeline" onclick="switchActivityViewMode('timeline')">
             Activity Timeline
@@ -1943,6 +1968,8 @@
                 <span class="badge" style="background: var(--green-bg); color: var(--green-dark);">ENFORCED</span>
               </div>
             </div>
+            <h4 class="overview-visual-title" style="margin-bottom: 8px;">Connections by current status</h4>
+            <div id="settingsDependencyChart" class="horizontal-chart" role="img" aria-label="Count of system connections by status"></div>
             <button class="btn btn-secondary btn-sm" onclick="fetchEnvironmentDependencies()">
               Refresh
             </button>
@@ -2275,9 +2302,9 @@
       <section class="route-view" id="view-decision-twin" aria-labelledby="headingDecisionTwin">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); margin-bottom: 6px;">Flagship Innovation · Mathematical Simulation</span>
+            <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); margin-bottom: 6px;">Try options before spending</span>
             <h1 class="view-title" id="headingDecisionTwin">Compare Strategies</h1>
-            <p class="view-subtitle">Simulate and compare 4 alternative commercial strategies before committing a single rupee of marketing budget.</p>
+            <p class="view-subtitle">Compare four offer options and their estimated profit before spending your marketing budget.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-primary btn-sm" onclick="triggerDecisionTwinSimulation()">Compare Strategies</button>
@@ -2317,6 +2344,16 @@
           <!-- Dynamically populated -->
         </div>
 
+        <section class="chart-card" aria-labelledby="strategyComparisonChartHeading" style="margin-bottom: 24px;">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="strategyComparisonChartHeading">Estimated profit by strategy</h3>
+              <p class="overview-visual-subtitle">Compare each option before choosing. These are simulations, not guaranteed results.</p>
+            </div>
+          </div>
+          <div id="strategyComparisonChart" class="horizontal-chart" role="img" aria-label="Estimated profit for each simulated strategy"></div>
+        </section>
+
         <!-- 4 Simulated Strategies Cards Container -->
         <div id="strategiesCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px;">
           <!-- Dynamically populated with Strategy A, B, C, D -->
@@ -2327,9 +2364,9 @@
       <section class="route-view" id="view-opportunities" aria-labelledby="headingOpportunities">
         <div class="view-header">
           <div>
-            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Algorithmic Opportunity Scoring</span>
+            <span class="badge" style="background: #fdf2f8; color: #9d174d; margin-bottom: 6px;">Ideas to help your store grow</span>
             <h1 class="view-title" id="headingOpportunities">Growth Opportunities</h1>
-            <p class="view-subtitle">Autonomous scanner continuously identifies opportunities across Profit, Inventory, Cash-Flow, and Retention.</p>
+            <p class="view-subtitle">Find practical ways to improve profit, manage stock, protect cash, and bring customers back.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchOpportunities()">Find Opportunities</button>
@@ -2360,6 +2397,16 @@
           </div>
         </div>
 
+        <section class="chart-card" aria-labelledby="opportunityImpactChartHeading" style="margin-bottom: 24px;">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="opportunityImpactChartHeading">Potential value by opportunity</h3>
+              <p class="overview-visual-subtitle">Estimated amounts from the opportunities found for your store</p>
+            </div>
+          </div>
+          <div id="opportunityImpactChart" class="horizontal-chart" role="img" aria-label="Estimated value by growth opportunity"></div>
+        </section>
+
         <!-- Opportunities List Container -->
         <div id="opportunitiesListContainer" style="display: grid; gap: 16px;">
           <!-- Dynamically populated -->
@@ -2372,12 +2419,22 @@
           <div>
             <span class="badge" style="background: var(--red-soft); color: var(--red-dark); margin-bottom: 6px;">Autonomous Operational Safeguards</span>
             <h1 class="view-title" id="headingGuardrails">My Business Limits</h1>
-            <p class="view-subtitle">Merchant-configured policy thresholds enforced by the backend to prevent unintended commercial damage.</p>
+            <p class="view-subtitle">Set the limits ActionMate must follow when planning offers and other business actions.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchGuardrails()">Refresh Rules</button>
           </div>
         </div>
+
+        <section class="chart-card" aria-labelledby="guardrailStatusChartHeading" style="margin-bottom: 24px;">
+          <div class="chart-header">
+            <div>
+              <h3 class="overview-visual-title" id="guardrailStatusChartHeading">Limits protecting your store</h3>
+              <p class="overview-visual-subtitle">How many business limits are active or switched off</p>
+            </div>
+          </div>
+          <div id="guardrailStatusChart" class="horizontal-chart" role="img" aria-label="Counts of active and disabled business limits"></div>
+        </section>
 
         <div class="card" style="margin-bottom: 24px;">
           <div class="card-header">
@@ -2409,7 +2466,7 @@
           <div>
             <span class="badge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy); margin-bottom: 6px;">Commercial Growth Platform</span>
             <h1 class="view-title" id="headingBusinessValue">Verified Results</h1>
-            <p class="view-subtitle">Measured ROI, causal Holdout lift verification, commercial pricing tiers, and merchant personas.</p>
+            <p class="view-subtitle">See how an offer performed compared with customers who did not receive it, plus available plans.</p>
           </div>
           <div class="view-actions">
             <button class="btn btn-secondary btn-sm" onclick="fetchBusinessValue()">Refresh</button>
@@ -2679,6 +2736,12 @@
             </div>
             <span class="badge" style="background: rgba(0, 186, 242, 0.12); color: #007799; font-weight: 700;">CLUSTER ID: NEIGHBOURHOOD-JP-01</span>
           </div>
+
+          <section aria-labelledby="bazaarMomentumChartHeading" style="margin-bottom: 18px;">
+            <h4 class="overview-visual-title" id="bazaarMomentumChartHeading">Demand momentum by product category</h4>
+            <p class="overview-visual-subtitle">Only categories that meet the minimum privacy group size are shown</p>
+            <div id="bazaarMomentumChart" class="horizontal-chart" role="img" aria-label="Published neighbourhood demand momentum"></div>
+          </section>
 
           <div style="overflow-x: auto;">
             <table class="table" style="width: 100%; border-collapse: collapse;">
@@ -3045,7 +3108,7 @@
     // Navigation and Routing Engine (Supports HTML5 History API & Popstate)
     function navigateToRoute(target) {
       if (!target) target = "overview";
-      target = target.replace(/^\/?app\/?/, "").replace(/^\//, "");
+      target = target.replace(/^\/?app\/+/, "").replace(/^\//, "");
       if (target === "" || target === "index.html") target = "overview";
 
       const isAuthRoute = AUTH_ROUTES.includes(target);
@@ -3206,6 +3269,19 @@
 
         if (container) container.innerHTML = html;
         if (settingsList) settingsList.innerHTML = html;
+        const statusCounts = deps.reduce((counts, dependency) => {
+          const status = String(dependency.status || "UNKNOWN");
+          counts[status] = (counts[status] || 0) + 1;
+          return counts;
+        }, {});
+        renderHorizontalBarChart(
+          "settingsDependencyChart",
+          Object.entries(statusCounts).map(([label, value]) => ({ label, value })),
+          "label",
+          "value",
+          value => `${value} services`,
+          "#00BAF2"
+        );
       } catch (e) {
         console.warn("Could not fetch dependencies:", e);
       }
@@ -3778,7 +3854,7 @@
         userMsgDiv.style.cssText = "display: flex; justify-content: flex-end; width: 100%; margin-bottom: 8px;";
         userMsgDiv.innerHTML = `
           <div style="background: var(--paytm-navy); color: #FFFFFF; border-radius: 14px 14px 2px 14px; padding: 12px 18px; max-width: 75%; font-size: 13.5px; box-shadow: var(--shadow-sm);">
-            ${prompt}
+            ${escapeHtml(prompt)}
           </div>
         `;
         stream.appendChild(userMsgDiv);
@@ -3819,6 +3895,7 @@
             input_mode: "TEXT"
           })
         });
+        if (!res.ok) throw new Error(`ActionMate request failed (${res.status}).`);
         const reply = await res.json();
 
         // Also trigger task plan update for Task #1042 backwards-compatibility
@@ -3840,102 +3917,7 @@
           const aiMsgDiv = document.createElement("div");
           aiMsgDiv.style.cssText = "display: flex; gap: 12px; align-items: flex-start; max-width: 90%; margin-bottom: 12px;";
 
-          let visualCardHtml = "";
-          const intent = reply.detected_intent || "";
-
-          // Render intent-specific data visualization
-          if (intent === "SALES_DROP_ANALYSIS" || prompt.toLowerCase().includes("sales") || prompt.toLowerCase().includes("drop")) {
-            visualCardHtml = `
-              <div style="background: #F8FAFD; border: 1.5px solid var(--border-light); border-radius: 8px; padding: 14px; margin-top: 12px;">
-                <div style="font-size: 12px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 8px; text-transform: uppercase;">
-                  Weekly Performance Comparison (Soundbox POS)
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
-                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
-                    <div style="font-size: 11px; color: var(--text-muted);">This Week</div>
-                    <div style="font-size: 16px; font-weight: 800; color: var(--red);">₹3,00,000</div>
-                  </div>
-                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
-                    <div style="font-size: 11px; color: var(--text-muted);">Last Week</div>
-                    <div style="font-size: 16px; font-weight: 800; color: var(--text-main);">₹4,12,000</div>
-                  </div>
-                  <div style="background: #FFF; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light);">
-                    <div style="font-size: 11px; color: var(--text-muted);">Deficit</div>
-                    <div style="font-size: 16px; font-weight: 800; color: var(--red);">-27.2%</div>
-                  </div>
-                </div>
-                <div style="font-size: 12px; color: var(--text-body); margin-bottom: 8px;">
-                  <strong>Impact:</strong> 46 loyal diners missing from lunch rush. Recoverable revenue: <strong>₹20,900</strong>.
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="navigateToRoute('campaigns')">View Re-engagement Campaign</button>
-              </div>
-            `;
-          } else if (intent === "PROFIT_ANALYSIS" || prompt.toLowerCase().includes("profit") || prompt.toLowerCase().includes("margin")) {
-            visualCardHtml = `
-              <div style="background: #F8FAFD; border: 1.5px solid var(--border-light); border-radius: 8px; padding: 14px; margin-top: 12px;">
-                <div style="font-size: 12px; font-weight: 800; color: var(--paytm-navy); margin-bottom: 8px; text-transform: uppercase;">
-                  Top Margin Product Catalog
-                </div>
-                <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
-                  <thead>
-                    <tr style="border-bottom: 1px solid var(--border-light); color: var(--text-muted);">
-                      <th style="text-align: left; padding: 4px;">Product</th>
-                      <th style="text-align: right; padding: 4px;">Price</th>
-                      <th style="text-align: right; padding: 4px;">Profit</th>
-                      <th style="text-align: right; padding: 4px;">Margin</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="padding: 6px 4px;"><strong>Banarasi Brocade Sherwani</strong></td>
-                      <td style="text-align: right;">₹6,200</td>
-                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹3,497</td>
-                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">56.4%</span></td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 6px 4px;"><strong>Bandhani Silk Dupatta</strong></td>
-                      <td style="text-align: right;">₹420</td>
-                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹205</td>
-                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">48.8%</span></td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 6px 4px;"><strong>Chikankari Cotton Kurta</strong></td>
-                      <td style="text-align: right;">₹850</td>
-                      <td style="text-align: right; color: var(--green-dark); font-weight: 700;">₹376</td>
-                      <td style="text-align: right;"><span class="badge" style="background: #DCFCE7; color: #166534;">44.2%</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            `;
-          } else if (intent === "INVENTORY_STATUS" || prompt.toLowerCase().includes("inventory") || prompt.toLowerCase().includes("stock")) {
-            visualCardHtml = `
-              <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 14px; margin-top: 12px;">
-                <div style="font-size: 12px; font-weight: 800; color: #92400E; margin-bottom: 6px; text-transform: uppercase;">
-                  Working Capital Alert: Trapped Stock
-                </div>
-                <div style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
-                  <strong>74 units of Bandhani Dupattas</strong> are aging in inventory (92 days), locking <strong>₹31,080</strong> in capital.
-                </div>
-                <div style="display: flex; gap: 8px;">
-                  <button class="btn btn-primary btn-sm" onclick="navigateToRoute('decision-twin')">Simulate Clearance Bundle</button>
-                  <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('inventory')">View Inventory</button>
-                </div>
-              </div>
-            `;
-          } else if (intent === "CASH_FLOW" || prompt.toLowerCase().includes("cash")) {
-            visualCardHtml = `
-              <div style="background: #FEE2E2; border: 1.5px solid #FECACA; border-radius: 8px; padding: 14px; margin-top: 12px;">
-                <div style="font-size: 12px; font-weight: 800; color: #991B1B; margin-bottom: 6px; text-transform: uppercase;">
-                  Cash-Flow Warning: Day 4 Liquidity Pinch
-                </div>
-                <div style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
-                  Supplier payables are scheduled before Soundbox settlement arrives, creating a temporary deficit of <strong>₹12,400</strong>.
-                </div>
-                <button class="btn btn-secondary btn-sm" onclick="navigateToRoute('cashflow')">Open Cash-Flow Runway</button>
-              </div>
-            `;
-          }
+          const visualCardHtml = renderAssistantPayloadVisual(reply);
 
           // Build suggested actions pills
           const actions = reply.suggested_actions || [];
@@ -3968,8 +3950,96 @@
       } catch (e) {
         const thinking = document.getElementById("assistantThinkingBubble");
         if (thinking) thinking.remove();
-        showSiteToast("Processed query.");
+        console.error("Assistant query failed:", e);
+        if (stream) {
+          const errorMessage = document.createElement("div");
+          errorMessage.className = "voice-language-error";
+          errorMessage.setAttribute("role", "alert");
+          errorMessage.textContent = "I couldn't get an answer just now. Please try again.";
+          stream.appendChild(errorMessage);
+          stream.scrollTop = stream.scrollHeight;
+        }
+        showSiteToast("ActionMate could not answer. Please try again.");
       }
+    }
+
+    function renderAssistantPayloadVisual(reply) {
+      const payload = reply.structured_payload || {};
+      const intent = reply.detected_intent || "";
+      let title = "";
+      let records = [];
+      let formatValue = value => String(value);
+
+      if (intent === "STRATEGY_COMPARISON") {
+        title = "Estimated profit by strategy";
+        records = Object.entries(payload)
+          .filter(([, strategy]) => strategy && Number.isFinite(Number(strategy.profit)))
+          .map(([label, strategy]) => ({ label: label.replace(/_/g, " "), value: Number(strategy.profit) }));
+        formatValue = value => `₹${Number(value).toLocaleString("en-IN")}`;
+      } else if (intent === "PROFIT_ANALYSIS") {
+        title = "Profit margin by product";
+        records = (payload.high_margin_opportunities || [])
+          .filter(product => Number.isFinite(Number(product.gross_margin_pct)))
+          .map(product => ({ label: product.product_name, value: Number(product.gross_margin_pct) }));
+        formatValue = value => `${Number(value).toFixed(1)}% margin`;
+      } else if (intent === "INVENTORY_STATUS") {
+        title = "Products that need attention";
+        records = [
+          { label: "Low-stock risk", value: Number(payload.critical_stockouts_count) || 0 },
+          { label: "Reorder suggested", value: Number(payload.reorders_pending_count) || 0 },
+          { label: "Slow-moving stock", value: Number(payload.slow_moving_skus_count) || 0 }
+        ];
+        formatValue = value => `${value} products`;
+      } else if (intent === "LOCAL_DEMAND_TREND") {
+        title = "Published neighbourhood demand";
+        records = (payload.signals || [])
+          .filter(signal => !signal.privacy_suppressed && Number.isFinite(Number(signal.growth_rate_pct)))
+          .map(signal => ({ label: signal.product_category, value: Number(signal.growth_rate_pct) }));
+        formatValue = value => `+${Number(value).toFixed(1)}%`;
+      } else if (intent === "CAMPAIGN_PERFORMANCE" && payload.treatment_group && payload.holdout_group) {
+        title = "Offer conversion compared with no offer";
+        records = [
+          { label: "Received the offer", value: Number(payload.treatment_group.conversion_rate_pct) || 0 },
+          { label: "Did not receive it", value: Number(payload.holdout_group.conversion_rate_pct) || 0 }
+        ];
+        formatValue = value => `${Number(value).toFixed(1)}%`;
+      } else if (intent === "SALES_DROP_ANALYSIS" && Number.isFinite(Number(payload.sales_drop_pct))) {
+        title = "Reported sales change";
+        records = [{ label: "Change from the comparison period", value: Math.abs(Number(payload.sales_drop_pct)) }];
+        formatValue = value => `-${Number(value).toFixed(1)}%`;
+      } else if (intent === "CUSTOMER_INTELLIGENCE") {
+        title = "Customers to reconnect with";
+        records = [
+          { label: "All tracked customers", value: Number(payload.total_customers) || 0 },
+          { label: "Dormant or at risk", value: Number(payload.at_risk_count) || 0 }
+        ];
+        formatValue = value => `${value} customers`;
+      } else if (intent === "GUARDRAIL_STATUS" && Array.isArray(payload.rules)) {
+        title = "Business limits status";
+        const active = payload.rules.filter(rule => rule.is_active).length;
+        records = [
+          { label: "Active limits", value: active },
+          { label: "Switched off", value: payload.rules.length - active }
+        ];
+        formatValue = value => `${value} limits`;
+      }
+
+      records = records.filter(record => record.label && Number.isFinite(record.value) && record.value >= 0);
+      if (records.length === 0) return "";
+      const maximum = Math.max(...records.map(record => record.value), 1);
+      const rows = records.map(record => `
+        <div class="horizontal-chart-row" title="${escapeHtml(record.label)}: ${escapeHtml(formatValue(record.value))}">
+          <div class="horizontal-chart-label">${escapeHtml(record.label)}</div>
+          <div class="horizontal-chart-track" aria-hidden="true"><span style="width:${(record.value / maximum) * 100}%;background:#00BAF2"></span></div>
+          <strong class="horizontal-chart-value">${escapeHtml(formatValue(record.value))}</strong>
+        </div>
+      `).join("");
+      return `
+        <section class="chart-card" aria-label="${escapeHtml(title)}" style="margin-top: 12px;">
+          <h4 class="overview-visual-title">${escapeHtml(title)}</h4>
+          <div class="horizontal-chart" role="img" aria-label="${escapeHtml(title)}">${rows}</div>
+        </section>
+      `;
     }
 
     async function approveTaskFromAssistant() {
@@ -5135,6 +5205,18 @@ async function recalculateCampaignAudience() {
     if (elEmail) elEmail.textContent = `${emailCount} excluded`;
     if (elPhone) elPhone.textContent = `${phoneCount} excluded`;
 
+    renderHorizontalBarChart(
+      "campaignAudienceChart",
+      [
+        { label: "Can receive offer", value: Number(aud.eligible_count) || 0 },
+        { label: "Left out for safety", value: Number(aud.excluded_count) || 0 }
+      ],
+      "label",
+      "value",
+      value => `${value} customers`,
+      "#16A36A"
+    );
+
     showSiteToast(`Audience calculated: ${aud.eligible_count} eligible, ${aud.excluded_count} excluded.`);
   } catch (e) {
     console.error("Error evaluating audience:", e);
@@ -5565,6 +5647,23 @@ async function fetchApprovalsHistory() {
     const tbody = document.getElementById("approvalsHistoryTableBody");
     const badge = document.getElementById("apprLedgerCountBadge");
     if (badge) badge.textContent = `${list.length} decisions recorded`;
+    const decisionCounts = (Array.isArray(list) ? list : []).reduce((counts, approval) => {
+      const decision = String(approval.decision || "UNKNOWN").replace(/_/g, " ");
+      counts[decision] = (counts[decision] || 0) + 1;
+      return counts;
+    }, {});
+    if (currentApprData && currentApprData.current_status) {
+      const currentStatus = String(currentApprData.current_status).replace(/_/g, " ");
+      decisionCounts[`Current offer: ${currentStatus}`] = 1;
+    }
+    renderHorizontalBarChart(
+      "approvalDecisionChart",
+      Object.entries(decisionCounts).map(([label, value]) => ({ label, value })),
+      "label",
+      "value",
+      value => `${value} recorded`,
+      "#00BAF2"
+    );
     if (!tbody) return;
 
     if (!list || list.length === 0) {
@@ -5661,7 +5760,10 @@ async function refreshAuditTrail() {
   try {
     // 1. Fetch Timeline Stream
     const tlRes = await fetch("/api/audit/timeline");
-    const timeline = await tlRes.json();
+    if (!tlRes.ok) throw new Error(`Activity timeline could not be loaded (${tlRes.status}).`);
+    const timelineResponse = await tlRes.json();
+    if (!Array.isArray(timelineResponse.ledger)) throw new Error("Activity timeline response is missing its ledger.");
+    const timeline = timelineResponse.ledger;
     const streamContainer = document.getElementById("activityTimelineStream");
 
     if (streamContainer && timeline) {
@@ -5680,6 +5782,19 @@ async function refreshAuditTrail() {
     const res = await fetch("/api/activity");
     const logs = await res.json();
     const tbody = document.getElementById("activityTableBody");
+    const actionCounts = (Array.isArray(logs) ? logs : []).reduce((counts, log) => {
+      const action = String(log.action_type || "Other").replace(/_/g, " ");
+      counts[action] = (counts[action] || 0) + 1;
+      return counts;
+    }, {});
+    renderHorizontalBarChart(
+      "activityActionChart",
+      Object.entries(actionCounts).map(([label, value]) => ({ label, value })),
+      "label",
+      "value",
+      value => `${value} actions`,
+      "#00BAF2"
+    );
     if (!tbody) return;
 
     tbody.innerHTML = logs.slice(0, 40).map(l => `
@@ -5995,7 +6110,7 @@ async function refreshAuditTrail() {
       const container = document.getElementById(elementId);
       if (!container) return;
       if (!Array.isArray(records) || records.length === 0) {
-        container.innerHTML = '<div class="chart-empty-state">No product data is available for this chart.</div>';
+        container.innerHTML = '<div class="chart-empty-state">No information is available for this chart yet.</div>';
         return;
       }
 
@@ -6418,6 +6533,14 @@ async function refreshAuditTrail() {
           })
         });
         const sim = await res.json();
+        renderHorizontalBarChart(
+          "strategyComparisonChart",
+          Array.isArray(sim.strategies_simulated) ? sim.strategies_simulated : [],
+          "strategy_name",
+          "net_contribution_inr",
+          value => `₹${Number(value).toLocaleString("en-IN")}`,
+          "#16A36A"
+        );
 
         // Verdict Banner
         if (verdict && sim.recommended_strategy) {
@@ -6504,6 +6627,14 @@ async function refreshAuditTrail() {
         ]);
         const opps = await oppRes.json();
         const sum = await sumRes.json();
+        renderHorizontalBarChart(
+          "opportunityImpactChart",
+          Array.isArray(opps) ? opps : [],
+          "title",
+          "financial_impact_inr",
+          value => `₹${Number(value).toLocaleString("en-IN")}`,
+          "#16A36A"
+        );
 
         // Populate summary
         const elVal = document.getElementById("valOppsValue");
@@ -6558,6 +6689,19 @@ async function refreshAuditTrail() {
       try {
         const res = await fetch("/api/guardrails");
         const rules = await res.json();
+        const activeRuleCount = Array.isArray(rules) ? rules.filter(rule => rule.is_active).length : 0;
+        const inactiveRuleCount = Array.isArray(rules) ? rules.length - activeRuleCount : 0;
+        renderHorizontalBarChart(
+          "guardrailStatusChart",
+          [
+            { label: "Active limits", value: activeRuleCount },
+            { label: "Switched off", value: inactiveRuleCount }
+          ],
+          "label",
+          "value",
+          value => `${value} limits`,
+          "#16A36A"
+        );
         const tbody = document.getElementById("tbodyGuardrails");
         if (tbody && Array.isArray(rules)) {
           tbody.innerHTML = rules.map(r => {
@@ -6659,7 +6803,23 @@ async function refreshAuditTrail() {
             <div style="font-size: 12px; color: var(--text-muted); background: #f8fafc; padding: 8px 12px; border-radius: 6px;">
               <strong>Methodological Disclosure:</strong> ${expData.methodological_disclosure}
             </div>
+            <section aria-labelledby="bvConversionChartHeading" style="margin-top: 16px;">
+              <h4 class="overview-visual-title" id="bvConversionChartHeading">Did the offer change buying behavior?</h4>
+              <p class="overview-visual-subtitle">Customers who received the offer compared with customers who did not</p>
+              <div id="bvConversionChart" class="horizontal-chart" role="img" aria-label="Offer and holdout customer conversion rates"></div>
+            </section>
           `;
+          renderHorizontalBarChart(
+            "bvConversionChart",
+            [
+              { label: "Received the offer", value: Number(t.conversion_rate_pct) || 0 },
+              { label: "Did not receive it", value: Number(h.conversion_rate_pct) || 0 }
+            ],
+            "label",
+            "value",
+            value => `${Number(value).toFixed(1)}%`,
+            "#00BAF2"
+          );
         }
 
         // Render Scorecards with Provenance Badges
@@ -7193,6 +7353,15 @@ async function refreshAuditTrail() {
 
         const tbody = document.getElementById("bazaarDemandSignalsTbody");
         if (tbody && Array.isArray(pulseData.signals)) {
+          const publishedSignals = pulseData.signals.filter(signal => !signal.privacy_suppressed);
+          renderHorizontalBarChart(
+            "bazaarMomentumChart",
+            publishedSignals,
+            "product_category",
+            "growth_rate_pct",
+            value => `+${Number(value).toFixed(1)}%`,
+            "#16A36A"
+          );
           tbody.innerHTML = pulseData.signals.map(sig => {
             const isSuppressed = sig.privacy_suppressed;
             const statusBadge = isSuppressed
