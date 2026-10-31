@@ -35,15 +35,15 @@ class TaskReportingService:
             "merchant_id": "MERCH-001",
             "original_request": "My sales have dropped this week. Help me bring customers back.",
             "detected_intent": "SALES_DROP_RECOVERY",
-            "current_state": "VERIFIED",
-            "created_at": "2026-10-31T02:00:00+00:00",
+            "current_state": "NOT_FOUND",
+            "created_at": None,
             "duration_seconds": 228.0
         }
 
         # 2. Fetch Merchant
         cur.execute("SELECT * FROM merchants WHERE id = ?", (task.get("merchant_id", "MERCH-001"),))
         merch_row = cur.fetchone()
-        merchant_name = merch_row["store_name"] if merch_row and "store_name" in merch_row.keys() else "Sharma Commercial & Industrial Supplies"
+        merchant_name = merch_row["store_name"] if merch_row and "store_name" in merch_row.keys() else "Sharma Family Grocery"
 
         # 3. Fetch Campaign Draft
         cur.execute("""
@@ -129,70 +129,65 @@ class TaskReportingService:
             merchant_name=merchant_name,
             original_request=task.get("original_request", "My sales have dropped this week. Help me bring customers back."),
             business_context={
-                "merchant_category": "Quick Service Restaurant / Retail",
+                "merchant_category": "Neighborhood Grocery",
                 "soundbox_device": "Paytm Soundbox 4G (Active)",
                 "payment_modes": ["UPI QR", "Cards", "Soundbox Voice Alerts"],
-                "data_mode": "Fictional Demo Merchant Data (DEMO)"
+                "data_mode": "Simulated grocery receipts and inventory (DEMO)"
             },
             sales_findings={
-                "weekly_sales_trend": "Simulated grocery sales declined from ₹412k last week to ₹300k this week (-27.2%)",
-                "repeat_customer_trend": "Simulated repeat-basket share moved from 37% to 24%",
-                "anomalous_window": "The larger sales decline appears from Thursday through Sunday; the cause is unknown",
-                "identified_revenue_leakage": "₹20,900 estimated sales at risk; not confirmed lost profit"
+                "weekly_sales_trend": "Simulated receipts: ₹412k last week and ₹300k this week (-27.2%).",
+                "repeat_customer_trend": "Repeat-basket share changed from 37% to 24% (-13 percentage points).",
+                "anomalous_window": "No cause or specific time window has been established.",
+                "identified_revenue_leakage": "₹20,900 estimated at-risk revenue; not confirmed lost profit."
             },
             ai_interpretation={
                 "detected_intent": task.get("detected_intent", "SALES_DROP_RECOVERY"),
-                "root_cause": "Cause is not established by the simulated receipts; 46 regular shoppers are flagged for review",
+                "root_cause": "Unknown; 46 regular grocery shoppers are flagged for review.",
                 "strategy_selected": "Targeted WhatsApp & Soundbox QR Re-engagement Campaign",
                 "autonomy_category": "CATEGORY_B (Requires Human Approval for Outbound Messages)"
             },
             recommended_campaign={
-                "campaign_name": draft.get("campaign_name", "Neighborhood Grocery Repeat-Basket Recovery"),
-                "objective": draft.get("business_objective", "Recover declining repeat customer volume"),
+                "campaign_name": draft.get("campaign_name", "Grocery repeat-visit offer"),
+                "objective": draft.get("business_objective", "Review grocery shoppers with declining visit frequency"),
                 "target_segment": draft.get("target_customer_segment", "DECLINING_FREQUENCY"),
-                "promotional_offer": "Test ₹50 off grocery baskets above ₹499 with code GROCERY50",
+                "promotional_offer": "₹50 off grocery baskets above ₹499 with code GROCERY50",
                 "max_liability_cap_inr": 3600.0,
                 "channels": ["WhatsApp", "SMS", "Paytm Soundbox Voice Announcement"]
             },
             approval_decision={
-                "status": approval.get("decision", "APPROVED") if approval else "APPROVED",
-                "approved_by": approval.get("approved_by", "Ramesh Sharma (Merchant Owner)") if approval else "Ramesh Sharma",
+                "status": approval.get("decision", "PENDING") if approval else "PENDING",
+                "approved_by": approval.get("approved_by") if approval else None,
                 "approver_role": "MERCHANT_OWNER",
-                "max_budget_authorized_inr": approval.get("max_budget_authorized_inr", 3600.0) if approval else 3600.0,
-                "auth_signature": (approval.get("auth_signature") or "HMAC-SHA256-VERIFIED")[:16] + "..." if approval else "VERIFIED",
-                "decided_at": approval.get("decided_at") if approval else now_utc
-            } if approval else {
-                "status": "APPROVED",
-                "approved_by": "Ramesh Sharma (Merchant Owner)",
-                "auth_signature": "HMAC-SHA256-VALID",
-                "max_budget_authorized_inr": 3600.0
+                "max_budget_authorized_inr": approval.get("max_budget_authorized_inr") if approval else None,
+                "auth_signature": (approval.get("auth_signature") or "")[:16] + "..." if approval else None,
+                "decided_at": approval.get("decided_at") if approval else None
             },
             execution_result={
-                "execution_id": draft.get("execution_id", "EXEC-SIM-1042"),
-                "status": "COMPLETED",
-                "total_attempted": exec_res.get("total_attempted", sum(status_counts.values()) or 43),
-                "delivered_count": status_counts.get("DELIVERED", 40),
-                "dnd_suppressed_count": status_counts.get("DND_SUPPRESSED", 3),
+                "execution_id": draft.get("execution_id"),
+                "status": exec_res.get("status", "NOT_EXECUTED"),
+                "total_attempted": exec_res.get("total_attempted", sum(status_counts.values())),
+                "delivered_count": status_counts.get("DELIVERED", 0),
+                "dnd_suppressed_count": status_counts.get("DND_SUPPRESSED", 0),
                 "failed_count": status_counts.get("FAILED", 0),
                 "mode": "SIMULATED_DEMO",
-                "channels_dispatched": ["WhatsApp", "SMS", "Paytm Soundbox"]
+                "channels_dispatched": exec_res.get("channels", [])
             },
             verification_result={
-                "verification_id": verification.get("verification_id", f"VERIF-{task_id}") if verification else f"VERIF-{task_id}",
-                "status": verification.get("verification_status", "VERIFIED") if verification else "VERIFIED",
-                "checks_passed_count": len(json.loads(verification.get("verified_checks_json") or "[]")) if verification else 7,
+                "verification_id": verification.get("verification_id") if verification else None,
+                "status": verification.get("verification_status", "PENDING") if verification else "PENDING",
+                "checks_passed_count": len(json.loads(verification.get("verified_checks_json") or "[]")) if verification else 0,
                 "checks_failed_count": len(json.loads(verification.get("failed_checks_json") or "[]")) if verification else 0,
-                "verified_at": verification.get("created_at") if verification else now_utc
+                "verified_at": verification.get("created_at") if verification else None
             },
             time_taken_seconds=task.get("duration_seconds") or 228.0,
             human_involvement={
                 "required": True,
-                "approval_action": "Approved promotional terms & set liability ceiling ₹3,600",
+                "approval_action": "Review promotional terms and set a liability ceiling",
                 "merchant_edits": 0,
                 "interventions": "Single review gate before customer dispatch"
             },
             relevant_kpi_contribution={
-                "task_completion_contribution": "Eligible task verified completed (100%)",
+                "task_completion_contribution": "Dispatch simulation complete; campaign impact is pending.",
                 "resolution_time_contribution": f"{round((task.get('duration_seconds') or 228.0)/60.0, 1)} min resolution time",
                 "approval_compliance_contribution": "100% compliant with Category B risk policy",
                 "operating_cost_contribution": "₹3.10 estimated demo cost"
@@ -206,13 +201,16 @@ class TaskReportingService:
     def export_report_markdown(task_id: str = "WF-REC-1042") -> str:
         """Formats the full task report as GitHub-flavored Markdown for export/download."""
         rep = TaskReportingService.generate_task_report(task_id)
+        report_status = (rep.verification_result or {}).get("status", "PENDING")
+        authorized_budget = rep.approval_decision.get("max_budget_authorized_inr")
+        budget_text = f"₹{authorized_budget:,.2f}" if authorized_budget is not None else "Not approved"
 
         md = f"""# Paytm AI ActionMate — Executive Task Audit Report
 **Report ID:** `{rep.report_id}`  
 **Task ID:** `{rep.task_id}`  
 **Merchant:** {rep.merchant_name} (`{rep.merchant_id}`)  
 **Generated At:** {rep.generated_at} (UTC)  
-**Status:** **VERIFIED COMPLETED** (DEMO / SIMULATED)
+**Status:** **{report_status}**
 
 ---
 
@@ -245,7 +243,7 @@ class TaskReportingService:
 ## 4. Human Approval Gate
 - **Decision:** **{rep.approval_decision.get('status')}**
 - **Approved By:** {rep.approval_decision.get('approved_by')} ({rep.approval_decision.get('approver_role')})
-- **Authorized Budget:** ₹{rep.approval_decision.get('max_budget_authorized_inr'):,.2f}
+- **Authorized Budget:** {budget_text}
 - **Cryptographic Signature:** `{rep.approval_decision.get('auth_signature')}`
 
 ---

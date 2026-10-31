@@ -14,25 +14,25 @@ def generate_email_mime(customer_name: str, recipient_email: str, discount_code:
     """Generates an RFC-822 compliant MIME email object with full deliverability headers."""
     msg = MIMEMultipart("alternative")
     msg["Subject"] = f"Exclusive: ₹{int(discount_amount)} OFF your next visit at {store_name}!"
-    msg["From"] = f"{store_name} via DealPilot AI <offers@sharmasweets.in>"
+    msg["From"] = f"{store_name} via Paytm AI ActionMate <offers@sharmafamilygrocery.example.test>"
     msg["To"] = f"{customer_name} <{recipient_email}>"
     msg["Date"] = formatdate(localtime=True)
-    msg["Message-ID"] = make_msgid(domain="sharmasweets.in")
+    msg["Message-ID"] = make_msgid(domain="sharmafamilygrocery.example.test")
     msg["X-Campaign-ID"] = f"DEALPILOT-RET-{discount_code}"
     msg["X-Mailer"] = "DealPilot Autonomous AI Engine v2.4"
-    msg["List-Unsubscribe"] = "<mailto:unsubscribe@sharmasweets.in?subject=unsubscribe>"
+    msg["List-Unsubscribe"] = "<mailto:unsubscribe@sharmafamilygrocery.example.test?subject=unsubscribe>"
 
     # Plain text version
     plain_text = f"""Hi {customer_name},
 
-We missed seeing you at {store_name}!
-Here are the details of your grocery offer:
+We would love to see you again at {store_name}. Here is the proposed grocery offer:
 
 PROMO CODE: {discount_code}
-OFFER: ₹{int(discount_amount)} OFF on orders above ₹{int(min_order)}
-VALIDITY: Please check the offer dates before visiting.
-HOW TO REDEEM: Show the code at the counter when paying.
+OFFER: ₹{int(discount_amount)} OFF on grocery baskets above ₹{int(min_order)}
+VALIDITY: Check the merchant's current offer terms before use.
+HOW TO REDEEM: Enter the code at checkout, subject to owner approval and offer availability.
 
+Sharma Family Grocery, New Delhi.
 To unsubscribe, reply with 'STOP'.
 """
 
@@ -64,7 +64,7 @@ To unsubscribe, reply with 'STOP'.
     <div class="body-content">
       <h2 style="font-size: 18px; margin-top: 0;">Hi {customer_name},</h2>
       <p style="font-size: 14.5px; line-height: 1.6; color: #334155;">
-        We noticed you haven't visited {store_name} recently. Here is a grocery offer for your next eligible basket.
+        Enjoy a proposed grocery offer on your next basket. Check the offer terms before using this code.
       </p>
       <div class="coupon-card">
         <div class="coupon-code">{discount_code}</div>
@@ -72,11 +72,11 @@ To unsubscribe, reply with 'STOP'.
         <p style="font-size: 12px; color: #64748B; margin-bottom: 0;">Scan Paytm QR code at our counter to auto-apply</p>
       </div>
       <p style="font-size: 13.5px; color: #64748B;">
-        Please check the offer dates and terms at the store. Cannot be combined with other offers.
+        Valid until this Sunday midnight. Cannot be combined with other offers.
       </p>
     </div>
     <div class="footer">
-      {store_name} · Powered by Paytm AI ActionMate<br>
+      Sharma Family Grocery · Powered by Paytm AI ActionMate<br>
       You are receiving this because you transacted with us previously. <a href="#unsubscribe" style="color: #64748B;">Unsubscribe</a>
     </div>
   </div>
@@ -93,8 +93,8 @@ To unsubscribe, reply with 'STOP'.
         "raw_mime": msg.as_string()
     }
 
-def execute_batch_dispatch(workflow_id: str, limit: int = 240) -> Dict[str, Any]:
-    """Simulates real dispatch of emails to the 240 cohort and logs each in the dispatches table."""
+def execute_batch_dispatch(workflow_id: str, limit: int = 46) -> Dict[str, Any]:
+    """Simulates dispatch to the eligible grocery audience and logs each recipient."""
     conn = get_connection()
     cur = conn.cursor()
 

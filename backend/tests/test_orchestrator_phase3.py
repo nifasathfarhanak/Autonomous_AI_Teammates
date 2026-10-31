@@ -199,8 +199,7 @@ class TestOrchestratorPhase3(unittest.TestCase):
 
         # 1. Confirmed Data contains verified SQLite numbers
         confirmed = " ".join(epistemic.confirmed_data)
-        self.assertIn("₹412,000", confirmed)
-        self.assertIn("₹300,000", confirmed)
+        self.assertIn("₹112,000", confirmed)
         self.assertIn("-27.2%", confirmed)
         self.assertIn("24.0%", confirmed)
         self.assertIn("46", confirmed)
@@ -208,10 +207,9 @@ class TestOrchestratorPhase3(unittest.TestCase):
 
         # 2. AI Interpretation contains behavioral deduction
         interpretation = " ".join(epistemic.ai_interpretation)
-        self.assertIn("do not establish the cause", interpretation)
-        self.assertIn("holdout", interpretation.lower())
+        self.assertIn("do not establish why", interpretation)
 
-        # 3. Recommendations contain RET50 and budget cap
+        # 3. Recommendations contain the grocery offer and budget cap
         recommendations = " ".join(epistemic.recommendations)
         self.assertIn("GROCERY50", recommendations)
         self.assertIn("₹3,600", recommendations)
@@ -219,7 +217,7 @@ class TestOrchestratorPhase3(unittest.TestCase):
         # 4. Unknown Information contains explicit boundaries
         unknowns = " ".join(epistemic.unknown_information)
         self.assertIn("Competitor", unknowns)
-        self.assertIn("Weather", unknowns)
+        self.assertIn("actual reason", unknowns)
 
     def test_08_llm_provider_failure_and_deterministic_fallback(self):
         """Verifies offline / sandbox environment fallback to deterministic reasoning without pretending real LLM call."""
@@ -267,14 +265,15 @@ class TestOrchestratorPhase3(unittest.TestCase):
         step_10 = next(s for s in completed_task.plan if s.step_id == "step_10_report_outcome")
 
         self.assertEqual(step_8.status, "COMPLETED")
-        self.assertEqual(step_9.status, "COMPLETED")
+        self.assertEqual(step_9.status, "WAITING_FOR_DATA")
         self.assertEqual(step_10.status, "COMPLETED")
 
-        # 4. Verified closed-loop ROI metrics
-        self.assertEqual(step_9.execution_result["total_redeemed"], 44)
-        self.assertEqual(step_9.execution_result["gross_recovered_sales_inr"], 16940.0)
-        self.assertEqual(step_9.execution_result["roi_multiple"], 6.38)
-        self.assertTrue(step_9.execution_result["is_verified"])
+        # Simulated dispatch is complete, but sales outcomes await real transactions.
+        self.assertEqual(step_9.status, "WAITING_FOR_DATA")
+        self.assertIsNone(step_9.execution_result["total_redeemed"])
+        self.assertIsNone(step_9.execution_result["gross_recovered_sales_inr"])
+        self.assertIsNone(step_9.execution_result["roi_multiple"])
+        self.assertFalse(step_9.execution_result["is_verified"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -61,8 +61,11 @@ class TestDealPilotWorkflow(unittest.TestCase):
         arun_opp = next((o for o in opps if "Arun Kumar" in o["customer"]["customer_name"]), None)
         self.assertIsNotNone(arun_opp)
         self.assertEqual(arun_opp["category"], "UNANSWERED_QUOTATION")
-        self.assertEqual(arun_opp["estimated_opportunity_value"], 65000.0)
-        self.assertGreaterEqual(arun_opp["recovery_score"], 85)
+        self.assertEqual(arun_opp["estimated_opportunity_value"], 650.0)
+        self.assertEqual(
+            arun_opp["recovery_score"],
+            sum(factor["points"] for factor in arun_opp["score_breakdown"].values())
+        )
 
     def test_stage_3_customer_research_agent(self):
         """Test Stage 3: Agent 2 Customer Research report with verified facts vs missing info."""
@@ -82,8 +85,8 @@ class TestDealPilotWorkflow(unittest.TestCase):
         
         self.assertEqual(strat["strategy_type"], "QUOTATION_REMINDER")
         self.assertEqual(strat["selected_tone"], "CONSULTATIVE_PROFESSIONAL")
-        self.assertIn("Quotation Value: ₹65,000", strat["email_body"])
-        self.assertEqual(strat["potential_commercial_value"], 65000.0)
+        self.assertIn("Quotation Value: ₹650", strat["email_body"])
+        self.assertEqual(strat["potential_commercial_value"], 650.0)
 
         # Test human editing
         new_subj = "Updated: Following up on your custom laboratory quotation — Arun Kumar"
@@ -138,14 +141,15 @@ class TestDealPilotWorkflow(unittest.TestCase):
         conn.commit()
         conn.close()
 
-    def test_verified_closed_loop_roi_calculation(self):
-        """Test verified ROI calculation based on transaction attribution."""
+    def test_simulated_dispatch_does_not_invent_roi(self):
+        """A simulated campaign without recorded purchases must not produce verified ROI."""
         roi = simulate_and_verify_roi("WF-REC-1042", redemption_count=44, avg_ticket_inr=385.0)
-        self.assertEqual(roi["gross_recovered_sales_inr"], 16940.0)
-        self.assertEqual(roi["total_discounts_paid_inr"], 2200.0)
-        self.assertEqual(roi["net_recovered_profit_inr"], 14644.0)
-        self.assertEqual(roi["roi_multiple"], 6.38)
-        self.assertTrue(roi["is_verified"])
+        self.assertIsNone(roi["redemption_count"])
+        self.assertIsNone(roi["gross_recovered_sales_inr"])
+        self.assertIsNone(roi["net_recovered_profit_inr"])
+        self.assertIsNone(roi["roi_multiple"])
+        self.assertFalse(roi["is_verified"])
+        self.assertEqual(roi["outcome_status"], "AWAITING_REAL_POST_CAMPAIGN_TRANSACTIONS")
 
 if __name__ == "__main__":
     unittest.main()

@@ -89,7 +89,7 @@ class DecisionTwinService:
         }
 
         # -------------------------------------------------------------
-        # Strategy B: Targeted Promotional Incentive (Code RET50)
+        # Strategy B: Targeted Grocery Basket Offer (Code GROCERY50)
         # -------------------------------------------------------------
         conv_rate_b = 0.233 # 23.3% conversion
         orders_b = int(round(audience_size * conv_rate_b)) # ~10 orders

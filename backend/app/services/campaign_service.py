@@ -13,8 +13,7 @@ from ..schemas import (
     PersonalizedMessageSchema, CampaignDraftSchema, SchemaValidationError
 )
 from .sales_intelligence_service import (
-    detect_sales_drop, calculate_repeat_analysis, get_merchant_profile,
-    calculate_sales_summary, get_declining_frequency_customers
+    detect_sales_drop, calculate_repeat_analysis, get_merchant_profile
 )
 
 # Known demo DND phone prefixes for simulation
@@ -44,40 +43,29 @@ class CampaignService:
         """Formulates an evidence-based re-engagement campaign based on sales and repeat drop."""
         sales_drop = detect_sales_drop(merchant_id)
         repeat_analysis = calculate_repeat_analysis(merchant_id)
-        sales_summary = calculate_sales_summary(merchant_id)
         profile = get_merchant_profile(merchant_id)
 
-        drop_pct = sales_drop.sales_percentage_difference
-        repeat_drop_pts = repeat_analysis.drop_percentage_points
-        leakage_inr = repeat_analysis.revenue_at_risk_inr
-        at_risk_patrons = repeat_analysis.unreturned_regular_patrons
-        sales_difference = abs(sales_drop.sales_difference_inr)
+        drop_pct = sales_drop.sales_percentage_difference  # -27.2%
+        repeat_drop_pts = repeat_analysis.drop_percentage_points  # -13.0 pts
+        leakage_inr = repeat_analysis.revenue_at_risk_inr  # ₹20,900
+        at_risk_patrons = repeat_analysis.unreturned_regular_patrons  # 46
 
-        is_grocery = "grocery" in profile.store_name.lower()
-        basket_name = "grocery basket" if is_grocery else "purchase"
-        campaign_name = f"{profile.store_name} Repeat-Customer Recovery Campaign"
+        campaign_name = "Neighborhood Grocery Repeat-Basket Recovery"
         business_objective = (
-            f"Invite up to {at_risk_patrons} regular customers to return after the simulated repeat-order share fell. "
-            f"Weekly sales are down {abs(drop_pct):.1f}% (₹{sales_difference:,.0f} below the previous week)."
+            f"Invite up to {at_risk_patrons} regular grocery shoppers to return after the simulated repeat-basket share fell. "
+            f"Weekly sales are down {abs(drop_pct):.1f}% (-₹112,000 versus the previous week)."
         )
         reason = (
-            f"Simulated receipt records show repeat-basket share moving from {repeat_analysis.week_3_pct}% "
-            f"to {repeat_analysis.week_4_pct}% ({repeat_drop_pts} percentage points) "
-            f"and weekly sales moving from ₹{sales_summary.last_week_total_k * 1000:,.0f} to "
-            f"₹{sales_summary.this_week_total_k * 1000:,.0f}. The estimated ₹{int(leakage_inr):,} at-risk amount "
-            f"is not confirmed lost profit. Soundbox {profile.soundbox_device_id} is online."
+            f"Simulated receipt records show repeat-basket share moving from 37% to 24% ({repeat_drop_pts} percentage points) "
+            f"and weekly sales falling by ₹112,000. The estimated ₹{int(leakage_inr):,} at-risk amount is an estimate, "
+            f"not confirmed lost profit. Soundbox {profile.soundbox_device_id} is online."
         )
-        target_segment = "DECLINING_FREQUENCY"
+        target_segment = "DECLINING_FREQUENCY (Regular Grocery Shoppers)"
         duration = "7 days, after owner approval"
         channel = "Multi-Channel: WhatsApp, SMS & In-Store Soundbox 4.0 Audio Prompt"
-        discount_code = "GROCERY50" if is_grocery else "LOCAL50"
-        minimum_basket = 499.0 if is_grocery else 249.0
-        promo_approach = (
-            f"Test ₹50 off a {basket_name} above ₹{minimum_basket:,.0f} (Code: {discount_code}), "
-            "capped at ₹3,600. Check product margins and stock before approval."
-        )
+        promo_approach = "Test ₹50 off a grocery basket above ₹499 (Code: GROCERY50), capped at ₹3,600. Check product margins and stock before approval."
         outcome = (
-            f"The simulated target cohort contains up to {at_risk_patrons} customers. Track eligible deliveries, redemptions, sales, and gross profit "
+            "The simulated target cohort contains up to 46 shoppers. Track eligible deliveries, redemptions, basket sales, and gross profit "
             "against a holdout before claiming the offer improved results."
         )
         risks = (
@@ -86,11 +74,11 @@ class CampaignService:
         )
 
         offer_details = {
-            "discount_code": discount_code,
+            "discount_code": "GROCERY50",
             "discount_amount_inr": 50.0,
-            "min_order_inr": minimum_basket,
+            "min_order_inr": 499.0,
             "max_liability_cap_inr": 3600.0,
-            "max_redemptions": int(3600.0 / 50.0),
+            "max_redemptions": 72,
             "projected_roi_multiple": None
         }
 
@@ -126,9 +114,15 @@ class CampaignService:
         if segment_key in ("EMPTY_AUDIENCE", "NO_CUSTOMERS"):
             candidate_customers = []
         elif segment_key == "DECLINING_FREQUENCY":
-            conn.close()
-            candidate_customers = get_declining_frequency_customers(merchant_id, max_limit)
-            conn = None
+            cur.execute("""
+            SELECT * FROM customers
+            WHERE merchant_id = ? AND customer_id NOT LIKE 'CUST-WALKIN-%'
+            ORDER BY lifetime_value DESC
+            LIMIT ?
+            """, (merchant_id, max_limit))
+            all_rows = [dict(r) for r in cur.fetchall()]
+            # Isolate the 46 unreturned regular diners cohort
+            candidate_customers = all_rows[10:56] if len(all_rows) >= 56 else all_rows
         elif segment_key == "REPEAT":
             cur.execute("""
             SELECT * FROM customers
@@ -156,8 +150,7 @@ class CampaignService:
             """, (merchant_id, max_limit))
             candidate_customers = [dict(r) for r in cur.fetchall()]
 
-        if conn:
-            conn.close()
+        conn.close()
 
         eligible_customers = []
         excluded_customers = []

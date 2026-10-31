@@ -1124,7 +1124,7 @@ def _migrate_primary_grocery_demo(cur):
     """)
     cur.execute("SELECT version FROM demo_seed_state WHERE seed_name = 'primary_grocery'")
     row = cur.fetchone()
-    if row and row[0] >= 3:
+    if row and row[0] >= 4:
         return
 
     _seed_100_customers(cur)
@@ -1144,7 +1144,6 @@ def _migrate_primary_grocery_demo(cur):
        OR order_id LIKE 'ORD-GROCERY-%'
        OR order_id = 'ORD-CUST-1001-01'
     """)
-    cur.execute("DELETE FROM customers WHERE merchant_id = 'MERCH-001' AND customer_id LIKE 'CUST-WALKIN-%'")
     cur.execute("DELETE FROM quotations WHERE quotation_id IN ('QUOT-1001', 'QUOT-1002', 'QUOT-1003', 'QUOT-1004')")
     cur.execute("DELETE FROM customer_interactions WHERE interaction_id IN ('INT-1001', 'INT-1002', 'INT-1003', 'INT-1004')")
     cur.execute("DELETE FROM merchant_inventory WHERE merchant_id = 'MERCH-001' AND inventory_id LIKE 'INV-00%'")
@@ -1155,6 +1154,7 @@ def _migrate_primary_grocery_demo(cur):
     cur.execute("""
     UPDATE workflows
     SET title = 'Bring back regular grocery shoppers',
+        current_state = 'AWAITING_APPROVAL',
         detected_leakage_inr = 20900.0,
         target_cohort_count = 46,
         discount_code = 'GROCERY50',
@@ -1170,11 +1170,12 @@ def _migrate_primary_grocery_demo(cur):
         json.dumps({
             "event_type": "TELEMETRY_ANOMALY_REPEAT_PURCHASE_DROP",
             "soundbox_device_id": "SB-4G-DEL-9842",
-            "drop_percentage": 18.4,
+            "sales_drop_pct": -27.2,
+            "repeat_share_change_points": -13.0,
             "revenue_leakage_inr": 20900.0,
             "missing_patrons_count": 46,
             "target_dormant_cohort_size": 46,
-            "period": "Recent grocery visits"
+            "period": "Recent simulated grocery receipts"
         }),
         json.dumps({
             "discount_code": "GROCERY50",
@@ -1190,6 +1191,19 @@ def _migrate_primary_grocery_demo(cur):
         })
     ))
     cur.execute("""
+    UPDATE approvals
+    SET approval_status = 'INVALID'
+    WHERE workflow_id = 'WF-REC-1042' AND approval_status = 'VALID'
+    """)
+    cur.execute("""
+    UPDATE roi_metrics
+    SET total_targeted = 0, total_delivered = 0, total_redeemed = 0,
+        gross_recovered_sales_inr = 0, total_discounts_paid_inr = 0,
+        net_recovered_profit_inr = 0, roi_multiple = 0, is_verified = 0,
+        last_updated_at = CURRENT_TIMESTAMP
+    WHERE workflow_id = 'WF-REC-1042'
+    """)
+    cur.execute("""
     UPDATE recovery_campaigns
     SET title = CASE campaign_id
         WHEN 'CAMP-2026-SEP-01' THEN 'Grocery basket repeat-visit offer'
@@ -1201,7 +1215,7 @@ def _migrate_primary_grocery_demo(cur):
     """)
     cur.execute("""
     INSERT INTO demo_seed_state (seed_name, version)
-    VALUES ('primary_grocery', 3)
+    VALUES ('primary_grocery', 4)
     ON CONFLICT(seed_name) DO UPDATE SET version = excluded.version
     """)
 
@@ -1315,31 +1329,32 @@ def seed_enterprise_data(conn):
         anomaly_payload = {
             "event_type": "TELEMETRY_ANOMALY_REPEAT_PURCHASE_DROP",
             "soundbox_device_id": "SB-4G-DEL-9842",
-            "drop_percentage": 18.4,
+            "sales_drop_pct": -27.2,
+            "repeat_share_change_points": -13.0,
             "revenue_leakage_inr": 20900.0,
             "missing_patrons_count": 46,
-            "target_dormant_cohort_size": 240,
-            "period": "Thursday & Friday Lunch Window"
+            "target_dormant_cohort_size": 46,
+            "period": "Recent simulated grocery receipts"
         }
         strategy_payload = {
-            "discount_code": "RET50",
+            "discount_code": "GROCERY50",
             "discount_amount_inr": 50.0,
-            "min_order_inr": 249.0,
+            "min_order_inr": 499.0,
             "max_liability_cap_inr": 3600.0,
             "expected_redemption_rate_pct": 18.2,
             "expected_gross_sales_inr": 28500.0
         }
         messages_payload = {
-            "en": "Hi [Customer Name]! We miss you at Sharma Sweets. Enjoy ₹50 OFF on your next order above ₹249 this weekend with code RET50 on Paytm Soundbox / QR. Valid till Sunday midnight!",
-            "hi": "नमस्ते [ग्राहक का नाम]! शर्मा स्वीट्स में आपकी कमी महसूस हुई। इस वीकेंड पेटीएम QR पर कोड RET50 के साथ ₹249 से ऊपर के ऑर्डर पर ₹50 की छूट पाएं। रविवार मध्यरात्रि तक वैध!"
+            "en": "Hi [Customer Name]! Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.",
+            "hi": "नमस्ते [ग्राहक का नाम]! शर्मा फैमिली ग्रोसरी में ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।"
         }
         cur.execute("""
         INSERT INTO workflows (id, merchant_id, title, workflow_type, current_state,
                                detected_leakage_inr, target_cohort_count, discount_code,
                                discount_amount_inr, min_order_inr, max_liability_cap_inr,
                                anomaly_payload, strategy_payload, messages_payload)
-        VALUES ('WF-REC-1042', 'MERCH-001', 'Recover 240 Dormant Repeat Diners', 'REVENUE_RECOVERY',
-                'AWAITING_APPROVAL', 20900.0, 240, 'RET50', 50.0, 249.0, 3600.0,
+        VALUES ('WF-REC-1042', 'MERCH-001', 'Bring back regular grocery shoppers', 'REVENUE_RECOVERY',
+                'AWAITING_APPROVAL', 20900.0, 46, 'GROCERY50', 50.0, 499.0, 3600.0,
                 ?, ?, ?)
         """, (json.dumps(anomaly_payload), json.dumps(strategy_payload), json.dumps(messages_payload)))
 
@@ -1347,7 +1362,7 @@ def seed_enterprise_data(conn):
     INSERT OR IGNORE INTO roi_metrics (workflow_id, total_targeted, total_delivered, total_redeemed,
                             gross_recovered_sales_inr, total_discounts_paid_inr,
                             total_execution_cost_inr, net_recovered_profit_inr, roi_multiple, is_verified)
-    VALUES ('WF-REC-1042', 240, 0, 0, 0.0, 0.0, 96.0, 0.0, 0.0, 0)
+    VALUES ('WF-REC-1042', 46, 0, 0, 0.0, 0.0, 96.0, 0.0, 0.0, 0)
     """)
 
     # Seed Historical Recovery Campaigns

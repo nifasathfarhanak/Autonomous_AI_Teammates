@@ -276,7 +276,6 @@ class TestPhase9VoiceAndBazaar(unittest.TestCase):
             ("GET", "/api/bazaar/pulse?neighbourhood_id=NEIGHBOURHOOD-JP-01", None),
             ("GET", "/api/bazaar/network?neighbourhood_id=NEIGHBOURHOOD-JP-01", None),
             ("GET", "/api/bazaar/opportunities?merchant_id=MERCH-002", None),
-            ("POST", "/api/voice/transcribe", {"language_code": "hi-IN"}),
             ("POST", "/api/voice/chat", {"merchant_id": "MERCH-002", "transcript": "Why did my sales drop?", "language_code": "hi-IN"}),
             ("POST", "/api/voice/synthesize", {"text": "नमस्ते", "language_code": "hi-IN"}),
             ("POST", "/api/bazaar/simulate", {"merchant_id": "MERCH-002", "strategy_key": "BALANCED"}),
@@ -290,6 +289,11 @@ class TestPhase9VoiceAndBazaar(unittest.TestCase):
             else:
                 h.do_POST()
             self.assertEqual(h.status_code, 200, f"Failed {method} {endpoint}: {h.get_response_json()}")
+
+        transcription_without_audio = DummyHandler("POST", "/api/voice/transcribe", {"language_code": "hi-IN"})
+        transcription_without_audio.do_POST()
+        self.assertEqual(transcription_without_audio.status_code, 400)
+        self.assertEqual(transcription_without_audio.get_response_json()["error"], "No audio was recorded.")
 
     def test_11_end_to_end_phase9_voice_to_verified_outcome_journey(self):
         """Validates the full uninterrupted 8-stage merchant journey from voice query to verified outcome."""

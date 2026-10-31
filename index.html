@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paytm AI ActionMate | Your Business Growth Assistant</title>
-  <meta name="description" content="Paytm AI ActionMate — Commercial SaaS AI Teammate for Indian Merchants. Integrates Soundbox POS data, Sarvam AI Indic voice copilot, and privacy-preserving Bazaar Intelligence for verified profit growth.">
+  <meta name="description" content="Paytm AI ActionMate — an AI business teammate for Indian merchants. Understand sales, products, customers, and inventory, then review evidence-backed actions.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://actionmate.paytm.com/">
   <meta property="og:title" content="Paytm AI ActionMate | Autonomous Merchant Growth &amp; Profit Intelligence">
-  <meta property="og:description" content="Autonomous AI teammates for Indian merchants. From conversations to verified completed actions.">
+  <meta property="og:description" content="An AI business teammate for Indian merchants: understand business data, review recommendations, and approve actions.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://actionmate.paytm.com/">
   <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,7 @@
 
         <!-- Merchant Session Identity -->
         <div class="store-badge" style="background: #EAF8FF; color: #002970; border: 1px solid #DCE8F1;">
-          <span>Ramesh Sharma · Connaught Place, New Delhi</span>
+          <span>Ramesh Sharma · Sharma Family Grocery</span>
         </div>
 
         <!-- Quick Ask ActionMate Button -->
@@ -178,7 +178,7 @@
 
         <a class="sidebar-nav-item" id="navItemAnalytics" onclick="navigateToRoute('analytics')" role="button" tabindex="0">
           <span class="nav-item-left">Results</span>
-          <span class="nav-badge-pill" style="color: var(--green-dark);">6.38x ROI</span>
+          <span class="nav-badge-pill" style="color: var(--amber-dark);">Track outcomes</span>
         </a>
 
         <a class="sidebar-nav-item" id="navItemBusinessValue" onclick="navigateToRoute('business-value')" role="button" tabindex="0">
@@ -196,7 +196,7 @@
         <div class="profile-avatar" aria-hidden="true">RS</div>
         <div style="flex: 1; overflow: hidden;">
           <div style="font-size: 13px; font-weight: 800; color: var(--paytm-navy); text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Sharma Family Grocery</div>
-          <div style="font-size: 11.5px; color: var(--text-muted);">Ramesh Sharma · Owner</div>
+          <div style="font-size: 11.5px; color: var(--text-muted);">Ramesh Sharma · Grocery owner</div>
         </div>
       </div>
     </aside>
@@ -222,7 +222,7 @@
           <div class="auth-subtitle">Sign in to manage store data, autonomous actions, and campaigns.</div>
           <div class="auth-demo-banner">
             
-            <span><strong>Simulated grocery demo:</strong> Quick sign-in for Ramesh Sharma at Sharma Family Grocery in Connaught Place.</span>
+            <span><strong>Demonstration Sandbox:</strong> Quick sign-in pre-configured for the simulated grocery shop <strong>Sharma Family Grocery</strong>.</span>
           </div>
           <form onsubmit="event.preventDefault(); navigateToRoute('overview');" class="auth-form">
             <div class="form-group" style="margin-bottom: 14px;">
@@ -234,7 +234,7 @@
               <input type="password" id="loginPass" class="form-input" value="••••••••••••" readonly style="width: 100%;">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
-              Enter as Ramesh Sharma (Shop Owner)
+              Enter as Ramesh Sharma (Grocery Owner)
             </button>
             <div style="display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px;">
               <a href="javascript:void(0)" onclick="navigateToRoute('forgot-password')" style="color: var(--paytm-blue);">Forgot Security PIN?</a>
@@ -257,7 +257,7 @@
           <div class="auth-title">Register Business</div>
           <div class="auth-subtitle">Link your Paytm Soundbox 4G device and activate autonomous revenue recovery.</div>
           <div class="auth-demo-banner">
-            <span>This demo uses a fictional neighborhood grocery shop with simulated receipts, products, stock, and shopper records.</span>
+            <span>This demo uses simulated neighborhood grocery data for <strong>Sharma Family Grocery</strong>.</span>
           </div>
           <button class="btn btn-primary" onclick="navigateToRoute('overview');" style="width: 100%; justify-content: center; padding: 12px;">
             Activate Merchant Profile
@@ -344,7 +344,7 @@
             <span class="suggestion-chip" onclick="setOverviewPrompt('Investigate repeat purchase drop-off this month')">
               "Investigate repeat purchase drop-off this month"
             </span>
-            <span class="suggestion-chip" onclick="setOverviewPrompt('Draft a re-engagement offer for grocery shoppers who have not visited recently')">
+            <span class="suggestion-chip" onclick="setOverviewPrompt('Draft a re-engagement offer for inactive diners')">
               "Draft a re-engagement offer for customers who haven't returned"
             </span>
           </div>
@@ -397,7 +397,7 @@
                   Revenue performance
                 </div>
                 <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
-                  Daily sales by weekday · ₹ thousands · simulated grocery shop
+                  Daily sales by weekday · ₹ thousands · illustrative demo feed
                 </div>
               </div>
               <div class="chart-legend-row">
@@ -412,7 +412,7 @@
             </div>
             
             <div class="overview-chart-footer">
-              <span>Source: simulated grocery receipts stored in SQLite</span>
+              <span>Source: Simulated grocery receipts in the demo database</span>
               <span id="overviewChartSummary" class="overview-chart-summary">Loading sales trend…</span>
             </div>
           </div>
@@ -429,11 +429,12 @@
                 <span class="nav-badge-pill" style="background: var(--amber-bg); color: var(--amber-dark);">Anomaly Flagged</span>
               </div>
               <div style="font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 12px;">
-                Simulated receipts show weekly sales down <strong>27.2%</strong> and repeat-basket share moving from <strong>37% to 24%</strong>. This is a signal to investigate, not proof of why shoppers bought less.
+                Simulated grocery receipts show weekly sales fell by <strong>27.2%</strong> and repeat-basket share moved from <strong>37% to 24%</strong>.
+                <strong>46 regular shoppers</strong> are flagged for review; the <strong>₹20,900 at-risk figure is an estimate</strong>, not confirmed lost profit.
               </div>
               <div style="background: var(--bg-subtle); border-radius: 6px; padding: 10px 12px; font-size: 12.5px; color: var(--text-muted); display: flex; justify-content: space-between;">
-                <span>At-risk regular shoppers: <strong>46 (simulated estimate)</strong></span>
-                <span>Source: <strong>Simulated SQLite receipts</strong></span>
+                <span>Impacted Cohort: <strong>Regular grocery shoppers</strong></span>
+                <span>Data: <strong>Simulated receipts</strong></span>
               </div>
             </div>
 
@@ -447,13 +448,12 @@
                 <span class="nav-badge-pill" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">Margin-Safe</span>
               </div>
               <div style="font-size: 13.5px; color: var(--text-body); line-height: 1.5; margin-bottom: 12px;">
-                Review the <strong>46 at-risk grocery shoppers</strong>, check stock and margin, then request approval for
-                <strong>₹50 off baskets above ₹499 (Code: GROCERY50)</strong>.
+                Review the flagged shoppers, product margins, and stock. If approved, test <strong>₹50 off grocery baskets above ₹499 (GROCERY50)</strong>.
               </div>
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 12px; background: var(--bg-subtle); padding: 8px 12px; border-radius: 6px;">
                 <div><span style="color: var(--text-muted);">Max Liability Cap:</span><br><strong>₹3,600</strong></div>
                 <div><span style="color: var(--text-muted);">Offer budget cap:</span><br><strong>₹3,600</strong></div>
-                <div><span style="color: var(--text-muted);">Outcome:</span><br><strong style="color: var(--green-dark);">Measure after approval</strong></div>
+                <div><span style="color: var(--text-muted);">Outcome:</span><br><strong style="color: var(--amber-dark);">Measure after approval</strong></div>
               </div>
             </div>
           </div>
@@ -502,14 +502,14 @@
             </div>
             
             <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
-              <div style="font-size: 13.5px; font-weight: 700; color: #92400E; margin-bottom: 4px;">Task #1042: Invite regular grocery shoppers back</div>
+              <div style="font-size: 13.5px; font-weight: 700; color: #92400E; margin-bottom: 4px;">Task #1042: Review 46 regular grocery shoppers</div>
               <div style="font-size: 13px; color: #78350F; line-height: 1.4;">
                 ActionMate has prepared the campaign copy in English &amp; Hindi. You must authorize the maximum budget liability before any customer receives an offer.
               </div>
               <div style="margin-top: 10px; font-size: 12.5px; color: #92400E; display: flex; gap: 16px;">
                 <span>Authorized Cap: <strong>₹3,600</strong></span>
                 <span>Offer: <strong>GROCERY50 (₹50 off above ₹499)</strong></span>
-                <span>Recipients: <strong>Up to 46 shoppers</strong></span>
+                <span>Recipients: <strong>Eligible approved shoppers</strong></span>
               </div>
             </div>
 
@@ -588,8 +588,8 @@
             <span class="suggestion-chip" onclick="setAssistantPrompt('Analyze repeat customer drop-off this month')">
               "Analyze repeat customer drop-off this month"
             </span>
-            <span class="suggestion-chip" onclick="setAssistantPrompt('Draft a re-engagement offer for grocery shoppers who have not visited recently')">
-              "Draft a re-engagement offer for grocery shoppers who have not visited recently"
+            <span class="suggestion-chip" onclick="setAssistantPrompt('Draft a re-engagement offer for inactive diners')">
+              "Draft a re-engagement offer for inactive diners"
             </span>
             <span class="suggestion-chip" onclick="setAssistantPrompt('Check outstanding quotations over ₹50,000')">
               "Check outstanding quotations over ₹50,000"
@@ -639,7 +639,7 @@
               <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <span class="badge" style="background: var(--paytm-navy); color: #FFF; font-family: var(--font-mono); font-weight: 700;">TASK #1042</span>
-                  <div class="card-title" id="taskTitleHeader">Invite regular grocery shoppers back</div>
+                  <div class="card-title" id="taskTitleHeader">Review regular grocery shoppers</div>
                 </div>
                 <div class="card-subtitle" id="taskPromptSubtitle">Prompt: "My sales have dropped this week. Help me bring customers back."</div>
               </div>
@@ -669,16 +669,16 @@
                   <div style="font-size: 18px; font-weight: 800; color: var(--red);">-27.2%</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
-                  <div style="font-size: 11.5px; color: var(--text-muted);">Estimated Sales at Risk</div>
+                  <div style="font-size: 11.5px; color: var(--text-muted);">Estimated Revenue Leakage</div>
                   <div style="font-size: 18px; font-weight: 800; color: var(--amber-dark);">₹20,900</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
-                  <div style="font-size: 11.5px; color: var(--text-muted);">At-Risk Regular Shoppers</div>
-                  <div style="font-size: 18px; font-weight: 800; color: var(--text-main);">46 shoppers</div>
+                  <div style="font-size: 11.5px; color: var(--text-muted);">Missing Regular Patrons</div>
+                  <div style="font-size: 18px; font-weight: 800; color: var(--text-main);">46 Shoppers</div>
                 </div>
                 <div style="background: #FFF; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-light);">
                   <div style="font-size: 11.5px; color: var(--text-muted);">Re-engagement Cohort</div>
-                  <div style="font-size: 18px; font-weight: 800; color: var(--paytm-blue);">46 shoppers</div>
+                  <div style="font-size: 18px; font-weight: 800; color: var(--paytm-blue);">Review first</div>
                 </div>
               </div>
             </div>
@@ -695,33 +695,33 @@
                 <div class="insight-box confirmed">
                   <div class="insight-box-title">Confirmed Data</div>
                   <ul class="insight-list" id="insightConfirmedList">
-                    <li>Gross sales dropped from ₹412,000 to ₹300,000 (-27.2% net loss).</li>
-                    <li>Repeat order share plummeted from 37% to 24% (-13.0 percentage points).</li>
-                    <li>Simulated receipts estimate 46 regular shoppers are at risk; confirm against current customer records.</li>
-                    <li>Estimated sales at risk: ₹20,900. This is not a profit or guaranteed recovery figure.</li>
+                    <li>Simulated grocery sales fell from ₹412,000 to ₹300,000 (-27.2%).</li>
+                    <li>Repeat-basket share changed from 37% to 24% (-13 percentage points).</li>
+                    <li>46 regular shoppers are flagged for review in the simulated data.</li>
+                    <li>₹20,900 is an estimated opportunity, not confirmed lost profit.</li>
                   </ul>
                 </div>
                 <div class="insight-box interpretation">
                   <div class="insight-box-title">AI Interpretation</div>
                   <ul class="insight-list" id="insightInterpretationList">
-                    <li>Sales fell more sharply from Thursday through Sunday in the simulated week.</li>
-                    <li>The records do not explain why shoppers bought less.</li>
-                    <li>A small, approved offer can be tested, but its effect is uncertain until measured.</li>
+                    <li>The receipt data shows a recent drop, but does not explain its cause.</li>
+                    <li>Shoppers may have changed buying habits; this needs validation.</li>
+                    <li>A small, margin-checked offer could be tested after owner approval.</li>
                   </ul>
                 </div>
                 <div class="insight-box recommendation">
                   <div class="insight-box-title">Recommended Actions</div>
                   <ul class="insight-list" id="insightRecommendationsList">
-                    <li>Review the 46-shoppers-at-risk list and verify contact consent.</li>
-                    <li>Check stock and margin before testing ₹50 off baskets above ₹499 with code GROCERY50.</li>
-                    <li>Enforce strict merchant budget liability cap of ₹3,600 with Secure Approval signature.</li>
+                    <li>Review the flagged grocery shoppers and eligible contact details.</li>
+                    <li>Consider ₹50 off baskets above ₹499 with code GROCERY50.</li>
+                    <li>Keep the offer within its ₹3,600 cap and require owner approval.</li>
                   </ul>
                 </div>
                 <div class="insight-box unknowns">
                   <div class="insight-box-title">What We Do Not Know</div>
                   <ul class="insight-list" id="insightUnknownsList">
-                    <li>Nearby competitor pricing and local events are not included in this demo data.</li>
-                    <li>These records are simulated and cannot establish the real cause of a sales decline.</li>
+                    <li>Competitor pricing and local footfall are not included in this demo data.</li>
+                    <li>Offer redemptions and campaign profit are unknown until transactions are recorded.</li>
                   </ul>
                 </div>
               </div>
@@ -775,36 +775,36 @@
               </div>
             </div>
 
-            <!-- Verified Outcome Card (Displayed after verification) -->
-            <div id="verifiedRoiOutcomeBox" style="display: none; margin-top: 20px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 18px;">
+            <!-- Outcome tracking card -->
+            <div id="verifiedRoiOutcomeBox" style="display: none; margin-top: 20px; background: var(--amber-bg); border: 1px solid var(--amber); border-radius: 8px; padding: 18px;">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="display:inline-block;width:20px;height:20px;background:var(--green);border-radius:50%;"></span>
+                  <span style="display:inline-block;width:20px;height:20px;background:var(--amber);border-radius:50%;"></span>
                   <div>
-                    <div style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: #065F46;">
-                      Outcome Verified by Revenue Attribution Engine
+                    <div style="font-family: var(--font-heading); font-size: 15px; font-weight: 800; color: var(--amber-dark);">
+                      Campaign outcomes awaiting transaction data
                     </div>
-                    <div style="font-size: 12.5px; color: #047857;">44 Soundbox QR voucher redemptions verified against settled POS orders.</div>
+                    <div style="font-size: 12.5px; color: var(--text-muted);">This demo can simulate dispatch; redemptions and profit are not yet verified.</div>
                   </div>
                 </div>
-                <span class="badge" style="background: var(--green-dark); color: #FFF; font-weight: 800;">6.38x VERIFIED ROI</span>
+                <span class="badge" style="background: var(--amber-bg); color: var(--amber-dark); font-weight: 800;">OUTCOME PENDING</span>
               </div>
               <div class="kpi-grid-4" style="margin-bottom: 0;">
                 <div style="background: #FFF; padding: 10px; border-radius: 6px; border: 1px solid #A7F3D0;">
                   <div style="font-size: 11px; color: var(--text-muted);">Gross Sales Recovered</div>
-                  <div style="font-size: 16px; font-weight: 800; color: var(--text-main);">₹16,940</div>
+                  <div style="font-size: 16px; font-weight: 800; color: var(--text-main);">Not measured</div>
                 </div>
                 <div style="background: #FFF; padding: 10px; border-radius: 6px; border: 1px solid #A7F3D0;">
                   <div style="font-size: 11px; color: var(--text-muted);">Discount Liability Paid</div>
-                  <div style="font-size: 16px; font-weight: 800; color: var(--amber-dark);">₹2,200</div>
+                  <div style="font-size: 16px; font-weight: 800; color: var(--amber-dark);">Not measured</div>
                 </div>
                 <div style="background: #FFF; padding: 10px; border-radius: 6px; border: 1px solid #A7F3D0;">
                   <div style="font-size: 11px; color: var(--text-muted);">Net Recovered Profit</div>
-                  <div style="font-size: 16px; font-weight: 800; color: var(--green-dark);">₹14,644</div>
+                  <div style="font-size: 16px; font-weight: 800; color: var(--amber-dark);">Not measured</div>
                 </div>
                 <div style="background: #FFF; padding: 10px; border-radius: 6px; border: 1px solid #A7F3D0;">
                   <div style="font-size: 11px; color: var(--text-muted);">Audit Chaining</div>
-                  <div style="font-size: 16px; font-weight: 800; color: var(--paytm-blue);"> Block</div>
+                  <div style="font-size: 16px; font-weight: 800; color: var(--paytm-blue);">Enabled</div>
                 </div>
               </div>
             </div>
@@ -1156,7 +1156,7 @@
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="badge" id="campaignStatusBadge" style="background: var(--amber-bg); color: var(--amber-dark);">PENDING_APPROVAL</span>
-                <div class="card-title" id="campaignTitle">Task #1042: Grocery repeat-basket recovery</div>
+                <div class="card-title" id="campaignTitle">Task #1042: Bring back regular grocery shoppers</div>
               </div>
               <div class="card-subtitle" id="campaignSubtitle">Channel: Paytm Soundbox Audio Script &amp; QR Data SMS &bull; Campaign ID: <span id="campaignIdSpan" style="font-family: var(--font-mono); font-weight: 700;">CAMP-REC-1042</span></div>
             </div>
@@ -1173,20 +1173,20 @@
 
           <!-- Campaign Rationale Box -->
           <div style="background: var(--bg-subtle); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: var(--text-body); line-height: 1.5; border-left: 3px solid var(--paytm-blue);">
-            <strong>Reason for Recommendation:</strong> <span id="campaignRationaleText">Simulated repeat-basket share moved from 37% to 24%. This shows a change in the records, not why shoppers bought less.</span>
+            <strong>Reason for Recommendation:</strong> <span id="campaignRationaleText">Simulated receipt data shows a decline in repeat grocery baskets. Review shopper eligibility, product margins, and stock before approving a capped offer.</span>
           </div>
 
           <!-- Campaign KPIs Grid -->
           <div class="kpi-grid-4" style="margin-bottom: 16px;">
             <div class="kpi-card">
               <div class="kpi-title">Customers selected</div>
-              <div class="kpi-metric" id="kpiTargetCohort">46 shoppers</div>
+              <div class="kpi-metric" id="kpiTargetCohort">46 Shoppers</div>
               <div class="kpi-subtext" id="kpiCohortSub">Declining frequency lapse</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-title">Incentive Offer</div>
               <div class="kpi-metric" id="kpiIncentiveOffer">₹50 OFF</div>
-              <div class="kpi-subtext" id="kpiOfferSub">Basket above ₹499</div>
+              <div class="kpi-subtext" id="kpiOfferSub">Min basket &gt; ₹499</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-title">Offer budget limit</div>
@@ -1286,11 +1286,11 @@
             </div>
             <div class="card-body">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--text-muted);">
-                <span>Simulated Target: <strong style="color: var(--paytm-navy);">Arun Kumar</strong> (fictional shopper)</span>
+                <span>Simulated Target: <strong style="color: var(--paytm-navy);">Arun Kumar</strong> (+91 98765 43210)</span>
                 <span class="badge" id="previewChannelBadge" style="background: var(--paytm-blue-soft); color: var(--paytm-navy);">SMS &amp; WHATSAPP</span>
               </div>
               <div id="campaignMessagePreviewBox" style="background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 13.5px; color: var(--text-body); line-height: 1.55; min-height: 90px; white-space: pre-wrap;">
-                Hi Arun Kumar! We miss you at Sharma Family Grocery. Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.
+                Hi [Customer Name]! Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.
               </div>
               <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--text-muted);">
                 <span>Subject / Title: <strong id="campaignSubjectTitle" style="color: var(--paytm-navy);">A grocery offer from Sharma Family Grocery</strong></span>
@@ -1395,7 +1395,7 @@
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="badge" id="apprStatusBadge" style="background: var(--amber-bg); color: var(--amber-dark);">PENDING_APPROVAL</span>
-                <div class="card-title" id="apprCampaignTitle">Task #1042: Grocery repeat-basket recovery</div>
+                <div class="card-title" id="apprCampaignTitle">Task #1042: Grocery shopper win-back offer</div>
               </div>
               <div class="card-subtitle">
                 Merchant: <strong style="color: var(--paytm-navy);" id="apprMerchantName">Sharma Family Grocery</strong> &bull;
@@ -1413,13 +1413,13 @@
             <div style="background: var(--bg-subtle); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--paytm-blue);">
               <strong>Campaign Purpose:</strong>
               <div id="apprPurposeText" style="color: var(--text-body); margin-top: 4px;">
-                Review 46 at-risk grocery shoppers after weekly sales in the simulated records fell by 27.2%.
+                Review 46 regular grocery shoppers flagged in the simulated receipt data.
               </div>
             </div>
             <div style="background: var(--bg-subtle); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--amber);">
               <strong>Reason for Recommendation:</strong>
               <div id="apprRationaleText" style="color: var(--text-body); margin-top: 4px;">
-                Simulated repeat-basket share moved from 37% to 24%. The records do not establish the cause.
+                Repeat-basket share changed from 37% to 24% in the simulated data. The cause is not confirmed.
               </div>
             </div>
           </div>
@@ -1428,13 +1428,13 @@
           <div class="kpi-grid-4" style="margin-bottom: 16px;">
             <div class="kpi-card">
               <div class="kpi-title">Target Audience</div>
-              <div class="kpi-metric" id="apprAudienceCount" style="font-size: 20px;">97 shoppers</div>
+              <div class="kpi-metric" id="apprAudienceCount" style="font-size: 20px;">Eligible shoppers</div>
               <div class="kpi-subtext" id="apprAudienceSub">3 excluded (unsub / invalid)</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-title">Incentive Offer</div>
               <div class="kpi-metric" id="apprOfferMetric" style="font-size: 20px;">₹50 OFF</div>
-              <div class="kpi-subtext">Code: GROCERY50 (Basket > ₹499)</div>
+              <div class="kpi-subtext">Code: GROCERY50 (Min > ₹499)</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-title">Max Liability Cap</div>
@@ -1459,7 +1459,7 @@
               </div>
             </div>
             <div id="apprMessageDisplayBox" style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: var(--text-body); line-height: 1.5; min-height: 60px; white-space: pre-wrap;">
-              Hi [Customer Name]! We miss you at Sharma Family Grocery. Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.
+              Hi [Customer Name]! Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11.5px; color: var(--text-muted);">
               <span>Content Hash: <code id="apprContentHashSpan" style="font-size: 11px; color: var(--paytm-blue);">Computing...</code></span>
@@ -1684,7 +1684,7 @@
               <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Campaign Focus</label>
               <select id="kpi-filter-campaign" class="form-input" style="padding: 6px 10px; font-size: 12px; height: 34px;" onchange="applyKpiFilters()">
                 <option value="">All Campaigns</option>
-                <option value="CAMP-REC-1042">Grocery Repeat-Basket Recovery (CAMP-REC-1042)</option>
+                <option value="CAMP-REC-1042">Grocery Repeat-Visit Offer (CAMP-REC-1042)</option>
               </select>
             </div>
             <div style="flex: 1; min-width: 140px;">
@@ -1728,7 +1728,7 @@
               <span class="badge" style="background: #E0E7FF; color: #3730A3; font-size: 10px;">Target: 4.0 min</span>
             </div>
             <div class="kpi-metric" id="kpi-val-resolution">3.8 min</div>
-            <div class="kpi-subtext" id="kpi-sub-resolution">From prompt to verified completion</div>
+            <div class="kpi-subtext" id="kpi-sub-resolution">From prompt to completed action</div>
           </div>
           <div class="kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1766,14 +1766,14 @@
             <div class="kpi-subtext" id="kpi-sub-engagement">Soundbox QR scans &amp; promo code redemptions</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-title">Verified Recovered Sales</div>
-            <div class="kpi-metric" style="color: var(--green-dark);">₹16,940</div>
-            <div class="kpi-subtext">Direct settled POS invoices</div>
+            <div class="kpi-title">Recovered Sales</div>
+            <div class="kpi-metric" style="color: var(--amber-dark);">Not measured</div>
+            <div class="kpi-subtext">Awaiting post-campaign transactions</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-title">Closed-Loop ROI Multiple</div>
-            <div class="kpi-metric" style="color: var(--green-dark);">6.38x</div>
-            <div class="kpi-subtext">(Recovered - Costs) / Costs</div>
+            <div class="kpi-title">Campaign ROI</div>
+            <div class="kpi-metric" style="color: var(--amber-dark);">Pending</div>
+            <div class="kpi-subtext">Calculated from verified transactions</div>
           </div>
         </div>
 
@@ -2101,15 +2101,11 @@
               <div>
                 <label class="form-label">Choose a product</label>
                 <select id="simProductSelect" class="form-select" onchange="runDiscountSimulation()">
-                  <option value="PROD-001">Whole Wheat Atta (5 kg) (Base Margin: 16.4%)</option>
-                  <option value="PROD-002">Basmati Rice (1 kg) (Base Margin: 27.6%)</option>
-                  <option value="PROD-003">Toned Milk (1 litre) (Base Margin: 10.0%)</option>
-                  <option value="PROD-004">Toor Dal (1 kg) (Base Margin: 19.4%)</option>
-                  <option value="PROD-005">Sunflower Oil (1 litre) (Base Margin: 17.4%)</option>
-                  <option value="PROD-006">Fresh Tomatoes (1 kg) (Base Margin: 30.0%)</option>
-                  <option value="PROD-007">Premium Breakfast Cereal (500 g) (Aging Stock)</option>
-                  <option value="PROD-008">Laundry Detergent (1 kg) (Base Margin: 29.6%)</option>
-                  <option value="PROD-009">Banana (each) (Base Margin: 30.0%)</option>
+                  <option value="PROD-001">Whole Wheat Atta (5 kg)</option>
+                  <option value="PROD-002">Basmati Rice (1 kg)</option>
+                  <option value="PROD-003">Toned Milk (1 litre)</option>
+                  <option value="PROD-004">Toor Dal (1 kg)</option>
+                  <option value="PROD-005">Sunflower Oil (1 litre)</option>
                 </select>
               </div>
               <div>
@@ -3600,7 +3596,7 @@
               <span class="step-title-text">1. Sales Analysed</span>
               <span class="badge" style="background: var(--green-bg); color: var(--green-dark);">Done</span>
             </div>
-            <div class="step-desc-text">Detected 18.4% volume drop (-₹20,900 revenue leakage)</div>
+            <div class="step-desc-text">Flagged a simulated repeat-basket decline; ₹20,900 is an estimate</div>
           </div>
         </div>
 
@@ -3611,7 +3607,7 @@
               <span class="step-title-text">2. Campaign Drafted</span>
               <span class="badge" style="background: var(--green-bg); color: var(--green-dark);">Done</span>
             </div>
-            <div class="step-desc-text">GROCERY50 offer (₹50 off baskets above ₹499) drafted for eligible shoppers</div>
+            <div class="step-desc-text">GROCERY50: ₹50 off baskets above ₹499; audience requires review</div>
           </div>
         </div>
 
@@ -3632,12 +3628,12 @@
           <div class="step-num-bubble">${isCompleted ? '✓' : '7'}</div>
           <div class="step-content-body">
             <div class="step-title-row">
-              <span class="step-title-text">4. Execution &amp; Verification</span>
+              <span class="step-title-text">4. Offer Dispatch &amp; Outcome Tracking</span>
               <span class="badge" style="${isCompleted ? 'background: var(--green-bg); color: var(--green-dark);' : 'background: var(--bg-subtle); color: var(--text-light);'}">
-                ${isCompleted ? 'Verified (6.38x ROI)' : 'Queued'}
+                ${isCompleted ? 'Dispatch simulated' : 'Queued'}
               </span>
             </div>
-            <div class="step-desc-text">${isCompleted ? 'Verified 44 redemptions at POS (₹14,644 Net Profit)' : 'Awaiting dispatch authorization'}</div>
+            <div class="step-desc-text">${isCompleted ? 'Waiting for real transaction data to measure redemptions and profit' : 'Awaiting dispatch authorization'}</div>
           </div>
         </div>
       `;
@@ -3785,7 +3781,7 @@
       if (task.is_completed) {
         btnApprove.style.display = "none";
         btnSimulate.style.display = "none";
-        statusText.innerHTML = "<strong>Status:</strong> Task fully completed & verified against Soundbox QR.";
+        statusText.innerHTML = "<strong>Status:</strong> Dispatch simulation complete; redemption and profit measurement pending.";
         outcomeBox.style.display = "block";
       } else if (task.is_approved) {
         btnApprove.disabled = true;
@@ -3809,11 +3805,11 @@
 
       const msgs = appState.activeTask.messages || {};
       if (lang === "en") {
-        box.textContent = msgs.en || "Hi [Customer Name]! We miss you at Sharma Family Grocery. Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.";
+        box.textContent = msgs.en || "Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.";
       } else if (lang === "hi") {
-        box.textContent = msgs.hi || "नमस्ते [ग्राहक का नाम]! शर्मा फैमिली ग्रोसरी में आपकी कमी महसूस हुई। ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
+        box.textContent = msgs.hi || "नमस्ते! शर्मा फैमिली ग्रोसरी में ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
       } else if (lang === "audio") {
-        box.innerHTML = '<strong>Paytm Soundbox 4.0 Audio Text:</strong><br><em>"Paytm par pachaas rupaye ki chhoot prapt hui. Dhanyavaad!"</em>';
+        box.innerHTML = '<strong>Paytm Soundbox 4.0 Audio Text:</strong><br><em>"Grocery basket par GROCERY50 code se ₹50 ki chhoot paayen."</em>';
       }
     }
 
@@ -3949,7 +3945,7 @@
           stream.scrollTop = stream.scrollHeight;
         }
 
-        showSiteToast("ActionMate answered your query with verified store data!");
+        showSiteToast("ActionMate answered your query using the store's recorded data.");
       } catch (e) {
         const thinking = document.getElementById("assistantThinkingBubble");
         if (thinking) thinking.remove();
@@ -4062,7 +4058,7 @@
     }
 
     async function simulateExecutionFromAssistant() {
-      showSiteToast("Simulating customer dispatch & monitoring POS redemptions...");
+      showSiteToast("Simulating the approved offer dispatch...");
       try {
         const res = await fetch("/api/actionmate/tasks/WF-REC-1042/simulate-execution", {
           method: "POST",
@@ -4072,7 +4068,7 @@
         const data = await res.json();
         appState.activeTask = data.task;
         renderAssistantTaskView(data.task);
-        showSiteToast("Execution completed & verified! ROI: 6.38x");
+        showSiteToast("Dispatch simulation complete. Track transactions to measure redemptions and profit.");
       } catch (e) {
         showSiteToast("Simulation error: " + e.message);
       }
@@ -5110,7 +5106,7 @@ function renderCampaignOverview(draft, rec) {
   // Code Badge
   if (codeBadge) {
     if (draft && draft.offer_configured && draft.offer_details) {
-      codeBadge.textContent = "Code: " + (draft.offer_details.discount_code || draft.offer_details.code || "GROCERY50");
+      codeBadge.textContent = "Code: " + (draft.offer_details.code || "GROCERY50");
       codeBadge.style.display = "inline-block";
     } else {
       codeBadge.textContent = "Pure Re-engagement (No Discount)";
@@ -5145,11 +5141,11 @@ function renderCampaignOverview(draft, rec) {
   const kpiExec = document.getElementById("kpiExecutionStatus");
   const kpiExecSub = document.getElementById("kpiExecutionSub");
 
-  if (kpiCohort && rec) kpiCohort.textContent = "46 regular shoppers";
+  if (kpiCohort && rec) kpiCohort.textContent = rec.target_customer_segment.replace("_", " ");
   if (kpiOffer) {
     if (draft && draft.offer_configured && draft.offer_details) {
-      kpiOffer.textContent = "₹" + (draft.offer_details.discount_amount_inr || draft.offer_details.discount_amount || "50") + " OFF";
-      if (kpiOfferSub) kpiOfferSub.textContent = "Basket above ₹" + (draft.offer_details.min_order_inr || draft.offer_details.min_order_value || "499");
+      kpiOffer.textContent = "₹" + (draft.offer_details.discount_amount || "50") + " OFF";
+      if (kpiOfferSub) kpiOfferSub.textContent = "Min basket > ₹" + (draft.offer_details.min_order_value || "499");
     } else {
       kpiOffer.textContent = "No Discount";
       if (kpiOfferSub) kpiOfferSub.textContent = "Pure relationship re-engagement";
@@ -5239,7 +5235,7 @@ async function fetchCampaignMessagePreview() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        customer: { customer_name: "Arun Kumar", interested_product: "wheat flour and toned milk" },
+        customer: { customer_name: "Customer", interested_product: "grocery essentials" },
         merchant_name: "Sharma Family Grocery",
         offer_details: offer
       })
@@ -5284,13 +5280,13 @@ function renderCampaignPreviewLang(lang) {
   const msgs = appState.campaignMessages;
   let text = "";
   if (lang === "hi") {
-    text = msgs.hi_message || msgs.hi || "नमस्ते अरुण कुमार! शर्मा फैमिली ग्रोसरी में आपकी कमी महसूस हुई। ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
+    text = msgs.hi_message || msgs.hi || "नमस्ते! शर्मा फैमिली ग्रोसरी में ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
     if (badgeEl) badgeEl.textContent = "HINDI SMS & WHATSAPP";
   } else if (lang === "soundbox_voice") {
-    text = msgs.soundbox_voice_script || "पेटीएम साउंडबॉक्स: ₹499 से अधिक की किराने की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
+    text = msgs.soundbox_voice_script || "पेटीएम ऑफर: ₹499 से अधिक की किराने की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
     if (badgeEl) badgeEl.textContent = "PAYTM SOUNDBOX VOICE";
   } else {
-    text = msgs.en_message || msgs.en || "Hi Arun Kumar! We miss you at Sharma Family Grocery. Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.";
+    text = msgs.en_message || msgs.en || "Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.";
     if (badgeEl) badgeEl.textContent = "ENGLISH SMS & WHATSAPP";
   }
 
@@ -5457,7 +5453,7 @@ async function fetchApprovalDetails() {
     if (merchEl) merchEl.textContent = data.merchant_name || "Sharma Family Grocery";
     if (purposeEl) purposeEl.textContent = data.campaign_purpose || "";
     if (rationaleEl) rationaleEl.textContent = data.reason_for_recommendation || "";
-    if (audCountEl) audCountEl.textContent = `${data.customer_count || 97} shoppers`;
+    if (audCountEl) audCountEl.textContent = `${data.customer_count || 0} shoppers`;
     if (hashSpan) hashSpan.textContent = (data.content_hash ? data.content_hash.substring(0, 24) + "..." : "Deterministic  Active");
 
     const st = data.current_status || "PENDING_APPROVAL";
@@ -5519,11 +5515,11 @@ function switchApprLang(lang) {
 
   const msgs = currentApprData.promotional_message || {};
   if (lang === "hi") {
-    box.textContent = msgs.hi || "नमस्ते Arun Kumar! Sharma Family Grocery में आपकी कमी महसूस हुई। ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
+    box.textContent = msgs.hi || "नमस्ते! शर्मा फैमिली ग्रोसरी में ₹499 से अधिक की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।";
   } else if (lang === "soundbox_voice") {
-    box.textContent = msgs.soundbox_voice_script || msgs.soundbox_voice || "Sharma Family Grocery par ₹499 se zyada ki khareed par GROCERY50 code se ₹50 ki chhoot paayein.";
+    box.textContent = msgs.soundbox_voice_script || msgs.soundbox_voice || "Grocery basket par GROCERY50 code se ₹50 ki chhoot paayen.";
   } else {
-    box.textContent = msgs.en || "Hi Arun Kumar! We miss you at Sharma Family Grocery. Enjoy ₹50 off a grocery basket above ₹499 with code GROCERY50.";
+    box.textContent = msgs.en || "Enjoy ₹50 off your grocery basket above ₹499 with code GROCERY50 at Sharma Family Grocery.";
   }
 }
 

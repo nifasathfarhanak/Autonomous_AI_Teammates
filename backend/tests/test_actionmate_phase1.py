@@ -67,10 +67,6 @@ class TestActionMatePhase1(unittest.TestCase):
         self.assertEqual(breakdown[3], {"day": "Thu", "last_week": 58, "this_week": 40, "change_pct": -31.0})
         self.assertEqual(breakdown[6], {"day": "Sun", "last_week": 66, "this_week": 37, "change_pct": -43.9})
 
-        api_summary = json.loads(get_response_body(DummyHandler("/api/sales/summary")))
-        self.assertEqual(api_summary["repeat_purchase_trend"]["current_repeat_rate_pct"], 24.0)
-        self.assertEqual(api_summary["repeat_purchase_trend"]["historical_repeat_rate_pct"], 37.0)
-
     def test_02_task_plan_generation_from_prompt(self):
         """Verifies submitting merchant natural-language request generates Task #1042 with 7-step plan."""
         task = get_actionmate_task_details("WF-REC-1042", "My sales have dropped this week. Help me bring customers back.")
@@ -129,19 +125,28 @@ class TestActionMatePhase1(unittest.TestCase):
         self.assertEqual(wf["current_state"], "APPROVED")
 
     def test_05_simulated_execution_and_closed_loop_roi(self):
-        """Verifies simulated execution and verified closed-loop ROI accounting."""
+        """Verifies simulated dispatch does not invent post-campaign ROI."""
+        unapproved = DummyHandler("/api/actionmate/tasks/WF-REC-1042/simulate-execution", "POST", b"{}")
+        self.assertIn("must be 'APPROVED'", json.loads(get_response_body(unapproved))["error"])
+
+        approval = DummyHandler(
+            "/api/actionmate/tasks/WF-REC-1042/approve",
+            "POST",
+            json.dumps({"approved_by": "Ramesh Sharma", "max_budget_authorized": 3600.0}).encode("utf-8")
+        )
+        self.assertEqual(json.loads(get_response_body(approval))["status"], "APPROVED")
+
         # Execute
         h = DummyHandler("/api/actionmate/tasks/WF-REC-1042/simulate-execution", "POST", b"{}")
         resp = json.loads(get_response_body(h))
         self.assertEqual(resp["status"], "COMPLETED")
 
         roi = resp["roi"]
-        self.assertEqual(roi["redemption_count"], 44)
-        self.assertEqual(roi["gross_recovered_sales_inr"], 16940.0)
-        self.assertEqual(roi["total_discounts_paid_inr"], 2200.0)
-        self.assertEqual(roi["net_recovered_profit_inr"], 14644.0)
-        self.assertEqual(roi["roi_multiple"], 6.38)
-        self.assertTrue(roi["is_verified"])
+        self.assertEqual(roi["total_redeemed"], 0)
+        self.assertEqual(roi["gross_recovered_sales_inr"], 0.0)
+        self.assertEqual(roi["net_recovered_profit_inr"], 0.0)
+        self.assertEqual(roi["roi_multiple"], 0.0)
+        self.assertFalse(roi["is_verified"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -200,18 +200,18 @@ class GovernanceService:
         # Live content fingerprint
         en_msg = draft.messages.get("en", "")
         hi_msg = draft.messages.get("hi", "")
+        from .sales_intelligence_service import get_merchant_profile
+        merchant_profile = get_merchant_profile(draft.merchant_id)
         chash = GovernanceService.calculate_content_hash(
             draft.campaign_name, en_msg, hi_msg, draft.offer_details, draft.target_customer_segment
         )
-        from .sales_intelligence_service import get_merchant_profile
-        merchant_name = get_merchant_profile(draft.merchant_id).store_name
 
         return ApprovalRequestSchema(
             approval_id=f"APPR-REQ-{campaign_id}",
             task_id="WF-REC-1042",
             campaign_id=campaign_id,
             merchant_id=draft.merchant_id,
-            merchant_name=merchant_name,
+            merchant_name=merchant_profile.store_name,
             campaign_name=draft.campaign_name,
             campaign_purpose=draft.business_objective,
             reason_for_recommendation=draft.reason_for_recommendation,
@@ -228,8 +228,8 @@ class GovernanceService:
             execution_mode="SIMULATED_DEMO",
             risks_and_assumptions=draft.risks_and_assumptions,
             ai_recommendation={
-                "strategy": "Grocery repeat-basket recovery",
-                "target_cohort": "Regular neighborhood grocery shoppers",
+                "strategy": "Grocery repeat-visit offer",
+                "target_cohort": "Regular grocery shoppers with declining visit frequency",
                 "soundbox_integration": "Audio banner broadcast & QR code telemetry"
             },
             current_status=draft.status,

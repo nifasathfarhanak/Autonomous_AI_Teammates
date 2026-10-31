@@ -160,15 +160,15 @@ class TestPhase7E2EAndErrorBoundaries(unittest.TestCase):
 
         # Step 7: Recommend re-engagement campaign
         rec = CampaignService.recommend_campaign_for_sales_drop(merchant_id)
-        self.assertIn("Recovery Campaign", rec.campaign_name)
+        self.assertIn("Grocery", rec.campaign_name)
         self.assertEqual(rec.offer_details["discount_code"], "GROCERY50")
         self.assertEqual(rec.offer_details["discount_amount_inr"], 50.0)
 
         # Step 8: Identify eligible customers (Audience Targeting)
         audience = CampaignService.evaluate_campaign_audience(merchant_id, "DECLINING_FREQUENCY")
         self.assertEqual(audience.total_evaluated, 46)
-        self.assertEqual(audience.excluded_count, 3)
-        self.assertEqual(audience.eligible_count, 43)
+        self.assertEqual(audience.excluded_count, 1)
+        self.assertEqual(audience.eligible_count, 45)
 
         # Step 9: Personalised promotional copy (EN, HI, Soundbox)
         sample_cust = audience.eligible_customers[0]
@@ -184,7 +184,7 @@ class TestPhase7E2EAndErrorBoundaries(unittest.TestCase):
 
         # Step 10: Rationale explanation
         self.assertIn("repeat", rec.reason_for_recommendation.lower())
-        self.assertIn("24.0%", rec.reason_for_recommendation)
+        self.assertIn("24%", rec.reason_for_recommendation)
 
         # Step 11: Request merchant approval (Create Draft)
         draft = CampaignService.create_campaign_draft({
@@ -218,7 +218,7 @@ class TestPhase7E2EAndErrorBoundaries(unittest.TestCase):
         # Step 14: Simulated execution starts & Step 15: Execution adapter records results
         exec_res = SimulatedCampaignExecutionAdapter.execute_campaign(cid)
         self.assertEqual(exec_res.status, "COMPLETED")
-        self.assertEqual(exec_res.total_attempted, 43)
+        self.assertEqual(exec_res.total_attempted, 97)
         self.assertGreater(exec_res.delivered_count, 0)
         self.assertTrue(exec_res.execution_id.startswith("EXEC-"))
 

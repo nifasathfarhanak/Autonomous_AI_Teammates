@@ -75,21 +75,20 @@ class ActionMateOrchestrator:
         product_performance = res_prods.data if res_prods.status == "SUCCESS" else []
 
         # 4. State: ANALYSING (epistemic reasoning & synthesis)
-        transition_task_state(t_id, STATE_ANALYSING, transitioned_by="ActionMateOrchestrator", reason="Synthesizing confirmed facts and identifying customers with no recent receipts")
+        transition_task_state(t_id, STATE_ANALYSING, transitioned_by="ActionMateOrchestrator", reason="Synthesizing confirmed facts and isolating unreturned diner cohort")
         findings = ReasoningEngine.evaluate(
             sales_drop=sales_drop,
             repeat_analysis=repeat_analysis,
             merchant_profile=merchant_profile,
             customer_segments=customer_segments,
-            product_performance=product_performance,
-            sales_summary=res_sales.data if res_sales.status == "SUCCESS" else {}
+            product_performance=product_performance
         )
 
         # 5. State: PLANNING (generating structured 10-step plan)
-        transition_task_state(t_id, STATE_PLANNING, transitioned_by="ActionMateOrchestrator", reason="Formulating the action plan and binding parameters to merchant records")
+        transition_task_state(t_id, STATE_PLANNING, transitioned_by="ActionMateOrchestrator", reason="Formulating 10-step recovery plan and binding tool parameters")
         plan_steps = TaskPlanner.generate_plan(
             merchant_id=merchant_id,
-            target_cohort_size=findings.get("target_cohort_size", 240),
+            target_cohort_size=findings.get("target_cohort_size", 46),
             discount_code=findings["recommendation"]["discount_code"],
             discount_amount_inr=findings["recommendation"]["discount_amount_inr"],
             min_order_inr=findings["recommendation"]["min_order_inr"],
@@ -264,7 +263,24 @@ class ActionMateOrchestrator:
 
         # 1. State: EXECUTING
         transition_task_state(task_id, STATE_EXECUTING, transitioned_by="ActionMateOrchestrator", reason="Dispatching simulated outreach")
-        dispatch_res = self.tool_registry.execute("execute_simulated_dispatch", {"campaign_code": "RET50", "target_count": 240})
+        recommendation = task.findings.get("recommendation", {})
+        campaign_code = recommendation.get("discount_code", "GROCERY50")
+        target_count = recommendation.get("target_cohort_size", task.findings.get("target_cohort_size", 46))
+        dispatch_res = self.tool_registry.execute(
+            "execute_simulated_dispatch",
+            {"campaign_code": campaign_code, "target_count": target_count}
+        )
+        if dispatch_res.status != "SUCCESS":
+            transition_task_state(
+                task_id,
+                STATE_FAILED,
+                transitioned_by="ActionMateOrchestrator",
+                reason=f"Simulated dispatch failed: {dispatch_res.error_message or dispatch_res.status}"
+            )
+            task.current_state = STATE_FAILED
+            task.updated_at = datetime.now(timezone.utc).isoformat()
+            self._save_task_record(task)
+            raise RuntimeError(dispatch_res.error_message or "Simulated dispatch failed.")
 
         for s in task.plan:
             if s.step_id == "step_8_simulate_execution":
@@ -274,23 +290,35 @@ class ActionMateOrchestrator:
                 s.status = "READY_FOR_EXECUTION"
 
         # 2. State: VERIFYING
-        transition_task_state(task_id, STATE_VERIFYING, transitioned_by="ActionMateOrchestrator", reason="Verifying redemption telemetry at Soundbox QR")
-        verify_res = self.tool_registry.execute("verify_pos_outcomes", {"campaign_code": "RET50"})
+        transition_task_state(task_id, STATE_VERIFYING, transitioned_by="ActionMateOrchestrator", reason="Checking for recorded post-campaign transactions")
+        verify_res = self.tool_registry.execute("verify_pos_outcomes", {"campaign_code": campaign_code})
+        if verify_res.status != "SUCCESS":
+            transition_task_state(
+                task_id,
+                STATE_FAILED,
+                transitioned_by="ActionMateOrchestrator",
+                reason=f"Outcome check failed: {verify_res.error_message or verify_res.status}"
+            )
+            task.current_state = STATE_FAILED
+            task.updated_at = datetime.now(timezone.utc).isoformat()
+            self._save_task_record(task)
+            raise RuntimeError(verify_res.error_message or "Outcome check failed.")
 
         for s in task.plan:
             if s.step_id == "step_9_verify_execution":
-                s.status = "COMPLETED"
+                s.status = "WAITING_FOR_DATA"
                 s.execution_result = verify_res.data
             elif s.step_id == "step_10_report_outcome":
                 s.status = "COMPLETED"
                 s.execution_result = {
-                    "status": "COMPLETED",
-                    "roi_multiple": verify_res.data.get("roi_multiple", 6.38),
-                    "gross_recovered_sales_inr": verify_res.data.get("gross_recovered_sales_inr", 16940.0)
+                    "status": "SIMULATED_DISPATCH_COMPLETE",
+                    "outcome_status": verify_res.data.get("outcome_status"),
+                    "roi_multiple": None,
+                    "gross_recovered_sales_inr": None
                 }
 
         # 3. State: COMPLETED
-        transition_task_state(task_id, STATE_COMPLETED, transitioned_by="ActionMateOrchestrator", reason="Verified closed-loop ROI accounting completed")
+        transition_task_state(task_id, STATE_COMPLETED, transitioned_by="ActionMateOrchestrator", reason="Simulated dispatch completed; awaiting real post-campaign transactions")
 
         task.current_state = STATE_COMPLETED
         task.updated_at = datetime.now(timezone.utc).isoformat()
@@ -304,10 +332,15 @@ class ActionMateOrchestrator:
             workflow_id, total_targeted, total_delivered, total_redeemed,
             gross_recovered_sales_inr, total_discounts_paid_inr, total_execution_cost_inr,
             net_recovered_profit_inr, roi_multiple, is_verified, last_updated_at
-        ) VALUES (?, 240, 232, 44, 16940.0, 2200.0, 96.0, 14644.0, 6.38, 1, ?)
-        """, (task_id, datetime.now(timezone.utc).isoformat()))
+        ) VALUES (?, ?, ?, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, ?)
+        """, (
+            task_id,
+            int(target_count),
+            int(dispatch_res.data.get("successfully_delivered", 0)),
+            datetime.now(timezone.utc).isoformat()
+        ))
 
-        cur.execute("UPDATE workflows SET current_state = 'COMPLETED_VERIFIED_ROI', updated_at = ? WHERE id = ?",
+        cur.execute("UPDATE workflows SET current_state = 'SIMULATED_DISPATCH_OUTCOME_PENDING', updated_at = ? WHERE id = ?",
                     (datetime.now(timezone.utc).isoformat(), task_id))
         conn.commit()
         conn.close()
@@ -357,8 +390,8 @@ class ActionMateOrchestrator:
         cur = conn.cursor()
 
         messages_payload = {
-            "en": "Hi [Customer Name]! We miss you at Sharma Supplies. Enjoy ₹50 OFF on your next order above ₹249 this weekend with code RET50 on Paytm Soundbox / QR. Valid till Sunday midnight!",
-            "hi": "नमस्ते [ग्राहक का नाम]! शर्मा सप्लाइज में आपकी कमी महसूस हुई। इस वीकेंड पेटीएम QR पर कोड RET50 के साथ ₹249 से ऊपर के ऑर्डर पर ₹50 की छूट पाएं। रविवार मध्यरात्रि तक वैध!"
+            "en": "Hi [Customer Name]! We miss you at Sharma Family Grocery. Enjoy ₹50 off your next grocery basket above ₹499 with code GROCERY50.",
+            "hi": "नमस्ते [ग्राहक का नाम]! शर्मा फैमिली ग्रोसरी में आपकी कमी महसूस हुई। ₹499 से अधिक की अगली खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं।"
         }
 
         legacy_state = "AWAITING_APPROVAL"
@@ -378,13 +411,13 @@ class ActionMateOrchestrator:
             created_at, updated_at
         ) VALUES (
             ?, ?, ?, 'REVENUE_RECOVERY', ?,
-            20900.0, 240, 'RET50', 50.0, 249.0, 3600.0,
+            20900.0, 46, 'GROCERY50', 50.0, 499.0, 3600.0,
             ?, ?, ?, ?, ?
         )
         """, (
             task.task_id,
             task.merchant_id,
-            "Recover 240 Dormant Repeat Diners",
+            "Neighborhood Grocery Repeat-Basket Recovery",
             legacy_state,
             json.dumps(task.findings),
             json.dumps(task.findings.get("recommendation", {})),

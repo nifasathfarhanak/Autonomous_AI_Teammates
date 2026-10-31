@@ -79,8 +79,8 @@ class TestCampaignExecutionPhase4(unittest.TestCase):
         rec = CampaignService.recommend_campaign_for_sales_drop("MERCH-001")
 
         self.assertIsNotNone(rec)
-        self.assertIn("Recovery Campaign", rec.campaign_name)
-        self.assertIn("24.0%", rec.reason_for_recommendation)
+        self.assertIn("Grocery", rec.campaign_name)
+        self.assertIn("24%", rec.reason_for_recommendation)
         self.assertIn("repeat", rec.reason_for_recommendation.lower())
         self.assertTrue(rec.target_customer_segment.startswith("DECLINING_FREQUENCY"))
         self.assertIn("7 days", rec.suggested_campaign_duration)

@@ -20,18 +20,18 @@ LANGUAGE_NAMES = {
 }
 
 INDIC_TEMPLATES = {
-    "en": "Hi [Customer Name]! Visit your neighborhood grocery shop and get ₹{discount} off a basket above ₹{min_order} with code {code}. Please check the offer dates.",
-    "hi": "नमस्ते [ग्राहक का नाम]! अपनी नज़दीकी किराना दुकान पर ₹{min_order} से अधिक की खरीद पर {code} कोड से ₹{discount} की छूट पाएं। कृपया ऑफ़र की तारीख़ देखें।",
-    "ta": "வணக்கம் [வாடிக்கையாளர் பெயர்]! அருகிலுள்ள மளிகைக் கடையில் ₹{min_order}க்கு மேற்பட்ட வாங்குதலுக்கு {code} குறியீட்டைப் பயன்படுத்தி ₹{discount} தள்ளுபடி பெறுங்கள். சலுகை தேதிகளைச் சரிபார்க்கவும்.",
-    "te": "నమస్కారం [కస్టమర్ పేరు]! మీ దగ్గరలోని కిరాణా దుకాణంలో ₹{min_order} కంటే ఎక్కువ కొనుగోలుపై {code} కోడ్‌తో ₹{discount} తగ్గింపు పొందండి. ఆఫర్ తేదీలను చూడండి.",
-    "bn": "নমস্কার [গ্রাহকের নাম]! কাছের মুদির দোকানে ₹{min_order}-এর বেশি কেনাকাটায় {code} কোডে ₹{discount} ছাড় পান। অফারের তারিখ দেখে নিন।",
-    "mr": "नमस्कार [ग्राहकाचे नाव]! जवळच्या किराणा दुकानात ₹{min_order} पेक्षा जास्त खरेदीवर {code} कोड वापरून ₹{discount} सूट मिळवा. ऑफरच्या तारखा तपासा.",
-    "gu": "નમસ્તે [ગ્રાહકનું નામ]! નજીકની કરિયાણાની દુકાનમાં ₹{min_order}થી વધુની ખરીદી પર {code} કોડથી ₹{discount}ની છૂટ મેળવો. ઓફરની તારીખ તપાસો."
+    "en": "Hi [Customer Name]! Enjoy ₹{discount} off your grocery basket above ₹{min_order} with code {code} at Sharma Family Grocery.",
+    "hi": "नमस्ते [ग्राहक का नाम]! शर्मा फैमिली ग्रोसरी में ₹{min_order} से अधिक की किराने की खरीद पर {code} कोड से ₹{discount} की छूट पाएं।",
+    "ta": "வணக்கம் [வாடிக்கையாளர் பெயர்]! Sharma Family Grocery-யில் ₹{min_order}-க்கு மேல் மளிகைப் பொருட்கள் வாங்கினால் {code} குறியீட்டைப் பயன்படுத்தி ₹{discount} தள்ளுபடி பெறுங்கள்.",
+    "te": "నమస్కారం [కస్టమర్ పేరు]! Sharma Family Groceryలో ₹{min_order} కంటే ఎక్కువ కిరాణా కొనుగోలుపై {code} కోడ్‌తో ₹{discount} తగ్గింపు పొందండి.",
+    "bn": "নমস্কার [গ্রাহকের নাম]! Sharma Family Grocery-তে ₹{min_order}-এর বেশি মুদিখানার কেনাকাটায় {code} কোড ব্যবহার করে ₹{discount} ছাড় পান।",
+    "mr": "नमस्कार [ग्राहकाचे नाव]! Sharma Family Grocery येथे ₹{min_order} पेक्षा जास्त किराणा खरेदीवर {code} कोड वापरून ₹{discount} सूट मिळवा.",
+    "gu": "નમસ્તે [ગ્રાહકનું નામ]! Sharma Family Grocery પર ₹{min_order}થી વધુની કરિયાણાની ખરીદી પર {code} કોડથી ₹{discount}ની છૂટ મેળવો."
 }
 
 SOUNDBOX_SCRIPTS = {
-    "en": "Paytm Soundbox: Simulated grocery sales are down 27.2 percent week over week. Review the evidence and approve any offer before sending.",
-    "hi": "पेटीएम साउंडबॉक्स: सिमुलेटेड किराना बिक्री पिछले हफ्ते से 27.2 प्रतिशत कम है। डेटा देखें और संदेश भेजने से पहले ऑफ़र को मंज़ूरी दें।"
+    "en": "Sharma Family Grocery offer: Get ₹50 off a grocery basket above ₹499 with code GROCERY50. Owner approval is required before sending.",
+    "hi": "शर्मा फैमिली ग्रोसरी ऑफर: ₹499 से अधिक की किराने की खरीद पर GROCERY50 कोड से ₹50 की छूट पाएं। भेजने से पहले मालिक की मंज़ूरी ज़रूरी है।"
 }
 
 def translate_indic_live(text: str, target_lang: str) -> Optional[str]:
